@@ -979,16 +979,16 @@ async function submitInquiry(){
   btn.textContent='Sending…';btn.disabled=true;
   const checkin=document.getElementById('inq-checkin').value||null;
   const checkout=document.getElementById('inq-checkout').value||null;
-  const roomType=document.getElementById('inq-package').value||'Not selected';
+  const unit=document.getElementById('inq-package').value||'Not selected';
   if(checkin&&checkout&&checkout<=checkin){showNotif('Check-out must be after check-in.');btn.textContent='Send Inquiry →';btn.disabled=false;return;}
   try{
-    const res=await fetch('/api/bookings',{
+    const res=await fetch('/api/inquiries',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         firstName:fname,lastName:lname,email,
         phone:document.getElementById('inq-phone').value,
-        checkIn:checkin,checkOut:checkout,roomType,
+        checkIn:checkin,checkOut:checkout,unit,
         guests:parseInt(document.getElementById('inq-guests').value)||1,
         message:document.getElementById('inq-message').value
       })

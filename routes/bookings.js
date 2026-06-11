@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
   try {
     const { firstName, lastName, email, phone, checkIn, checkOut, roomType, guests, message } = req.body;
 
-    if (!firstName || !lastName || !email || !phone) {
+    if (!firstName || !lastName || !email) {
       return res.status(400).json({ error: 'Missing required fields.' });
     }
 
