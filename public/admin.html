@@ -201,6 +201,76 @@ table{width:100%;border-collapse:collapse;}
 th{font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);padding:0 0.75rem 0.65rem;text-align:left;border-bottom:1px solid var(--border);}
 td{padding:0.85rem 0.75rem;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);}
 tr:last-child td{border-bottom:none;}
+
+/* ── MOBILE SIDEBAR TOGGLE ── */
+.sb-toggle{display:none;position:fixed;top:0.85rem;left:1rem;z-index:300;background:var(--navy-mid);border:1px solid var(--border);color:var(--white);width:38px;height:38px;font-size:1.1rem;cursor:pointer;border-radius:4px;align-items:center;justify-content:center;}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:50;}
+
+/* ── TABLET ── */
+@media(max-width:900px){
+  :root{--sidebar:180px;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .cal-grid-wrap{grid-template-columns:1fr;}
+  .cal-grid-wrap-3{grid-template-columns:1fr 1fr;}
+  .booking-card{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;}
+  .bc-actions{flex-direction:row;flex-wrap:wrap;min-width:unset;grid-column:1/-1;}
+  .bc-actions button{flex:1;min-width:70px;}
+}
+
+/* ── MOBILE ── */
+@media(max-width:680px){
+  :root{--sidebar:220px;}
+
+  /* Show hamburger toggle */
+  .sb-toggle{display:flex;}
+
+  /* Sidebar off-canvas */
+  .sidebar{transform:translateX(-100%);transition:transform 0.3s;z-index:100;}
+  .sidebar.open{transform:translateX(0);}
+  .sb-overlay.open{display:block;}
+
+  /* Main takes full width */
+  .main{margin-left:0;}
+  .topbar{padding:0.85rem 1rem 0.85rem 3.75rem;}
+  .content{padding:1rem;}
+
+  /* Login */
+  .login-box{width:90vw;padding:2rem 1.5rem;}
+
+  /* Stats */
+  .stats-row{grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;}
+  .stat-box{padding:1rem;}
+  .stat-box-value{font-size:1.6rem;}
+
+  /* Calendars */
+  .cal-grid-wrap,.cal-grid-wrap-3{grid-template-columns:1fr;gap:0.85rem;}
+
+  /* Booking cards — stack everything */
+  .booking-card{grid-template-columns:1fr;gap:0.6rem;padding:1rem;}
+  .bc-total,.bc-guests{text-align:left;}
+  .bc-actions{flex-direction:row;flex-wrap:wrap;gap:0.4rem;min-width:unset;}
+  .bc-actions button{flex:1;min-width:80px;}
+
+  /* Filter tabs */
+  .filter-tabs{flex-wrap:wrap;gap:0.4rem;}
+  .filter-search{min-width:100%;margin-left:0;margin-top:0.35rem;}
+  .filter-tabs .btn-primary{width:100%;}
+
+  /* Forms */
+  .form-row{flex-direction:column;}
+  .form-inp{min-width:100%;width:100%;}
+
+  /* Modal */
+  .modal{padding:1.5rem 1.25rem;}
+  .modal-grid{grid-template-columns:1fr;}
+
+  /* Tables — scroll horizontally */
+  .card-body{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{min-width:480px;}
+
+  /* Pending banner */
+  .pending-banner{flex-direction:column;gap:0.5rem;align-items:flex-start;}
+}
 </style>
 </head>
 <body>
@@ -219,6 +289,8 @@ tr:last-child td{border-bottom:none;}
 
 <!-- APP -->
 <div id="app-screen">
+<button class="sb-toggle" id="sb-toggle" onclick="toggleSidebar()">☰</button>
+<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -227,11 +299,11 @@ tr:last-child td{border-bottom:none;}
     <div class="sb-logo-sub">Admin Panel</div>
   </div>
   <nav class="sb-nav">
-    <a href="#" class="active" onclick="return showPage('bookings',this)"><span class="nav-icon">📋</span> Bookings <span class="sb-badge" id="pending-badge" style="display:none;">0</span></a>
-    <a href="#" onclick="return showPage('inquiries',this)"><span class="nav-icon">💬</span> Inquiries <span class="sb-badge" id="inq-badge" style="display:none;">0</span></a>
-    <a href="#" onclick="return showPage('calendar',this)"><span class="nav-icon">📅</span> Calendar</a>
-    <a href="#" onclick="return showPage('expenses',this)"><span class="nav-icon">₱</span> Expenses</a>
-    <a href="#" onclick="return showPage('reports',this)"><span class="nav-icon">📊</span> Reports</a>
+    <a href="#" class="active" onclick="closeSidebar();return showPage('bookings',this)"><span class="nav-icon">📋</span> Bookings <span class="sb-badge" id="pending-badge" style="display:none;">0</span></a>
+    <a href="#" onclick="closeSidebar();return showPage('inquiries',this)"><span class="nav-icon">💬</span> Inquiries <span class="sb-badge" id="inq-badge" style="display:none;">0</span></a>
+    <a href="#" onclick="closeSidebar();return showPage('calendar',this)"><span class="nav-icon">📅</span> Calendar</a>
+    <a href="#" onclick="closeSidebar();return showPage('expenses',this)"><span class="nav-icon">₱</span> Expenses</a>
+    <a href="#" onclick="closeSidebar();return showPage('reports',this)"><span class="nav-icon">📊</span> Reports</a>
   </nav>
   <div class="sb-footer">
     <a href="/">← Back to Site</a>
@@ -397,6 +469,16 @@ tr:last-child td{border-bottom:none;}
 </div>
 
 <script>
+// ── MOBILE SIDEBAR ────────────────────────────────────
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sb-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const UNIT_RATES={'Ocean View Villa':28200,'Mountain View Villa':28200,'Cabana 1':6500,'Cabana 2':6500,'Cabana 3':6500,'The Cabin':10600};
 const UNIT_KEYS={'Ocean View Villa':'ocean','Mountain View Villa':'mountain','Cabana 1':'cabana1','Cabana 2':'cabana2','Cabana 3':'cabana3','The Cabin':'cabin'};
