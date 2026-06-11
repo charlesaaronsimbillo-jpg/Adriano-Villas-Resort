@@ -221,20 +221,27 @@ select.form-input option{background:var(--navy);}
 /* ── INQUIRE ── */
 #inquire{background:var(--cream);border-top:1px solid var(--border-light);padding:7rem 4rem;}
 .inquire-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;max-width:1200px;margin:0 auto;align-items:start;}
-.inquire-form-wrap{background:var(--white);border:1px solid var(--border-light);padding:2.5rem;box-shadow:0 4px 30px rgba(0,0,0,0.06);}
-.inquire-form-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:0.5rem;color:var(--dark-text);}
-.inquire-form-sub{font-size:0.82rem;color:var(--mid-text);line-height:1.65;margin-bottom:2rem;}
-.inq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.inquire-form-wrap{background:var(--white);border:1px solid var(--border-light);padding:0;box-shadow:0 8px 48px rgba(0,0,0,0.09);overflow:hidden;}
+.inq-form-header{padding:2rem 2.5rem 1.75rem;border-bottom:1px solid var(--border-light);background:linear-gradient(135deg,#faf8f3 0%,var(--white) 100%);}
+.inquire-form-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;margin-bottom:0.4rem;color:var(--dark-text);letter-spacing:-0.01em;}
+.inquire-form-sub{font-size:0.8rem;color:var(--mid-text);line-height:1.7;margin:0;}
+.inq-body{padding:2rem 2.5rem 2.5rem;}
+.inq-section-label{font-size:0.55rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;margin-top:1.5rem;display:flex;align-items:center;gap:0.6rem;}
+.inq-section-label::after{content:'';flex:1;height:1px;background:var(--border-light);}
+.inq-section-label:first-child{margin-top:0;}
+.inq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0;}
 .inq-full{grid-column:1/-1;}
-.inq-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--light-text);display:block;margin-bottom:0.45rem;}
-.inq-input{width:100%;background:var(--cream);border:1px solid var(--border-light);color:var(--dark-text);padding:0.8rem 1rem;font-family:'Jost',sans-serif;font-size:0.88rem;transition:border-color 0.2s;outline:none;}
-.inq-input:focus{border-color:var(--gold);}
+.inq-label{font-size:0.57rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--light-text);display:block;margin-bottom:0.4rem;}
+.inq-input{width:100%;background:var(--cream);border:1px solid rgba(0,0,0,0.08);color:var(--dark-text);padding:0.78rem 0.95rem;font-family:'Jost',sans-serif;font-size:0.875rem;transition:border-color 0.2s,box-shadow 0.2s;outline:none;border-radius:2px;}
+.inq-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,110,0.1);}
 .inq-input::placeholder{color:var(--light-text);}
-textarea.inq-input{resize:vertical;min-height:100px;}
+textarea.inq-input{resize:vertical;min-height:110px;line-height:1.65;}
 select.inq-input option{background:var(--white);}
-.inq-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;}
+.inq-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:1.05rem 2rem;font-family:'Jost',sans-serif;font-size:0.7rem;letter-spacing:0.28em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:1.5rem;border-radius:2px;position:relative;overflow:hidden;}
+.inq-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);transform:translateX(-100%);transition:transform 0.5s;}
+.inq-btn:hover::after{transform:translateX(100%);}
 .inq-btn:hover{background:var(--gold);color:var(--navy);}
-.inq-success{display:none;text-align:center;padding:2rem;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.5rem;}
+.inq-success{display:none;text-align:center;padding:3.5rem 2rem;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.5rem;}
 
 /* map side */
 .inquire-map-side{}
@@ -679,39 +686,48 @@ footer{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.06);pa
     <!-- RIGHT: Inquiry Form -->
     <div class="reveal-right">
       <div class="inquire-form-wrap">
-        <h3 class="inquire-form-title">Send an Inquiry</h3>
-        <p class="inquire-form-sub">Fill out the form and we'll get back to you fast. Viewing first — see the place before committing.</p>
-        <div id="inq-form">
-          <div class="inq-grid">
-            <div><label class="inq-label">First Name</label><input class="inq-input" id="inq-fname" type="text" placeholder="Juan"/></div>
-            <div><label class="inq-label">Last Name</label><input class="inq-input" id="inq-lname" type="text" placeholder="Dela Cruz"/></div>
-            <div><label class="inq-label">Email</label><input class="inq-input" id="inq-email" type="email" placeholder="juan@email.com"/></div>
-            <div><label class="inq-label">Phone</label><input class="inq-input" id="inq-phone" type="tel" placeholder="+63 9XX XXX XXXX"/></div>
-            <div><label class="inq-label">Check-in Date</label><input class="inq-input" id="inq-checkin" type="date"/></div>
-            <div><label class="inq-label">Check-out Date</label><input class="inq-input" id="inq-checkout" type="date"/></div>
-            <div>
-              <label class="inq-label">Package / Unit</label>
-              <select class="inq-input" id="inq-package">
-                <option value="">Select a package…</option>
-                <option>Ocean View Villa (₱28,200/night)</option>
-                <option>Mountain View Villa (₱28,200/night)</option>
-                <option>Cabana 1 (₱6,500/night)</option>
-                <option>Cabana 2 (₱6,500/night)</option>
-                <option>Cabana 3 (₱6,500/night)</option>
-                <option>The Cabin (₱10,600/night)</option>
-                <option>Day Tour</option>
-                <option>Not sure yet</option>
-              </select>
-            </div>
-            <div><label class="inq-label">No. of Guests</label><input class="inq-input" id="inq-guests" type="number" min="1" placeholder="e.g. 10"/></div>
-            <div class="inq-full"><label class="inq-label">Message / Special Requests</label><textarea class="inq-input" id="inq-message" placeholder="Occasion, requests, or questions?"></textarea></div>
-          </div>
-          <button class="inq-btn" onclick="submitInquiry()">Send Inquiry →</button>
+        <div class="inq-form-header">
+          <h3 class="inquire-form-title">Send an Inquiry</h3>
+          <p class="inquire-form-sub">Fill out the form and we'll get back to you fast. Viewing first — see the place before committing.</p>
         </div>
-        <div class="inq-success" id="inq-success">
-          <div style="font-size:2.5rem;margin-bottom:1rem;">🌿</div>
-          <div>Inquiry sent!</div>
-          <div style="font-size:0.85rem;color:var(--text-muted);font-family:'Jost',sans-serif;margin-top:0.75rem;">We'll reach out within 24 hours.</div>
+        <div class="inq-body">
+          <div id="inq-form">
+            <div class="inq-section-label">Contact</div>
+            <div class="inq-grid">
+              <div><label class="inq-label">First Name</label><input class="inq-input" id="inq-fname" type="text" placeholder="Juan"/></div>
+              <div><label class="inq-label">Last Name</label><input class="inq-input" id="inq-lname" type="text" placeholder="Dela Cruz"/></div>
+              <div><label class="inq-label">Email</label><input class="inq-input" id="inq-email" type="email" placeholder="juan@email.com"/></div>
+              <div><label class="inq-label">Phone</label><input class="inq-input" id="inq-phone" type="tel" placeholder="+63 9XX XXX XXXX"/></div>
+            </div>
+            <div class="inq-section-label">Stay Details</div>
+            <div class="inq-grid">
+              <div><label class="inq-label">Check-in Date</label><input class="inq-input" id="inq-checkin" type="date"/></div>
+              <div><label class="inq-label">Check-out Date</label><input class="inq-input" id="inq-checkout" type="date"/></div>
+              <div>
+                <label class="inq-label">Package / Unit</label>
+                <select class="inq-input" id="inq-package">
+                  <option value="">Select a package…</option>
+                  <option>Ocean View Villa (₱28,200/night)</option>
+                  <option>Mountain View Villa (₱28,200/night)</option>
+                  <option>Cabana 1 (₱6,500/night)</option>
+                  <option>Cabana 2 (₱6,500/night)</option>
+                  <option>Cabana 3 (₱6,500/night)</option>
+                  <option>The Cabin (₱10,600/night)</option>
+                  <option>Day Tour</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+              <div><label class="inq-label">No. of Guests</label><input class="inq-input" id="inq-guests" type="number" min="1" placeholder="e.g. 10"/></div>
+            </div>
+            <div class="inq-section-label">Message</div>
+            <div><textarea class="inq-input" id="inq-message" placeholder="Occasion, requests, or questions?"></textarea></div>
+            <button class="inq-btn" onclick="submitInquiry()">Send Inquiry →</button>
+          </div>
+          <div class="inq-success" id="inq-success">
+            <div style="font-size:2.8rem;margin-bottom:1.25rem;opacity:0.85;">🌿</div>
+            <div style="font-size:1.75rem;font-weight:300;letter-spacing:0.01em;">Inquiry sent!</div>
+            <div style="font-size:0.82rem;color:var(--mid-text);font-family:'Jost',sans-serif;margin-top:0.85rem;letter-spacing:0.05em;">We'll reach out within 24 hours.</div>
+          </div>
         </div>
       </div>
     </div>
