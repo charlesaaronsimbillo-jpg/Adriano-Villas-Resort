@@ -772,12 +772,29 @@ initSliders();
 
 // ── BOOKING ──────────────────────────────────────────
 const UNIT_LABELS={ocean:'Ocean View Villa',mountain:'Mountain View Villa',cabana1:'Cabana 1',cabana2:'Cabana 2',cabana3:'Cabana 3',cabin:'The Cabin'};
+const UNIT_RATES={ocean:28200,mountain:28200,cabana1:6500,cabana2:6500,cabana3:6500,cabin:10600};
 const booking={unit:null,rate:0,cap:0,checkin:null,checkout:null};
 let calYear=new Date().getFullYear();
 let calMonth=new Date().getMonth();
 let pickStage=0;
-function getBookings(){try{return JSON.parse(localStorage.getItem('av_bookings')||'[]');}catch{return[];}}
-function saveBookings(b){localStorage.setItem('av_bookings',JSON.stringify(b));}
+let availabilityData={bookings:[],blocked:[]};
+
+async function fetchAvailability(){
+  try{
+    const res=await fetch('/api/bookings/availability');
+    availabilityData=await res.json();
+  }catch(e){console.error('Could not load availability:',e);}
+}
+
+function getBookedDatesForUnit(unitLabel){
+  const booked=new Set();
+  availabilityData.bookings.filter(b=>b.roomType===unitLabel).forEach(b=>{
+    let d=new Date(b.checkIn);const end=new Date(b.checkOut);
+    while(d<end){booked.add(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}
+  });
+  availabilityData.blocked.forEach(b=>{booked.add(new Date(b.date).toISOString().split('T')[0]);});
+  return booked;
+}
 
 function scrollToBook(unit){
   document.getElementById('booking').scrollIntoView({behavior:'smooth'});
@@ -794,7 +811,7 @@ function selectUnit(type){
   document.querySelectorAll('.unit-option').forEach(o=>{if(o.dataset.unit===type)pickUnit(o);});
 }
 
-function goStep(n){
+async function goStep(n){
   if(n===2&&!booking.unit){showNotif('Please select a unit first.');return;}
   if(n===3&&(!booking.checkin||!booking.checkout)){showNotif('Please select check-in and check-out dates.');return;}
   if(n===4)buildSummary();
@@ -810,26 +827,20 @@ function goStep(n){
     else{num.textContent=i;}
   }
   if(n===2){
-    // Show which unit's calendar
     document.getElementById('cal-unit-label').textContent=UNIT_LABELS[booking.unit]||'';
+    await fetchAvailability();
     renderCalendar();
   }
 }
 
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-function getBookedDates(){
-  const booked=new Set();
-  getBookings().filter(b=>b.unit===booking.unit).forEach(b=>{
-    let d=new Date(b.checkin);const end=new Date(b.checkout);
-    while(d<end){booked.add(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}
-  });
-  return booked;
-}
+
 function renderCalendar(){
   document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;
   const grid=document.getElementById('cal-days');grid.innerHTML='';
   ['SUN','MON','TUE','WED','THU','FRI','SAT'].forEach(d=>{const el=document.createElement('div');el.className='cal-day-label';el.textContent=d;grid.appendChild(el);});
-  const booked=getBookedDates();
+  const unitLabel=UNIT_LABELS[booking.unit];
+  const booked=getBookedDatesForUnit(unitLabel);
   const first=new Date(calYear,calMonth,1).getDay();
   const days=new Date(calYear,calMonth+1,0).getDate();
   const today=new Date();today.setHours(0,0,0,0);
@@ -847,7 +858,7 @@ function renderCalendar(){
         if(dateStr===booking.checkin||dateStr===booking.checkout)el.classList.add('selected');
         else if(thisDate>ci&&thisDate<co)el.classList.add('in-range');
       }else if(booking.checkin&&dateStr===booking.checkin){el.classList.add('selected');}
-      el.addEventListener('click',()=>clickDay(dateStr,thisDate));
+      el.addEventListener('click',()=>clickDay(dateStr));
     }
     grid.appendChild(el);
   }
@@ -877,19 +888,72 @@ function buildSummary(){
   document.getElementById('s-name').textContent=(document.getElementById('f-fname').value+' '+document.getElementById('f-lname').value).trim()||'—';
   document.getElementById('s-total').textContent='₱'+(nights*booking.rate).toLocaleString();
 }
-function submitBooking(){
+
+async function submitBooking(){
   const fname=document.getElementById('f-fname').value.trim();
   const lname=document.getElementById('f-lname').value.trim();
   const email=document.getElementById('f-email').value.trim();
   if(!fname||!lname||!email){showNotif('Please fill in required guest details.');goStep(3);return;}
-  const nights=Math.round((new Date(booking.checkout)-new Date(booking.checkin))/(864e5));
-  const ref='AV'+Date.now().toString().slice(-6);
-  const record={ref,unit:booking.unit,unitLabel:UNIT_LABELS[booking.unit],checkin:booking.checkin,checkout:booking.checkout,nights,guests:document.getElementById('f-guests').value,name:fname+' '+lname,email,phone:document.getElementById('f-phone').value,notes:document.getElementById('f-notes').value,total:nights*booking.rate,rate:booking.rate,created:new Date().toISOString()};
-  const all=getBookings();all.push(record);saveBookings(all);
-  document.getElementById('confirm-ref').textContent='REF# '+ref;
-  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-5').classList.add('active');
+  const btn=document.querySelector('#panel-4 .btn-next');
+  btn.textContent='Sending…';btn.disabled=true;
+  try{
+    const res=await fetch('/api/bookings',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        firstName:fname,lastName:lname,email,
+        phone:document.getElementById('f-phone').value,
+        checkIn:booking.checkin,checkOut:booking.checkout,
+        roomType:UNIT_LABELS[booking.unit],
+        guests:parseInt(document.getElementById('f-guests').value)||1,
+        message:document.getElementById('f-notes').value
+      })
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Booking failed.');
+    const ref=data.booking?._id?.toString().slice(-6).toUpperCase()||Date.now().toString().slice(-6);
+    document.getElementById('confirm-ref').textContent='REF# AV'+ref;
+    document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-5').classList.add('active');
+  }catch(err){
+    showNotif(err.message||'Something went wrong. Please try again.');
+    btn.textContent='Confirm Booking ✓';btn.disabled=false;
+  }
 }
+
+async function submitInquiry(){
+  const fname=document.getElementById('inq-fname').value.trim();
+  const lname=document.getElementById('inq-lname').value.trim();
+  const email=document.getElementById('inq-email').value.trim();
+  if(!fname||!email){showNotif('Please fill in your name and email.');return;}
+  const btn=document.querySelector('.inq-btn');
+  btn.textContent='Sending…';btn.disabled=true;
+  const checkin=document.getElementById('inq-checkin').value||null;
+  const checkout=document.getElementById('inq-checkout').value||null;
+  const roomType=document.getElementById('inq-package').value||'Not selected';
+  if(checkin&&checkout&&checkout<=checkin){showNotif('Check-out must be after check-in.');btn.textContent='Send Inquiry →';btn.disabled=false;return;}
+  try{
+    const res=await fetch('/api/bookings',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        firstName:fname,lastName:lname,email,
+        phone:document.getElementById('inq-phone').value,
+        checkIn:checkin,checkOut:checkout,roomType,
+        guests:parseInt(document.getElementById('inq-guests').value)||1,
+        message:document.getElementById('inq-message').value
+      })
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Could not send inquiry.');
+    document.getElementById('inq-form').style.display='none';
+    document.getElementById('inq-success').style.display='block';
+  }catch(err){
+    showNotif(err.message||'Something went wrong. Please try again.');
+    btn.textContent='Send Inquiry →';btn.disabled=false;
+  }
+}
+
 function resetBooking(){
   booking.unit=null;booking.rate=0;booking.cap=0;booking.checkin=null;booking.checkout=null;pickStage=0;
   document.querySelectorAll('.unit-option').forEach(e=>e.classList.remove('selected'));
