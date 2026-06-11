@@ -495,25 +495,33 @@ function renderInquiries(){
   }
 
   document.getElementById('inquiries-list').innerHTML=list.map(i=>`
-    <div class="booking-card ${i.status==='new'?'pending':'cancelled'}">
-      <div>
-        <div class="bc-name">${i.firstName} ${i.lastName||''}</div>
-        <div class="bc-email">${i.email||''}</div>
-        ${i.phone?`<div class="bc-email" style="margin-top:0.2rem;">${i.phone}</div>`:''}
-        <div style="margin-top:0.5rem;"><span class="badge ${i.status==='new'?'badge-pending':'badge-cancelled'}">${i.status}</span></div>
+    <div class="booking-card ${i.status==='new'?'pending':'cancelled'}" style="display:block;padding:0;overflow:hidden;">
+      <div style="display:flex;align-items:flex-start;gap:1.5rem;padding:1rem 1.25rem 0.75rem;flex-wrap:wrap;">
+        <div style="flex:1;min-width:160px;">
+          <div class="bc-name" style="margin-bottom:0.15rem;">${i.firstName} ${i.lastName||''}</div>
+          <div class="bc-email">${i.email||''}</div>
+          ${i.phone?`<div class="bc-email" style="margin-top:0.1rem;">${i.phone}</div>`:''}
+        </div>
+        <div style="flex:1;min-width:160px;">
+          <div class="bc-unit">${i.unit&&i.unit!=='Not selected'?i.unit:'No unit selected'}</div>
+          ${i.checkIn?`<div class="bc-dates" style="margin-top:0.2rem;">${fmtDate(i.checkIn)} → ${fmtDate(i.checkOut)}</div>`:'<div class="bc-dates" style="color:var(--muted);margin-top:0.2rem;">No dates specified</div>'}
+          ${i.guests?`<div class="bc-dates" style="margin-top:0.15rem;">${i.guests} guest${i.guests!==1?'s':''}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;min-width:100px;">
+          <div style="font-size:0.65rem;color:var(--muted);">${fmtDate(i.createdAt)}</div>
+          <span class="badge ${i.status==='new'?'badge-pending':'badge-cancelled'}">${i.status}</span>
+        </div>
       </div>
-      <div>
-        <div class="bc-unit">${i.unit&&i.unit!=='Not selected'?i.unit:'No unit selected'}</div>
-        ${i.checkIn?`<div class="bc-dates">${fmtDate(i.checkIn)} → ${fmtDate(i.checkOut)}</div>`:'<div class="bc-dates" style="color:var(--muted);">No dates specified</div>'}
-        ${i.guests?`<div class="bc-dates" style="margin-top:0.2rem;">${i.guests} guest${i.guests!==1?'s':''}</div>`:''}
-        ${i.message?`<div style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem;font-style:italic;max-width:280px;">"${i.message}"</div>`:''}
-      </div>
-      <div>
-        <div style="font-size:0.65rem;color:var(--muted);">${fmtDate(i.createdAt)}</div>
-        <a href="mailto:${i.email}" style="display:inline-block;margin-top:0.75rem;font-size:0.68rem;color:var(--gold);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(201,169,110,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,169,110,0.1)'" onmouseout="this.style.background='transparent'">Reply via Email</a>
-        <a href="https://www.facebook.com/adrianovillasandresort" target="_blank" style="display:inline-block;margin-top:0.4rem;font-size:0.68rem;color:#1877f2;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(24,119,242,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(24,119,242,0.08)'" onmouseout="this.style.background='transparent'">Facebook Page</a>
-      </div>
-      <div class="bc-actions">
+      ${i.message?`
+      <div style="margin:0 1.25rem 0.85rem;background:rgba(201,169,110,0.07);border-left:3px solid var(--gold);border-radius:4px;padding:0.75rem 1rem;">
+        <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.45rem;opacity:0.85;">Message / Special Request</div>
+        <div style="font-size:0.9rem;color:var(--text);line-height:1.65;">${i.message}</div>
+      </div>`
+      :`<div style="margin:0 1.25rem 0.85rem;font-size:0.78rem;color:var(--muted);font-style:italic;">No message provided.</div>`}
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.65rem 1.25rem;border-top:1px solid rgba(255,255,255,0.05);background:rgba(0,0,0,0.12);flex-wrap:wrap;">
+        <a href="mailto:${i.email}" style="font-size:0.68rem;color:var(--gold);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(201,169,110,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,169,110,0.1)'" onmouseout="this.style.background='transparent'">Reply via Email</a>
+        <a href="https://www.facebook.com/adrianovillasandresort" target="_blank" style="font-size:0.68rem;color:#1877f2;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(24,119,242,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(24,119,242,0.08)'" onmouseout="this.style.background='transparent'">Facebook Page</a>
+        <div style="flex:1;"></div>
         ${i.status==='new'?`<button class="btn-cancel" onclick="closeInquiry('${i._id}')">Mark Closed</button>`:''}
         <button class="btn-delete" onclick="deleteInquiry('${i._id}')">Delete</button>
       </div>
