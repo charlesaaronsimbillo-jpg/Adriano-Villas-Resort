@@ -612,12 +612,40 @@ footer{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.06);pa
     <!-- STEP 5 Confirmation -->
     <div class="step-panel" id="panel-5">
       <div class="confirm-box">
-        <div class="confirm-icon">🌿</div>
+        <div class="confirm-icon">🎉</div>
         <h2 class="confirm-title">Booking Received!</h2>
-        <p class="confirm-sub">We'll be in touch within 24 hours to confirm your stay.</p>
+        <p class="confirm-sub">Your reservation is being processed. Please screenshot this page and send your proof of payment to confirm your booking.</p>
+
+        <!-- Booking Details Card — screenshot this -->
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.35);padding:2rem;margin:2rem auto;max-width:480px;text-align:left;border-radius:2px;">
+          <div style="font-size:0.58rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;text-align:center;">Booking Summary</div>
+          <div id="confirm-details">
+            <!-- filled by JS -->
+          </div>
+          <div style="border-top:1px solid rgba(255,255,255,0.08);margin-top:1rem;padding-top:1rem;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);">Total</span>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);" id="confirm-total">₱0</span>
+          </div>
+        </div>
+
+        <!-- Reference -->
         <p class="confirm-ref" id="confirm-ref">REF# —</p>
-        <br><br>
-        <a href="#" class="btn-primary" onclick="resetBooking();return false;">Make Another Booking</a>
+
+        <!-- Payment instruction -->
+        <div style="background:rgba(201,169,110,0.07);border:1px solid rgba(201,169,110,0.25);padding:1.5rem;margin:1.5rem auto;max-width:480px;border-radius:2px;">
+          <div style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;">How to Confirm Your Booking</div>
+          <p style="font-size:0.83rem;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:1rem;">
+            Send your proof of payment (GCash or bank transfer) via our Facebook page. Include your <strong style="color:var(--white);">reference number</strong> in your message.
+          </p>
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;">
+            <a href="https://www.facebook.com/adrianovillasandresort" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;background:#1877f2;color:white;text-decoration:none;padding:0.75rem 1.5rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;border-radius:2px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Message Us on Facebook
+            </a>
+          </div>
+        </div>
+
+        <a href="#" class="btn-outline" style="display:inline-block;margin-top:1rem;" onclick="resetBooking();return false;">Make Another Booking</a>
       </div>
     </div>
   </div>
@@ -911,8 +939,29 @@ async function submitBooking(){
     });
     const data=await res.json();
     if(!res.ok)throw new Error(data.error||'Booking failed.');
-    const ref=data.booking?._id?.toString().slice(-6).toUpperCase()||Date.now().toString().slice(-6);
-    document.getElementById('confirm-ref').textContent='REF# AV'+ref;
+
+    // Populate confirmation card
+    const nights=Math.round((new Date(booking.checkout)-new Date(booking.checkin))/864e5);
+    const total=nights*booking.rate;
+    const ref=data.booking?.refNumber||'AV-'+Date.now().toString().slice(-8);
+    const rows=[
+      ['Reference No.', `<strong style="color:var(--gold);">${ref}</strong>`],
+      ['Name', `${fname} ${lname}`],
+      ['Email', email],
+      ['Unit', UNIT_LABELS[booking.unit]],
+      ['Check-in', fmtDate(booking.checkin)],
+      ['Check-out', fmtDate(booking.checkout)],
+      ['Nights', `${nights} night${nights!==1?'s':''}`],
+      ['Guests', document.getElementById('f-guests').value||1],
+    ];
+    document.getElementById('confirm-details').innerHTML=rows.map(([label,val])=>`
+      <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.82rem;">
+        <span style="color:rgba(255,255,255,0.45);">${label}</span>
+        <span style="color:var(--white);">${val}</span>
+      </div>`).join('');
+    document.getElementById('confirm-total').textContent='₱'+total.toLocaleString();
+    document.getElementById('confirm-ref').textContent=ref;
+
     document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-5').classList.add('active');
   }catch(err){

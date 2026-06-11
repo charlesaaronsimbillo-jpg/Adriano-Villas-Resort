@@ -24,6 +24,17 @@ async function sendEmail({ toEmail, toName, subject, htmlContent }) {
   );
 }
 
+// ── REF NUMBER GENERATOR ─────────────────────────────────────────────────────
+// Format: AV-YYYYMMDD-XXXXX (e.g. AV-20260611-A3K7F)
+function generateRef() {
+  const date = new Date();
+  const dateStr = `${date.getFullYear()}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}`;
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no confusing chars like 0/O 1/I
+  let random = '';
+  for (let i = 0; i < 5; i++) random += chars[Math.floor(Math.random() * chars.length)];
+  return `AV-${dateStr}-${random}`;
+}
+
 // ── POST /api/bookings — submit a booking inquiry ────────────────────────────
 router.post('/', async (req, res) => {
   try {
@@ -66,6 +77,7 @@ router.post('/', async (req, res) => {
     }
 
     const booking = new Booking({
+      refNumber: generateRef(),
       firstName, lastName, email, phone,
       checkIn:  start || new Date(),
       checkOut: end   || new Date(),
