@@ -55,6 +55,7 @@ if (
 // Routes
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/inquiries', require('./routes/inquiries'));
 
 // Serve pages
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
