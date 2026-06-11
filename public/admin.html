@@ -3,608 +3,683 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Adriano Villas — Admin Dashboard</title>
+<title>Adriano Villas — Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --navy:#0d1b2a;--navy-mid:#1a2e45;--navy-light:#243b55;
   --gold:#c9a96e;--gold-light:#e8d5b0;--white:#f8f6f1;
-  --text-muted:#8a9bb0;--border:rgba(201,169,110,0.2);
-  --danger:#e05c5c;--success:#5cb88a;--sidebar:190px;
+  --muted:#8a9bb0;--border:rgba(201,169,110,0.18);
+  --danger:#e05c5c;--success:#5cb88a;--warn:#f0a500;
+  --sidebar:200px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--navy);color:var(--white);font-family:'Jost',sans-serif;display:flex;min-height:100vh;}
+body{background:#0a1520;color:var(--white);font-family:'Jost',sans-serif;display:flex;min-height:100vh;}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:#0a1520;display:flex;align-items:center;justify-content:center;z-index:999;}
+.login-box{background:var(--navy-mid);border:1px solid var(--border);padding:2.5rem;width:360px;border-radius:4px;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;text-align:center;margin-bottom:0.25rem;}
+.login-sub{font-size:0.58rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:2rem;}
+.login-err{font-size:0.75rem;color:var(--danger);text-align:center;min-height:1.1rem;margin-bottom:0.75rem;}
+.login-input{width:100%;background:var(--navy);border:1px solid var(--border);color:var(--white);padding:0.75rem 1rem;font-family:'Jost',sans-serif;font-size:0.88rem;outline:none;margin-bottom:0.85rem;border-radius:2px;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;background:var(--gold);color:var(--navy);border:none;padding:0.85rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:2px;transition:background 0.2s;}
+.login-btn:hover{background:var(--gold-light);}
+
+/* APP */
+#app-screen{display:none;width:100%;}
 
 /* SIDEBAR */
-.sidebar{width:var(--sidebar);background:var(--navy-mid);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:2rem 0;position:fixed;top:0;left:0;bottom:0;z-index:10;}
-.sidebar-logo{padding:0 1.5rem 2rem;border-bottom:1px solid var(--border);}
-.sidebar-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;letter-spacing:0.05em;}
-.sidebar-logo-sub{font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-top:0.2rem;}
-.sidebar-badge{font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);padding:0 1.5rem;margin:1.5rem 0 0.75rem;}
-.sidebar-nav{list-style:none;flex:1;}
-.sidebar-nav a{display:flex;align-items:center;gap:0.75rem;padding:0.8rem 1.5rem;text-decoration:none;color:var(--text-muted);font-size:0.72rem;letter-spacing:0.1em;transition:all 0.2s;border-left:2px solid transparent;}
-.sidebar-nav a:hover{color:var(--white);background:rgba(201,169,110,0.05);}
-.sidebar-nav a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,169,110,0.07);}
-.sidebar-icon{font-size:1rem;}
-.sidebar-bottom{padding:1.5rem;border-top:1px solid var(--border);}
-.sidebar-bottom a{font-size:0.68rem;color:var(--text-muted);text-decoration:none;display:block;margin-bottom:0.5rem;transition:color 0.2s;}
-.sidebar-bottom a:hover{color:var(--white);}
+.sidebar{width:var(--sidebar);background:var(--navy-mid);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:10;}
+.sb-logo{padding:1.5rem;border-bottom:1px solid var(--border);}
+.sb-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;}
+.sb-logo-sub{font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-top:0.15rem;}
+.sb-nav{flex:1;padding:1rem 0;}
+.sb-nav a{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.5rem;text-decoration:none;color:var(--muted);font-size:0.72rem;letter-spacing:0.08em;transition:all 0.2s;border-left:2px solid transparent;}
+.sb-nav a:hover{color:var(--white);background:rgba(255,255,255,0.03);}
+.sb-nav a.active{color:var(--white);border-left-color:var(--gold);background:rgba(201,169,110,0.06);}
+.sb-nav a .nav-icon{font-size:0.9rem;margin-right:0.6rem;}
+.sb-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--danger);color:white;font-size:0.55rem;font-weight:600;min-width:16px;height:16px;border-radius:8px;padding:0 4px;}
+.sb-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.sb-footer a{font-size:0.65rem;color:var(--muted);text-decoration:none;display:block;padding:0.3rem 0;transition:color 0.2s;}
+.sb-footer a:hover{color:var(--white);}
+.sb-footer a.logout{color:var(--danger);opacity:0.7;}
+.sb-footer a.logout:hover{opacity:1;}
 
 /* MAIN */
-.main{margin-left:var(--sidebar);flex:1;padding:2.5rem;min-height:100vh;}
-
-/* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;}
-.topbar-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;}
+.main{margin-left:var(--sidebar);flex:1;min-height:100vh;}
+.topbar{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--navy-mid);position:sticky;top:0;z-index:5;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;}
 .topbar-title em{font-style:italic;color:var(--gold);}
-.topbar-right{display:flex;align-items:center;gap:1rem;}
-.month-select{background:var(--navy-mid);border:1px solid var(--border);color:var(--white);padding:0.5rem 1rem;font-family:'Jost',sans-serif;font-size:0.72rem;outline:none;cursor:pointer;}
-.month-select option{background:var(--navy);}
-.topbar-date{font-size:0.72rem;color:var(--text-muted);letter-spacing:0.1em;}
+.topbar-date{font-size:0.68rem;color:var(--muted);}
+.content{padding:2rem;}
 
 /* PAGES */
 .page{display:none;}
 .page.active{display:block;}
 
-/* STAT CARDS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem;}
-.stat-card{background:var(--navy-mid);border:1px solid var(--border);padding:1.75rem;position:relative;overflow:hidden;}
-.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.stat-label{font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem;}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;line-height:1;}
-.stat-value.gold{color:var(--gold);}
-.stat-sub{font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem;}
-.stat-icon{position:absolute;top:1.5rem;right:1.5rem;font-size:1.5rem;opacity:0.18;}
+/* PENDING BANNER */
+.pending-banner{background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.3);border-radius:4px;padding:1rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.pending-banner-text{font-size:0.83rem;color:var(--gold);}
+.pending-banner-count{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold);font-weight:300;}
 
-/* CARDS */
-.card{background:var(--navy-mid);border:1px solid var(--border);margin-bottom:1.5rem;}
-.card-header{padding:1.25rem 1.75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;}
-.card-body{padding:1.75rem;}
+/* BOOKING CARDS */
+.booking-card{background:var(--navy-mid);border:1px solid var(--border);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:0.85rem;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;align-items:center;transition:border-color 0.2s;}
+.booking-card:hover{border-color:rgba(201,169,110,0.35);}
+.booking-card.pending{border-left:3px solid var(--gold);}
+.booking-card.approved{border-left:3px solid var(--success);}
+.booking-card.rejected{border-left:3px solid var(--danger);opacity:0.6;}
+.booking-card.cancelled{border-left:3px solid var(--muted);opacity:0.6;}
+.bc-name{font-size:0.95rem;font-weight:500;margin-bottom:0.2rem;}
+.bc-email{font-size:0.7rem;color:var(--muted);}
+.bc-unit{font-size:0.78rem;color:var(--gold);margin-bottom:0.2rem;}
+.bc-dates{font-size:0.72rem;color:var(--muted);}
+.bc-total{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);text-align:right;}
+.bc-guests{font-size:0.68rem;color:var(--muted);text-align:right;}
+.bc-actions{display:flex;flex-direction:column;gap:0.4rem;min-width:90px;}
+.btn-approve{background:var(--success);color:white;border:none;padding:0.45rem 0.85rem;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:opacity 0.2s;width:100%;}
+.btn-approve:hover{opacity:0.85;}
+.btn-reject{background:rgba(224,92,92,0.15);color:var(--danger);border:1px solid rgba(224,92,92,0.3);padding:0.45rem 0.85rem;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s;width:100%;}
+.btn-reject:hover{background:var(--danger);color:white;}
+.btn-cancel{background:rgba(138,155,176,0.1);color:var(--muted);border:1px solid var(--border);padding:0.45rem 0.85rem;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s;width:100%;}
+.btn-cancel:hover{color:var(--white);border-color:var(--muted);}
+.btn-delete{background:none;border:none;color:var(--muted);font-size:0.65rem;cursor:pointer;padding:0.2rem;text-align:center;width:100%;transition:color 0.2s;letter-spacing:0.08em;text-transform:uppercase;}
+.btn-delete:hover{color:var(--danger);}
 
-/* TABLES */
-table{width:100%;border-collapse:collapse;}
-th{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);padding:0 0.75rem 0.75rem;text-align:left;border-bottom:1px solid var(--border);}
-td{padding:1rem 0.75rem;font-size:0.83rem;border-bottom:1px solid rgba(201,169,110,0.07);}
-tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(201,169,110,0.03);}
-.badge{display:inline-block;padding:0.25rem 0.6rem;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;border-radius:2px;}
-.badge-confirmed{background:rgba(92,184,138,0.15);color:var(--success);border:1px solid rgba(92,184,138,0.3);}
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center;}
+.filter-tab{padding:0.45rem 1rem;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:2px;transition:all 0.2s;}
+.filter-tab:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+.filter-tab.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:600;}
+.filter-search{background:var(--navy-mid);border:1px solid var(--border);color:var(--white);padding:0.45rem 0.9rem;font-family:'Jost',sans-serif;font-size:0.78rem;outline:none;border-radius:2px;margin-left:auto;min-width:200px;}
+.filter-search:focus{border-color:var(--gold);}
+.filter-search::placeholder{color:var(--muted);}
+
+/* BADGES */
+.badge{display:inline-block;padding:0.2rem 0.55rem;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;}
 .badge-pending{background:rgba(201,169,110,0.15);color:var(--gold);border:1px solid rgba(201,169,110,0.3);}
-.unit-tag{display:inline-block;padding:0.2rem 0.5rem;font-size:0.62rem;border:1px solid var(--border);color:var(--text-muted);}
+.badge-approved{background:rgba(92,184,138,0.15);color:var(--success);border:1px solid rgba(92,184,138,0.3);}
+.badge-rejected{background:rgba(224,92,92,0.1);color:var(--danger);border:1px solid rgba(224,92,92,0.2);}
+.badge-cancelled{background:rgba(138,155,176,0.1);color:var(--muted);border:1px solid var(--border);}
 
-/* BUTTONS */
-.btn-sm{padding:0.35rem 0.85rem;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-danger{background:rgba(224,92,92,0.15);color:var(--danger);border:1px solid rgba(224,92,92,0.3);}
-.btn-danger:hover{background:var(--danger);color:white;}
-.btn-gold{background:var(--gold);color:var(--navy);font-weight:600;}
-.btn-gold:hover{background:var(--gold-light);}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-muted);}
-.btn-outline:hover{border-color:var(--gold);color:var(--white);}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.stat-box{background:var(--navy-mid);border:1px solid var(--border);padding:1.25rem 1.5rem;border-radius:4px;}
+.stat-box-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;}
+.stat-box-value{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold);}
+.stat-box-sub{font-size:0.65rem;color:var(--muted);margin-top:0.25rem;}
 
-/* FORMS */
-.form-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:1rem;}
-.form-group{display:flex;flex-direction:column;gap:0.4rem;}
-.form-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);}
-.form-input{background:var(--navy);border:1px solid var(--border);color:var(--white);padding:0.65rem 0.9rem;font-family:'Jost',sans-serif;font-size:0.83rem;outline:none;min-width:180px;}
-.form-input:focus{border-color:var(--gold);}
-.form-input::placeholder{color:var(--text-muted);}
-select.form-input option{background:var(--navy);}
-
-/* CALENDAR PAGE — 3 cols for cabanas */
-.cal-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
-.cal-grid-wrap-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
-.cal-section-label{font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
-.mini-cal-nav{background:none;border:1px solid var(--border);color:var(--white);width:26px;height:26px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;}
-.mini-cal-nav:hover{border-color:var(--gold);color:var(--gold);}
+/* CALENDAR */
+.cal-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.cal-grid-wrap-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.cal-unit-box{background:var(--navy-mid);border:1px solid var(--border);padding:1.25rem;border-radius:4px;}
+.cal-unit-label{font-size:0.6rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;}
 .mini-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-.mcd-label{font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);text-align:center;padding:0.4rem 0;}
-.mcd{padding:0.45rem;text-align:center;font-size:0.72rem;cursor:default;border:1px solid transparent;}
-.mcd.booked-ocean{background:rgba(15,52,96,0.85);color:var(--gold-light);border-color:rgba(201,169,110,0.2);}
-.mcd.booked-mountain{background:rgba(26,58,42,0.85);color:#a8d5b5;border-color:rgba(168,213,181,0.2);}
-.mcd.booked-cabana1{background:rgba(90,45,5,0.75);color:#f0c080;border-color:rgba(240,192,128,0.25);}
-.mcd.booked-cabana2{background:rgba(60,25,80,0.75);color:#d4a8f0;border-color:rgba(212,168,240,0.25);}
-.mcd.booked-cabana3{background:rgba(8,65,55,0.75);color:#88e0cc;border-color:rgba(136,224,204,0.25);}
-.mcd.booked-cabin{background:rgba(50,20,80,0.6);color:#c8a0f0;border-color:rgba(200,160,240,0.2);}
+.mcd-label{font-size:0.5rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:center;padding:0.3rem 0;}
+.mcd{padding:0.4rem;text-align:center;font-size:0.7rem;border-radius:2px;}
 .mcd.today{outline:1px solid var(--gold);}
-.mcd.past{opacity:0.32;}
-.cal-legend{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem;}
-.cleg{display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--text-muted);}
-.cleg-dot{width:10px;height:10px;border-radius:1px;}
+.mcd.past{opacity:0.25;}
+.mcd.booked-ocean{background:rgba(15,52,96,0.9);color:#c9d8f0;}
+.mcd.booked-mountain{background:rgba(26,58,42,0.9);color:#a8d5b5;}
+.mcd.booked-cabana1{background:rgba(100,55,5,0.9);color:#f0c080;}
+.mcd.booked-cabana2{background:rgba(70,30,90,0.9);color:#d4a8f0;}
+.mcd.booked-cabana3{background:rgba(8,75,65,0.9);color:#88e0cc;}
+.mcd.booked-cabin{background:rgba(60,30,90,0.7);color:#c8a0f0;}
+.cal-nav-row{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;}
+.cal-nav-btn{background:none;border:1px solid var(--border);color:var(--white);width:28px;height:28px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;border-radius:2px;}
+.cal-nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+.cal-month-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;}
 
 /* EXPENSES */
-.expense-list{display:flex;flex-direction:column;gap:0.75rem;}
-.expense-item{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1rem;background:var(--navy);border:1px solid var(--border);}
-.expense-name{font-size:0.83rem;}
-.expense-meta{font-size:0.68rem;color:var(--text-muted);}
-.expense-amount{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);}
-.expense-delete{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:0.2rem 0.5rem;transition:color 0.2s;}
-.expense-delete:hover{color:var(--danger);}
+.exp-item{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;background:var(--navy-mid);border:1px solid var(--border);border-radius:4px;margin-bottom:0.5rem;}
+.exp-name{font-size:0.83rem;}
+.exp-date{font-size:0.65rem;color:var(--muted);margin-top:0.15rem;}
+.exp-amount{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--gold);}
+.exp-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.2rem 0.5rem;transition:color 0.2s;}
+.exp-del:hover{color:var(--danger);}
 
-/* SUMMARY BOXES */
-.summary-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;}
-.sbox{background:var(--navy-mid);border:1px solid var(--border);padding:1.5rem;text-align:center;}
-.sbox-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;}
-.sbox-value{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;}
-.sbox-value.income{color:var(--success);}
-.sbox-value.expense{color:var(--danger);}
-.sbox-value.net{color:var(--gold);}
+/* FORM */
+.form-row{display:flex;gap:0.85rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem;}
+.form-grp{display:flex;flex-direction:column;gap:0.35rem;}
+.form-lbl{font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);}
+.form-inp{background:var(--navy);border:1px solid var(--border);color:var(--white);padding:0.6rem 0.85rem;font-family:'Jost',sans-serif;font-size:0.82rem;outline:none;border-radius:2px;min-width:160px;}
+.form-inp:focus{border-color:var(--gold);}
+.form-inp::placeholder{color:var(--muted);}
+select.form-inp option{background:var(--navy);}
 
 /* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:none;align-items:center;justify-content:center;}
 .modal-bg.open{display:flex;}
-.modal{background:var(--navy-mid);border:1px solid var(--border);padding:2rem;min-width:420px;max-width:90vw;position:relative;}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:1.5rem;}
-.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;transition:color 0.2s;}
+.modal{background:var(--navy-mid);border:1px solid var(--border);padding:2rem;width:500px;max-width:95vw;border-radius:4px;position:relative;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:1.5rem;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;}
 .modal-close:hover{color:var(--white);}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;margin-bottom:1rem;}
+.modal-summary{background:var(--navy);padding:0.85rem 1rem;border:1px solid var(--border);border-radius:2px;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.modal-total{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--gold);}
+.btn-row{display:flex;justify-content:flex-end;gap:0.65rem;}
+.btn-primary{background:var(--gold);color:var(--navy);border:none;padding:0.65rem 1.5rem;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:2px;transition:background 0.2s;}
+.btn-primary:hover{background:var(--gold-light);}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--muted);padding:0.65rem 1.25rem;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s;}
+.btn-secondary:hover{border-color:var(--gold);color:var(--white);}
 
 /* MISC */
-.empty-state{text-align:center;padding:3rem;color:var(--text-muted);font-size:0.83rem;}
-.divider{height:1px;background:var(--border);margin:1.5rem 0;}
-.text-muted{color:var(--text-muted);}
-.text-gold{color:var(--gold);}
-.flex-end{display:flex;justify-content:flex-end;gap:0.75rem;}
+.section-label{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.empty{text-align:center;padding:3rem;color:var(--muted);font-size:0.83rem;}
+.card{background:var(--navy-mid);border:1px solid var(--border);border-radius:4px;margin-bottom:1.25rem;}
+.card-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;}
+.card-body{padding:1.5rem;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);padding:0 0.75rem 0.65rem;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:0.85rem 0.75rem;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+tr:last-child td{border-bottom:none;}
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">ADRIANO VILLAS</div>
+    <div class="login-sub">Admin Panel</div>
+    <div class="login-err" id="login-err"></div>
+    <input class="login-input" id="login-user" type="text" placeholder="Username"/>
+    <input class="login-input" id="login-pass" type="password" placeholder="Password"/>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Login →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="sidebar-logo-main">ADRIANO</div>
-    <div class="sidebar-logo-sub">Admin Panel</div>
+  <div class="sb-logo">
+    <div class="sb-logo-main">ADRIANO VILLAS</div>
+    <div class="sb-logo-sub">Admin Panel</div>
   </div>
-  <div class="sidebar-badge">Menu</div>
-  <ul class="sidebar-nav">
-    <li><a href="#" class="active" onclick="return showPage('dashboard',this)"><span class="sidebar-icon">◈</span> Dashboard</a></li>
-    <li><a href="#" onclick="return showPage('bookings',this)"><span class="sidebar-icon">📋</span> Bookings</a></li>
-    <li><a href="#" onclick="return showPage('calendar',this)"><span class="sidebar-icon">📅</span> Calendar</a></li>
-    <li><a href="#" onclick="return showPage('expenses',this)"><span class="sidebar-icon">₱</span> Expenses</a></li>
-    <li><a href="#" onclick="return showPage('reports',this)"><span class="sidebar-icon">📊</span> Reports</a></li>
-  </ul>
-  <div class="sidebar-bottom">
-    <a href="index.html">← Back to Site</a>
+  <nav class="sb-nav">
+    <a href="#" class="active" onclick="return showPage('bookings',this)"><span class="nav-icon">📋</span> Bookings <span class="sb-badge" id="pending-badge" style="display:none;">0</span></a>
+    <a href="#" onclick="return showPage('calendar',this)"><span class="nav-icon">📅</span> Calendar</a>
+    <a href="#" onclick="return showPage('expenses',this)"><span class="nav-icon">₱</span> Expenses</a>
+    <a href="#" onclick="return showPage('reports',this)"><span class="nav-icon">📊</span> Reports</a>
+  </nav>
+  <div class="sb-footer">
+    <a href="/">← Back to Site</a>
+    <a href="#" class="logout" onclick="doLogout();return false;">Logout</a>
   </div>
 </aside>
 
 <!-- MAIN -->
 <main class="main">
   <div class="topbar">
-    <div>
-      <div class="topbar-title" id="page-title">Good day, <em>Admin</em></div>
-    </div>
-    <div class="topbar-right">
-      <select class="month-select" id="month-select" onchange="onMonthChange()"></select>
-      <div class="topbar-date" id="topbar-date"></div>
-    </div>
+    <div class="topbar-title" id="page-title">Booking <em>Requests</em></div>
+    <div class="topbar-date" id="topbar-date"></div>
   </div>
+  <div class="content">
 
-  <!-- DASHBOARD -->
-  <div class="page active" id="page-dashboard">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon">🏡</div><div class="stat-label">Total Bookings (Month)</div><div class="stat-value" id="stat-bookings-month">0</div><div class="stat-sub">Selected month</div></div>
-      <div class="stat-card"><div class="stat-icon">₱</div><div class="stat-label">Monthly Revenue</div><div class="stat-value gold" id="stat-revenue-month">₱0</div><div class="stat-sub">From confirmed bookings</div></div>
-      <div class="stat-card"><div class="stat-icon">📉</div><div class="stat-label">Monthly Expenses</div><div class="stat-value" id="stat-expenses-month">₱0</div><div class="stat-sub">Logged expenses</div></div>
-      <div class="stat-card"><div class="stat-icon">✨</div><div class="stat-label">Net Income</div><div class="stat-value gold" id="stat-net-month">₱0</div><div class="stat-sub">Revenue − Expenses</div></div>
+    <!-- BOOKINGS PAGE (default) -->
+    <div class="page active" id="page-bookings">
+      <!-- Pending banner -->
+      <div class="pending-banner" id="pending-banner" style="display:none;">
+        <div>
+          <div style="font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;">Action Required</div>
+          <div class="pending-banner-text">You have pending booking requests waiting for approval.</div>
+        </div>
+        <div class="pending-banner-count" id="pending-count">0</div>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-tab" onclick="setFilter('pending',this)">Pending</button>
+        <button class="filter-tab" onclick="setFilter('approved',this)">Approved</button>
+        <button class="filter-tab" onclick="setFilter('rejected',this)">Rejected</button>
+        <button class="filter-tab" onclick="setFilter('cancelled',this)">Cancelled</button>
+        <input class="filter-search" id="filter-search" placeholder="Search name, email…" oninput="renderBookings()"/>
+        <button class="btn-primary" style="margin-left:0.5rem;" onclick="openAddModal()">+ Add</button>
+      </div>
+
+      <div id="bookings-list"></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+
+    <!-- CALENDAR PAGE -->
+    <div class="page" id="page-calendar">
+      <div class="cal-nav-row">
+        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+        <div class="cal-month-title" id="cal-month-title"></div>
+        <button class="cal-nav-btn" onclick="calNext()">›</button>
+      </div>
+      <div class="cal-grid-wrap">
+        <div class="cal-unit-box"><div class="cal-unit-label">🌊 Ocean View Villa</div><div class="mini-cal-days" id="cal-ocean"></div></div>
+        <div class="cal-unit-box"><div class="cal-unit-label">⛰️ Mountain View Villa</div><div class="mini-cal-days" id="cal-mountain"></div></div>
+      </div>
+      <div class="cal-grid-wrap-3">
+        <div class="cal-unit-box"><div class="cal-unit-label">🏖️ Cabana 1</div><div class="mini-cal-days" id="cal-cabana1"></div></div>
+        <div class="cal-unit-box"><div class="cal-unit-label">🏖️ Cabana 2</div><div class="mini-cal-days" id="cal-cabana2"></div></div>
+        <div class="cal-unit-box"><div class="cal-unit-label">🏖️ Cabana 3</div><div class="mini-cal-days" id="cal-cabana3"></div></div>
+      </div>
+      <div style="max-width:340px;">
+        <div class="cal-unit-box"><div class="cal-unit-label">🌿 The Cabin</div><div class="mini-cal-days" id="cal-cabin"></div></div>
+      </div>
+      <!-- Legend -->
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.25rem;">
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--muted);"><div style="width:10px;height:10px;background:rgba(15,52,96,0.9);border-radius:1px;"></div>Ocean View</div>
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--muted);"><div style="width:10px;height:10px;background:rgba(26,58,42,0.9);border-radius:1px;"></div>Mountain View</div>
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--muted);"><div style="width:10px;height:10px;background:rgba(100,55,5,0.9);border-radius:1px;"></div>Cabana 1</div>
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--muted);"><div style="width:10px;height:10px;background:rgba(70,30,90,0.9);border-radius:1px;"></div>Cabana 2</div>
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--muted);"><div style="width:10px;height:10px;background:rgba(8,75,65,0.9);border-radius:1px;"></div>Cabana 3</div>
+        <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--muted);"><div style="width:10px;height:10px;background:rgba(60,30,90,0.7);border-radius:1px;"></div>Cabin</div>
+      </div>
+    </div>
+
+    <!-- EXPENSES PAGE -->
+    <div class="page" id="page-expenses">
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-box"><div class="stat-box-label">Revenue (Month)</div><div class="stat-box-value" id="exp-revenue">₱0</div></div>
+        <div class="stat-box"><div class="stat-box-label">Expenses (Month)</div><div class="stat-box-value" style="color:var(--danger);" id="exp-total">₱0</div></div>
+        <div class="stat-box"><div class="stat-box-label">Net Income</div><div class="stat-box-value" id="exp-net">₱0</div></div>
+      </div>
       <div class="card">
-        <div class="card-header"><span class="card-title">Recent Bookings</span><button class="btn-sm btn-outline" onclick="showPage('bookings',null)">View All</button></div>
-        <div class="card-body" style="padding:0;"><table><thead><tr><th>Guest</th><th>Unit</th><th>Check-in</th><th>Total</th></tr></thead><tbody id="dash-recent"></tbody></table></div>
+        <div class="card-header">
+          <span class="card-title">Add Expense</span>
+          <select class="form-inp" id="exp-month-sel" onchange="onExpMonthChange()" style="min-width:150px;padding:0.4rem 0.75rem;font-size:0.72rem;"></select>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-grp"><label class="form-lbl">Description</label><input class="form-inp" id="exp-name" placeholder="e.g. Electricity bill"/></div>
+            <div class="form-grp"><label class="form-lbl">Amount (₱)</label><input class="form-inp" id="exp-amount" type="number" placeholder="0" style="min-width:120px;"/></div>
+            <div class="form-grp"><label class="form-lbl">Date</label><input class="form-inp" id="exp-date" type="date" style="min-width:145px;"/></div>
+            <button class="btn-primary" onclick="addExpense()" style="align-self:flex-end;">Add</button>
+          </div>
+        </div>
+      </div>
+      <div class="section-label">Expense Log</div>
+      <div id="expense-list"><div class="empty">No expenses logged.</div></div>
+    </div>
+
+    <!-- REPORTS PAGE -->
+    <div class="page" id="page-reports">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-label">All-time Bookings</div><div class="stat-box-value" id="rep-total">0</div></div>
+        <div class="stat-box"><div class="stat-box-label">All-time Revenue</div><div class="stat-box-value" id="rep-revenue">₱0</div></div>
+        <div class="stat-box"><div class="stat-box-label">Total Nights</div><div class="stat-box-value" id="rep-nights">0</div></div>
+        <div class="stat-box"><div class="stat-box-label">Pending Now</div><div class="stat-box-value" id="rep-pending">0</div></div>
       </div>
       <div class="card">
-        <div class="card-header"><span class="card-title">Bookings by Unit</span></div>
-        <div class="card-body"><div id="unit-breakdown"></div></div>
+        <div class="card-header"><span class="card-title">Monthly Summary</span></div>
+        <div class="card-body" style="padding:0;overflow-x:auto;">
+          <table>
+            <thead><tr><th>Month</th><th>Bookings</th><th>Nights</th><th>Revenue</th><th>Expenses</th><th>Net</th></tr></thead>
+            <tbody id="reports-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- BOOKINGS -->
-  <div class="page" id="page-bookings">
-    <div class="card" style="margin-bottom:1.5rem;">
-      <div class="card-header"><span class="card-title">Filter Bookings</span></div>
-      <div class="card-body">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Unit</label>
-            <select class="form-input" id="filter-unit" onchange="renderBookingsTable()">
-              <option value="">All Units</option>
-              <option value="ocean">Ocean View Villa</option>
-              <option value="mountain">Mountain View Villa</option>
-              <option value="cabana1">Cabana 1</option>
-              <option value="cabana2">Cabana 2</option>
-              <option value="cabana3">Cabana 3</option>
-              <option value="cabin">The Cabin</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Search</label>
-            <input class="form-input" id="filter-search" placeholder="Name, email, ref…" oninput="renderBookingsTable()"/>
-          </div>
-          <button class="btn-sm btn-gold" style="height:36px;align-self:flex-end;" onclick="openAddBookingModal()">+ Add Booking</button>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">All Bookings</span><span style="font-size:0.72rem;color:var(--text-muted);" id="bookings-count"></span></div>
-      <div class="card-body" style="padding:0;overflow-x:auto;">
-        <table>
-          <thead><tr><th>Ref</th><th>Guest</th><th>Unit</th><th>Check-in</th><th>Check-out</th><th>Nights</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr></thead>
-          <tbody id="bookings-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- CALENDAR -->
-  <div class="page" id="page-calendar">
-    <div class="card" style="margin-bottom:1.5rem;">
-      <div class="card-header">
-        <span class="card-title">Availability Calendar</span>
-        <div style="display:flex;gap:0.5rem;align-items:center;">
-          <button class="mini-cal-nav" onclick="calPrev()">‹</button>
-          <span id="cal-page-title" style="font-size:0.85rem;min-width:130px;text-align:center;"></span>
-          <button class="mini-cal-nav" onclick="calNext()">›</button>
-        </div>
-      </div>
-      <div class="card-body">
-        <!-- Villas row -->
-        <div class="cal-grid-wrap">
-          <div>
-            <div class="cal-section-label">🌊 Ocean View Villa</div>
-            <div class="mini-cal-days" id="cal-ocean"></div>
-          </div>
-          <div>
-            <div class="cal-section-label">⛰️ Mountain View Villa</div>
-            <div class="mini-cal-days" id="cal-mountain"></div>
-          </div>
-        </div>
-        <!-- Cabanas row -->
-        <div class="cal-grid-wrap-3">
-          <div>
-            <div class="cal-section-label">🏖️ Cabana 1</div>
-            <div class="mini-cal-days" id="cal-cabana1"></div>
-          </div>
-          <div>
-            <div class="cal-section-label">🏖️ Cabana 2</div>
-            <div class="mini-cal-days" id="cal-cabana2"></div>
-          </div>
-          <div>
-            <div class="cal-section-label">🏖️ Cabana 3</div>
-            <div class="mini-cal-days" id="cal-cabana3"></div>
-          </div>
-        </div>
-        <!-- Cabin row -->
-        <div style="max-width:340px;">
-          <div class="cal-section-label">🌿 The Cabin</div>
-          <div class="mini-cal-days" id="cal-cabin"></div>
-        </div>
-        <!-- Legend -->
-        <div class="cal-legend" style="margin-top:1.5rem;">
-          <div class="cleg"><div class="cleg-dot" style="background:rgba(15,52,96,0.85);"></div>Ocean View</div>
-          <div class="cleg"><div class="cleg-dot" style="background:rgba(26,58,42,0.85);"></div>Mountain View</div>
-          <div class="cleg"><div class="cleg-dot" style="background:rgba(90,45,5,0.75);"></div>Cabana 1</div>
-          <div class="cleg"><div class="cleg-dot" style="background:rgba(60,25,80,0.75);"></div>Cabana 2</div>
-          <div class="cleg"><div class="cleg-dot" style="background:rgba(8,65,55,0.75);"></div>Cabana 3</div>
-          <div class="cleg"><div class="cleg-dot" style="background:rgba(50,20,80,0.6);"></div>Cabin</div>
-        </div>
-      </div>
-    </div>
-    <!-- Upcoming -->
-    <div class="card">
-      <div class="card-header"><span class="card-title">Upcoming Check-ins</span></div>
-      <div class="card-body" style="padding:0;overflow-x:auto;">
-        <table>
-          <thead><tr><th>Guest</th><th>Unit</th><th>Check-in</th><th>Check-out</th><th>Guests</th><th>Total</th></tr></thead>
-          <tbody id="upcoming-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- EXPENSES -->
-  <div class="page" id="page-expenses">
-    <div class="summary-boxes">
-      <div class="sbox"><div class="sbox-label">Monthly Revenue</div><div class="sbox-value income" id="exp-revenue">₱0</div></div>
-      <div class="sbox"><div class="sbox-label">Monthly Expenses</div><div class="sbox-value expense" id="exp-total">₱0</div></div>
-      <div class="sbox"><div class="sbox-label">Net Income</div><div class="sbox-value net" id="exp-net">₱0</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Add Expense</span></div>
-      <div class="card-body">
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="exp-name" placeholder="e.g. Electricity bill"/></div>
-          <div class="form-group"><label class="form-label">Amount (₱)</label><input class="form-input" id="exp-amount" type="number" placeholder="0.00" style="min-width:130px;"/></div>
-          <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="exp-date" type="date" style="min-width:150px;"/></div>
-          <button class="btn-sm btn-gold" style="height:36px;align-self:flex-end;" onclick="addExpense()">Add Expense</button>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Expense Log</span><span style="font-size:0.72rem;color:var(--text-muted);" id="exp-month-label"></span></div>
-      <div class="card-body"><div class="expense-list" id="expense-list"><div class="empty-state">No expenses logged for this month.</div></div></div>
-    </div>
-  </div>
-
-  <!-- REPORTS -->
-  <div class="page" id="page-reports">
-    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
-      <div class="stat-card"><div class="stat-label">All-time Bookings</div><div class="stat-value" id="rep-total-bookings">0</div></div>
-      <div class="stat-card"><div class="stat-label">All-time Revenue</div><div class="stat-value gold" id="rep-total-revenue">₱0</div></div>
-      <div class="stat-card"><div class="stat-label">Total Nights Booked</div><div class="stat-value" id="rep-total-nights">0</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><span class="card-title">Monthly Summary</span></div>
-      <div class="card-body" style="padding:0;overflow-x:auto;">
-        <table>
-          <thead><tr><th>Month</th><th>Bookings</th><th>Nights</th><th>Revenue</th><th>Expenses</th><th>Net</th></tr></thead>
-          <tbody id="reports-tbody"></tbody>
-        </table>
-      </div>
-    </div>
   </div>
 </main>
+</div>
 
 <!-- ADD BOOKING MODAL -->
 <div class="modal-bg" id="add-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-title">Add Booking</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-      <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="m-fname" placeholder="Juan"/></div>
-      <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="m-lname" placeholder="dela Cruz"/></div>
-      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="m-email" type="email" placeholder="email@example.com"/></div>
-      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="m-phone" type="tel" placeholder="+63 9XX XXX XXXX"/></div>
-      <div class="form-group"><label class="form-label">Unit</label>
-        <select class="form-input" id="m-unit" onchange="updateModalRate()">
-          <option value="ocean" data-rate="28200">Ocean View Villa</option>
-          <option value="mountain" data-rate="28200">Mountain View Villa</option>
-          <option value="cabana1" data-rate="6500">Cabana 1</option>
-          <option value="cabana2" data-rate="6500">Cabana 2</option>
-          <option value="cabana3" data-rate="6500">Cabana 3</option>
-          <option value="cabin" data-rate="10600">The Cabin</option>
+    <div class="modal-grid">
+      <div class="form-grp"><label class="form-lbl">First Name</label><input class="form-inp" id="m-fname" placeholder="Juan" style="min-width:unset;width:100%;"/></div>
+      <div class="form-grp"><label class="form-lbl">Last Name</label><input class="form-inp" id="m-lname" placeholder="dela Cruz" style="min-width:unset;width:100%;"/></div>
+      <div class="form-grp"><label class="form-lbl">Email</label><input class="form-inp" id="m-email" type="email" placeholder="email@example.com" style="min-width:unset;width:100%;"/></div>
+      <div class="form-grp"><label class="form-lbl">Phone</label><input class="form-inp" id="m-phone" placeholder="+63 9XX XXX XXXX" style="min-width:unset;width:100%;"/></div>
+      <div class="form-grp"><label class="form-lbl">Unit</label>
+        <select class="form-inp" id="m-unit" style="min-width:unset;width:100%;" onchange="updateModalTotal()">
+          <option value="Ocean View Villa">Ocean View Villa</option>
+          <option value="Mountain View Villa">Mountain View Villa</option>
+          <option value="Cabana 1">Cabana 1</option>
+          <option value="Cabana 2">Cabana 2</option>
+          <option value="Cabana 3">Cabana 3</option>
+          <option value="The Cabin">The Cabin</option>
         </select>
       </div>
-      <div class="form-group"><label class="form-label">Guests</label><input class="form-input" id="m-guests" type="number" min="1" placeholder="1"/></div>
-      <div class="form-group"><label class="form-label">Check-in</label><input class="form-input" id="m-checkin" type="date"/></div>
-      <div class="form-group"><label class="form-label">Check-out</label><input class="form-input" id="m-checkout" type="date"/></div>
+      <div class="form-grp"><label class="form-lbl">Guests</label><input class="form-inp" id="m-guests" type="number" min="1" placeholder="1" style="min-width:unset;width:100%;"/></div>
+      <div class="form-grp"><label class="form-lbl">Check-in</label><input class="form-inp" id="m-checkin" type="date" style="min-width:unset;width:100%;" oninput="updateModalTotal()"/></div>
+      <div class="form-grp"><label class="form-lbl">Check-out</label><input class="form-inp" id="m-checkout" type="date" style="min-width:unset;width:100%;" oninput="updateModalTotal()"/></div>
     </div>
-    <div style="background:var(--navy);padding:1rem;border:1px solid var(--border);margin-bottom:1.25rem;">
-      <div style="display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:0.4rem;"><span class="text-muted">Rate per night</span><span id="m-rate-display">₱28,200</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:0.83rem;"><span class="text-muted">Estimated Total</span><span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);" id="m-total-display">₱0</span></div>
+    <div class="modal-summary">
+      <div style="font-size:0.72rem;color:var(--muted);">Estimated Total</div>
+      <div class="modal-total" id="m-total">₱0</div>
     </div>
-    <div class="flex-end">
-      <button class="btn-sm btn-outline" onclick="closeModal()">Cancel</button>
-      <button class="btn-sm btn-gold" onclick="saveModalBooking()">Save Booking</button>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" id="m-save-btn" onclick="saveModalBooking()">Save Booking</button>
     </div>
   </div>
 </div>
 
 <script>
-const UNIT_LABELS={ocean:'Ocean View Villa',mountain:'Mountain View Villa',cabana1:'Cabana 1',cabana2:'Cabana 2',cabana3:'Cabana 3',cabin:'The Cabin'};
-const UNIT_RATES={ocean:28200,mountain:28200,cabana1:6500,cabana2:6500,cabana3:6500,cabin:10600};
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-let selYear=new Date().getFullYear(),selMonth=new Date().getMonth();
+const UNIT_RATES={'Ocean View Villa':28200,'Mountain View Villa':28200,'Cabana 1':6500,'Cabana 2':6500,'Cabana 3':6500,'The Cabin':10600};
+const UNIT_KEYS={'Ocean View Villa':'ocean','Mountain View Villa':'mountain','Cabana 1':'cabana1','Cabana 2':'cabana2','Cabana 3':'cabana3','The Cabin':'cabin'};
+let allBookings=[];
+let currentFilter='all';
 let adminCalYear=new Date().getFullYear(),adminCalMonth=new Date().getMonth();
+let expSelYear=new Date().getFullYear(),expSelMonth=new Date().getMonth();
 
-function getBookings(){try{return JSON.parse(localStorage.getItem('av_bookings')||'[]');}catch{return[];}}
-function saveBookings(b){localStorage.setItem('av_bookings',JSON.stringify(b));}
-function getExpenses(){try{return JSON.parse(localStorage.getItem('av_expenses')||'[]');}catch{return[];}}
-function saveExpenses(e){localStorage.setItem('av_expenses',JSON.stringify(e));}
+// ── API ───────────────────────────────────────────────
+async function api(path,opts={}){
+  const res=await fetch('/api'+path,{headers:{'Content-Type':'application/json'},...opts});
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||'Request failed');
+  return data;
+}
 
-function init(){
-  const now=new Date();
-  document.getElementById('topbar-date').textContent=now.toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const sel=document.getElementById('month-select');
-  for(let y=now.getFullYear();y>=now.getFullYear()-2;y--){
-    for(let m=11;m>=0;m--){
-      if(y===now.getFullYear()&&m>now.getMonth())continue;
-      const opt=document.createElement('option');
-      opt.value=`${y}-${m}`;opt.textContent=`${MONTHS[m]} ${y}`;
-      if(y===selYear&&m===selMonth)opt.selected=true;
-      sel.appendChild(opt);
-    }
+// ── AUTH ──────────────────────────────────────────────
+async function init(){
+  document.getElementById('topbar-date').textContent=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  initExpMonthSelect();
+  try{
+    const c=await api('/admin/check');
+    if(c.isAdmin){showApp();await refreshAll();}
+    else showLogin();
+  }catch{showLogin();}
+}
+function showLogin(){document.getElementById('login-screen').style.display='flex';document.getElementById('app-screen').style.display='none';}
+function showApp(){document.getElementById('login-screen').style.display='none';document.getElementById('app-screen').style.display='flex';}
+async function doLogin(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value;
+  const btn=document.getElementById('login-btn');
+  const err=document.getElementById('login-err');
+  btn.textContent='Logging in…';btn.disabled=true;err.textContent='';
+  try{
+    await api('/admin/login',{method:'POST',body:JSON.stringify({username:u,password:p})});
+    showApp();await refreshAll();
+  }catch(e){
+    err.textContent=e.message||'Invalid credentials.';
+    btn.textContent='Login →';btn.disabled=false;
   }
-  document.getElementById('exp-date').value=now.toISOString().split('T')[0];
-  document.getElementById('m-checkin').addEventListener('change',updateModalTotal);
-  document.getElementById('m-checkout').addEventListener('change',updateModalTotal);
-  document.getElementById('m-unit').addEventListener('change',updateModalTotal);
-  refreshAll();
 }
+async function doLogout(){await api('/admin/logout',{method:'POST'});showLogin();}
 
-function onMonthChange(){
-  const[y,m]=document.getElementById('month-select').value.split('-').map(Number);
-  selYear=y;selMonth=m;refreshAll();
+// ── DATA ──────────────────────────────────────────────
+async function refreshAll(){
+  try{allBookings=await api('/admin/bookings');}catch{allBookings=[];}
+  renderBookings();
+  updatePendingBadge();
+  if(document.getElementById('page-calendar').classList.contains('active'))renderCalendarPage();
+  renderExpenses();
+  renderReports();
 }
-function refreshAll(){updateDashboard();renderBookingsTable();renderCalendarPage();renderExpenses();renderReports();}
 
 function showPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.remove('active'));
   if(el)el.classList.add('active');
-  const titles={dashboard:'Good day, <em>Admin</em>',bookings:'Manage <em>Bookings</em>',calendar:'Availability <em>Calendar</em>',expenses:'Expenses &amp; <em>Finances</em>',reports:'Monthly <em>Reports</em>'};
+  const titles={bookings:'Booking <em>Requests</em>',calendar:'Availability <em>Calendar</em>',expenses:'Expenses &amp; <em>Finances</em>',reports:'Monthly <em>Reports</em>'};
   document.getElementById('page-title').innerHTML=titles[id]||id;
   if(id==='calendar')renderCalendarPage();
+  if(id==='bookings')renderBookings();
   return false;
 }
 
 function fmt(n){return'₱'+(n||0).toLocaleString();}
-function fmtDate(s){if(!s)return'—';const[y,m,d]=s.split('-');return`${MONTHS[parseInt(m)-1]} ${parseInt(d)}, ${y}`;}
+function fmtDate(s){
+  if(!s)return'—';
+  const d=new Date(s);
+  return`${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+function nightsFor(b){return Math.round((new Date(b.checkOut)-new Date(b.checkIn))/86400000)||0;}
+function totalFor(b){return nightsFor(b)*(UNIT_RATES[b.roomType]||0);}
 function monthKey(y,m){return`${y}-${String(m+1).padStart(2,'0')}`;}
-function bookingInMonth(b,y,m){const mk=monthKey(y,m);return(b.checkin&&b.checkin.startsWith(mk))||(b.checkout&&b.checkout.startsWith(mk));}
-
-// Dashboard
-function updateDashboard(){
-  const all=getBookings();
-  const monthly=all.filter(b=>bookingInMonth(b,selYear,selMonth));
-  const revenue=monthly.reduce((s,b)=>s+(b.total||0),0);
-  const expTotal=getExpenses().filter(e=>e.date&&e.date.startsWith(monthKey(selYear,selMonth))).reduce((s,e)=>s+(e.amount||0),0);
-  document.getElementById('stat-bookings-month').textContent=monthly.length;
-  document.getElementById('stat-revenue-month').textContent=fmt(revenue);
-  document.getElementById('stat-expenses-month').textContent=fmt(expTotal);
-  document.getElementById('stat-net-month').textContent=fmt(revenue-expTotal);
-  const recent=[...all].sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,6);
-  document.getElementById('dash-recent').innerHTML=recent.length?recent.map(b=>`<tr><td>${b.name||'—'}</td><td><span class="unit-tag">${UNIT_LABELS[b.unit]||b.unit}</span></td><td>${fmtDate(b.checkin)}</td><td style="color:var(--gold);font-family:'Cormorant Garamond',serif;">${fmt(b.total)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty-state">No bookings yet.</td></tr>';
-  const breakdown={};all.forEach(b=>{breakdown[b.unit]=(breakdown[b.unit]||0)+1;});
-  document.getElementById('unit-breakdown').innerHTML=Object.entries(breakdown).length?Object.entries(breakdown).map(([u,c])=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.85rem 0;border-bottom:1px solid var(--border);">
-      <span style="font-size:0.83rem;">${UNIT_LABELS[u]||u}</span>
-      <div style="display:flex;align-items:center;gap:1rem;">
-        <div style="width:80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:${Math.min(100,c*20)}%;height:100%;background:var(--gold);"></div></div>
-        <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);min-width:24px;text-align:right;">${c}</span>
-      </div>
-    </div>`).join(''):'<div class="empty-state">No bookings yet.</div>';
+function bookingInMonth(b,y,m){
+  const mk=monthKey(y,m);
+  return(b.checkIn||'').substring(0,7)===mk||(b.checkOut||'').substring(0,7)===mk;
 }
 
-// Bookings table
-function renderBookingsTable(){
-  const all=getBookings();
-  const unit=document.getElementById('filter-unit').value;
+// ── BOOKINGS ──────────────────────────────────────────
+function setFilter(f,el){
+  currentFilter=f;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderBookings();
+}
+
+function updatePendingBadge(){
+  const count=allBookings.filter(b=>b.status==='pending').length;
+  const badge=document.getElementById('pending-badge');
+  const banner=document.getElementById('pending-banner');
+  const pc=document.getElementById('pending-count');
+  badge.textContent=count;
+  badge.style.display=count>0?'inline-flex':'none';
+  banner.style.display=count>0?'flex':'none';
+  if(pc)pc.textContent=count;
+}
+
+function renderBookings(){
   const q=(document.getElementById('filter-search').value||'').toLowerCase();
-  let filtered=all;
-  if(unit)filtered=filtered.filter(b=>b.unit===unit);
-  if(q)filtered=filtered.filter(b=>((b.name||'')+(b.email||'')+(b.ref||'')).toLowerCase().includes(q));
-  filtered=[...filtered].sort((a,b)=>new Date(b.created)-new Date(a.created));
-  document.getElementById('bookings-count').textContent=`${filtered.length} result${filtered.length!==1?'s':''}`;
-  document.getElementById('bookings-tbody').innerHTML=filtered.length?filtered.map(b=>`
-    <tr>
-      <td style="font-size:0.68rem;color:var(--text-muted);">${b.ref||'—'}</td>
-      <td>${b.name||'—'}<div style="font-size:0.68rem;color:var(--text-muted);">${b.email||''}</div></td>
-      <td><span class="unit-tag">${UNIT_LABELS[b.unit]||b.unit}</span></td>
-      <td>${fmtDate(b.checkin)}</td><td>${fmtDate(b.checkout)}</td>
-      <td>${b.nights||'—'}</td><td>${b.guests||'—'}</td>
-      <td style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;">${fmt(b.total)}</td>
-      <td><span class="badge badge-confirmed">Confirmed</span></td>
-      <td><button class="btn-sm btn-danger" onclick="deleteBooking('${b.ref}')">Delete</button></td>
-    </tr>`).join(''):'<tr><td colspan="10" class="empty-state">No bookings found.</td></tr>';
-}
-function deleteBooking(ref){if(!confirm('Delete this booking?'))return;saveBookings(getBookings().filter(b=>b.ref!==ref));refreshAll();}
+  let list=allBookings;
+  if(currentFilter!=='all')list=list.filter(b=>b.status===currentFilter);
+  if(q)list=list.filter(b=>((b.firstName||'')+(b.lastName||'')+(b.email||'')).toLowerCase().includes(q));
+  // Sort: pending first, then by date
+  list=[...list].sort((a,b)=>{
+    if(a.status==='pending'&&b.status!=='pending')return -1;
+    if(a.status!=='pending'&&b.status==='pending')return 1;
+    return new Date(b.createdAt)-new Date(a.createdAt);
+  });
 
-// Calendar — separate mini-cal per unit
-function renderCalendarPage(){
-  document.getElementById('cal-page-title').textContent=`${MONTHS[adminCalMonth]} ${adminCalYear}`;
-  ['ocean','mountain','cabana1','cabana2','cabana3','cabin'].forEach(u=>renderMiniCal(u));
-  renderUpcoming();
+  if(!list.length){
+    document.getElementById('bookings-list').innerHTML=`<div class="empty">No bookings found.</div>`;
+    return;
+  }
+
+  document.getElementById('bookings-list').innerHTML=list.map(b=>{
+    const nights=nightsFor(b);
+    const total=totalFor(b);
+    const isPending=b.status==='pending';
+    const isApproved=b.status==='approved';
+    return`
+    <div class="booking-card ${b.status}">
+      <div>
+        <div class="bc-name">${b.firstName} ${b.lastName}</div>
+        <div class="bc-email">${b.email||''}</div>
+        <div style="margin-top:0.5rem;"><span class="badge badge-${b.status}">${b.status}</span></div>
+      </div>
+      <div>
+        <div class="bc-unit">${b.roomType||'—'}</div>
+        <div class="bc-dates">${fmtDate(b.checkIn)} → ${fmtDate(b.checkOut)}</div>
+        <div class="bc-dates" style="margin-top:0.2rem;">${nights} night${nights!==1?'s':''} · ${b.guests||1} guest${(b.guests||1)!==1?'s':''}</div>
+        ${b.message?`<div style="font-size:0.68rem;color:var(--muted);margin-top:0.4rem;font-style:italic;">"${b.message}"</div>`:''}
+      </div>
+      <div>
+        <div class="bc-total">${fmt(total)}</div>
+        <div class="bc-guests" style="margin-top:0.2rem;font-size:0.65rem;color:var(--muted);">${fmtDate(b.createdAt)}</div>
+      </div>
+      <div class="bc-actions">
+        ${isPending?`
+          <button class="btn-approve" onclick="updateStatus('${b._id}','approved')">✓ Approve</button>
+          <button class="btn-reject" onclick="updateStatus('${b._id}','rejected')">✗ Reject</button>
+        `:''}
+        ${isApproved?`<button class="btn-cancel" onclick="updateStatus('${b._id}','cancelled')">Cancel</button>`:''}
+        <button class="btn-delete" onclick="deleteBooking('${b._id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
 }
-function getBookedDatesForUnit(unit){
+
+async function updateStatus(id,status){
+  const labels={approved:'approve',rejected:'reject',cancelled:'cancel'};
+  if(!confirm(`${labels[status]||status} this booking?`))return;
+  try{
+    await api(`/admin/bookings/${id}`,{method:'PATCH',body:JSON.stringify({status})});
+    await refreshAll();
+  }catch(e){alert(e.message);}
+}
+async function deleteBooking(id){
+  if(!confirm('Permanently delete this booking?'))return;
+  try{await api(`/admin/bookings/${id}`,{method:'DELETE'});await refreshAll();}
+  catch(e){alert(e.message);}
+}
+
+// ── CALENDAR ─────────────────────────────────────────
+function renderCalendarPage(){
+  document.getElementById('cal-month-title').textContent=`${MONTHS[adminCalMonth]} ${adminCalYear}`;
+  const unitMap={'Ocean View Villa':'ocean','Mountain View Villa':'mountain','Cabana 1':'cabana1','Cabana 2':'cabana2','Cabana 3':'cabana3','The Cabin':'cabin'};
+  Object.entries(unitMap).forEach(([label,key])=>renderMiniCal(key,label));
+}
+function getBookedDates(unitLabel){
   const booked=new Set();
-  getBookings().filter(b=>b.unit===unit).forEach(b=>{
-    let d=new Date(b.checkin);const end=new Date(b.checkout);
+  allBookings.filter(b=>b.roomType===unitLabel&&b.status==='approved').forEach(b=>{
+    let d=new Date(b.checkIn);const end=new Date(b.checkOut);
     while(d<end){booked.add(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}
   });
   return booked;
 }
-function renderMiniCal(unit){
-  const container=document.getElementById('cal-'+unit);
-  if(!container)return;
-  container.innerHTML='';
+function renderMiniCal(key,label){
+  const c=document.getElementById('cal-'+key);if(!c)return;
+  c.innerHTML='';
   const today=new Date();today.setHours(0,0,0,0);
-  ['S','M','T','W','T','F','S'].forEach(d=>{const e=document.createElement('div');e.className='mcd-label';e.textContent=d;container.appendChild(e);});
-  const booked=getBookedDatesForUnit(unit);
+  ['S','M','T','W','T','F','S'].forEach(d=>{const e=document.createElement('div');e.className='mcd-label';e.textContent=d;c.appendChild(e);});
+  const booked=getBookedDates(label);
   const first=new Date(adminCalYear,adminCalMonth,1).getDay();
   const days=new Date(adminCalYear,adminCalMonth+1,0).getDate();
-  for(let i=0;i<first;i++){const e=document.createElement('div');container.appendChild(e);}
+  for(let i=0;i<first;i++){const e=document.createElement('div');c.appendChild(e);}
   for(let d=1;d<=days;d++){
     const el=document.createElement('div');el.className='mcd';
-    const dateStr=`${adminCalYear}-${String(adminCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const thisDate=new Date(adminCalYear,adminCalMonth,d);
+    const ds=`${adminCalYear}-${String(adminCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const td=new Date(adminCalYear,adminCalMonth,d);
     el.textContent=d;
-    if(booked.has(dateStr))el.classList.add('booked-'+unit);
-    if(thisDate.toDateString()===today.toDateString())el.classList.add('today');
-    if(thisDate<today)el.classList.add('past');
-    container.appendChild(el);
+    if(booked.has(ds))el.classList.add('booked-'+key);
+    if(td.toDateString()===today.toDateString())el.classList.add('today');
+    if(td<today)el.classList.add('past');
+    c.appendChild(el);
   }
 }
 function calPrev(){adminCalMonth--;if(adminCalMonth<0){adminCalMonth=11;adminCalYear--;}renderCalendarPage();}
 function calNext(){adminCalMonth++;if(adminCalMonth>11){adminCalMonth=0;adminCalYear++;}renderCalendarPage();}
 
-function renderUpcoming(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const upcoming=getBookings().filter(b=>new Date(b.checkin)>=today).sort((a,b)=>new Date(a.checkin)-new Date(b.checkin)).slice(0,10);
-  document.getElementById('upcoming-tbody').innerHTML=upcoming.length?upcoming.map(b=>`<tr><td>${b.name||'—'}</td><td><span class="unit-tag">${UNIT_LABELS[b.unit]||b.unit}</span></td><td>${fmtDate(b.checkin)}</td><td>${fmtDate(b.checkout)}</td><td>${b.guests||'—'}</td><td style="color:var(--gold);font-family:'Cormorant Garamond',serif;">${fmt(b.total)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty-state">No upcoming bookings.</td></tr>';
-}
+// ── EXPENSES ─────────────────────────────────────────
+function getExpenses(){try{return JSON.parse(localStorage.getItem('av_expenses_adriano')||'[]');}catch{return[];}}
+function saveExpenses(e){localStorage.setItem('av_expenses_adriano',JSON.stringify(e));}
 
-// Expenses
+function initExpMonthSelect(){
+  const now=new Date();
+  const sel=document.getElementById('exp-month-sel');
+  for(let y=now.getFullYear();y>=now.getFullYear()-2;y--){
+    for(let m=11;m>=0;m--){
+      if(y===now.getFullYear()&&m>now.getMonth())continue;
+      const opt=document.createElement('option');
+      opt.value=`${y}-${m}`;opt.textContent=`${MONTHS[m]} ${y}`;
+      if(y===expSelYear&&m===expSelMonth)opt.selected=true;
+      sel.appendChild(opt);
+    }
+  }
+}
+function onExpMonthChange(){
+  const[y,m]=document.getElementById('exp-month-sel').value.split('-').map(Number);
+  expSelYear=y;expSelMonth=m;renderExpenses();
+}
 function renderExpenses(){
-  const mk=monthKey(selYear,selMonth);
-  document.getElementById('exp-month-label').textContent=`${MONTHS[selMonth]} ${selYear}`;
+  const mk=monthKey(expSelYear,expSelMonth);
   const exps=getExpenses().filter(e=>e.date&&e.date.startsWith(mk));
   const total=exps.reduce((s,e)=>s+(e.amount||0),0);
-  const revenue=getBookings().filter(b=>bookingInMonth(b,selYear,selMonth)).reduce((s,b)=>s+(b.total||0),0);
+  const revenue=allBookings.filter(b=>b.status==='approved'&&bookingInMonth(b,expSelYear,expSelMonth)).reduce((s,b)=>s+totalFor(b),0);
   document.getElementById('exp-revenue').textContent=fmt(revenue);
   document.getElementById('exp-total').textContent=fmt(total);
   document.getElementById('exp-net').textContent=fmt(revenue-total);
-  document.getElementById('expense-list').innerHTML=exps.length?exps.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(e=>`
-    <div class="expense-item">
-      <div><div class="expense-name">${e.name}</div><div class="expense-meta">${fmtDate(e.date)}</div></div>
-      <div style="display:flex;align-items:center;gap:1rem;"><div class="expense-amount">${fmt(e.amount)}</div><button class="expense-delete" onclick="deleteExpense('${e.id}')">✕</button></div>
-    </div>`).join(''):'<div class="empty-state">No expenses logged for this month.</div>';
+  document.getElementById('expense-list').innerHTML=exps.length
+    ?exps.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(e=>`
+      <div class="exp-item">
+        <div><div class="exp-name">${e.name}</div><div class="exp-date">${e.date}</div></div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <div class="exp-amount">${fmt(e.amount)}</div>
+          <button class="exp-del" onclick="deleteExpense('${e.id}')">✕</button>
+        </div>
+      </div>`).join('')
+    :'<div class="empty">No expenses for this month.</div>';
 }
 function addExpense(){
   const name=document.getElementById('exp-name').value.trim();
   const amount=parseFloat(document.getElementById('exp-amount').value);
   const date=document.getElementById('exp-date').value;
   if(!name||!amount||!date){alert('Please fill in all fields.');return;}
-  const exps=getExpenses();exps.push({id:'E'+Date.now(),name,amount,date,created:new Date().toISOString()});
-  saveExpenses(exps);document.getElementById('exp-name').value='';document.getElementById('exp-amount').value='';
-  renderExpenses();updateDashboard();renderReports();
+  const exps=getExpenses();
+  exps.push({id:'E'+Date.now(),name,amount,date});
+  saveExpenses(exps);
+  document.getElementById('exp-name').value='';
+  document.getElementById('exp-amount').value='';
+  renderExpenses();renderReports();
 }
-function deleteExpense(id){if(!confirm('Remove this expense?'))return;saveExpenses(getExpenses().filter(e=>e.id!==id));renderExpenses();updateDashboard();renderReports();}
+function deleteExpense(id){
+  if(!confirm('Remove this expense?'))return;
+  saveExpenses(getExpenses().filter(e=>e.id!==id));
+  renderExpenses();renderReports();
+}
+// Set today as default date
+document.getElementById('exp-date').value=new Date().toISOString().split('T')[0];
 
-// Reports
+// ── REPORTS ──────────────────────────────────────────
 function renderReports(){
-  const all=getBookings();
-  document.getElementById('rep-total-bookings').textContent=all.length;
-  document.getElementById('rep-total-revenue').textContent=fmt(all.reduce((s,b)=>s+(b.total||0),0));
-  document.getElementById('rep-total-nights').textContent=all.reduce((s,b)=>s+(b.nights||0),0);
+  document.getElementById('rep-total').textContent=allBookings.length;
+  document.getElementById('rep-revenue').textContent=fmt(allBookings.filter(b=>b.status==='approved').reduce((s,b)=>s+totalFor(b),0));
+  document.getElementById('rep-nights').textContent=allBookings.reduce((s,b)=>s+nightsFor(b),0);
+  document.getElementById('rep-pending').textContent=allBookings.filter(b=>b.status==='pending').length;
   const now=new Date();const rows=[];
   for(let i=0;i<12;i++){
     let m=now.getMonth()-i;let y=now.getFullYear();
     while(m<0){m+=12;y--;}
     const mk=monthKey(y,m);
-    const mBookings=all.filter(b=>bookingInMonth(b,y,m));
-    const revenue=mBookings.reduce((s,b)=>s+(b.total||0),0);
+    const mb=allBookings.filter(b=>bookingInMonth(b,y,m));
+    const rev=mb.filter(b=>b.status==='approved').reduce((s,b)=>s+totalFor(b),0);
     const exps=getExpenses().filter(e=>e.date&&e.date.startsWith(mk)).reduce((s,e)=>s+(e.amount||0),0);
-    rows.push({label:`${MONTHS[m]} ${y}`,count:mBookings.length,nights:mBookings.reduce((s,b)=>s+(b.nights||0),0),revenue,exps,net:revenue-exps});
+    rows.push({label:`${MONTHS[m]} ${y}`,count:mb.length,nights:mb.reduce((s,b)=>s+nightsFor(b),0),rev,exps,net:rev-exps});
   }
   document.getElementById('reports-tbody').innerHTML=rows.map(r=>`
-    <tr><td>${r.label}</td><td>${r.count}</td><td>${r.nights}</td>
-    <td style="color:var(--success);">${fmt(r.revenue)}</td>
-    <td style="color:var(--danger);">${fmt(r.exps)}</td>
-    <td style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;">${fmt(r.net)}</td></tr>`).join('');
+    <tr>
+      <td>${r.label}</td><td>${r.count}</td><td>${r.nights}</td>
+      <td style="color:var(--success);">${fmt(r.rev)}</td>
+      <td style="color:var(--danger);">${fmt(r.exps)}</td>
+      <td style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.05rem;">${fmt(r.net)}</td>
+    </tr>`).join('');
 }
 
-// Modal
-function openAddBookingModal(){document.getElementById('add-modal').classList.add('open');updateModalRate();}
+// ── MODAL ────────────────────────────────────────────
+function openAddModal(){document.getElementById('add-modal').classList.add('open');}
 function closeModal(){document.getElementById('add-modal').classList.remove('open');}
-function updateModalRate(){
-  const sel=document.getElementById('m-unit');
-  document.getElementById('m-rate-display').textContent=fmt(parseInt(sel.selectedOptions[0].dataset.rate||0));
-  updateModalTotal();
-}
 function updateModalTotal(){
-  const rate=parseInt(document.getElementById('m-unit').selectedOptions[0]?.dataset.rate||0);
+  const unit=document.getElementById('m-unit').value;
+  const rate=UNIT_RATES[unit]||0;
   const ci=document.getElementById('m-checkin').value;
   const co=document.getElementById('m-checkout').value;
-  if(ci&&co&&ci<co){const nights=Math.round((new Date(co)-new Date(ci))/(86400000));document.getElementById('m-total-display').textContent=fmt(nights*rate);}
-  else{document.getElementById('m-total-display').textContent='₱0';}
+  if(ci&&co&&ci<co){
+    const nights=Math.round((new Date(co)-new Date(ci))/86400000);
+    document.getElementById('m-total').textContent=fmt(nights*rate);
+  }else{document.getElementById('m-total').textContent='₱0';}
 }
-function saveModalBooking(){
+async function saveModalBooking(){
   const fname=document.getElementById('m-fname').value.trim();
   const lname=document.getElementById('m-lname').value.trim();
   const email=document.getElementById('m-email').value.trim();
+  const phone=document.getElementById('m-phone').value.trim();
   const unit=document.getElementById('m-unit').value;
-  const checkin=document.getElementById('m-checkin').value;
-  const checkout=document.getElementById('m-checkout').value;
-  if(!fname||!checkin||!checkout){alert('Please fill in required fields.');return;}
-  const rate=UNIT_RATES[unit];
-  const nights=Math.round((new Date(checkout)-new Date(checkin))/(86400000));
-  const ref='AV'+Date.now().toString().slice(-6);
-  const record={ref,unit,unitLabel:UNIT_LABELS[unit],checkin,checkout,nights,guests:document.getElementById('m-guests').value,name:(fname+' '+lname).trim(),email,phone:document.getElementById('m-phone').value,total:nights*rate,rate,created:new Date().toISOString()};
-  const all=getBookings();all.push(record);saveBookings(all);
-  closeModal();refreshAll();
-  ['m-fname','m-lname','m-email','m-phone','m-guests','m-checkin','m-checkout'].forEach(id=>document.getElementById(id).value='');
+  const ci=document.getElementById('m-checkin').value;
+  const co=document.getElementById('m-checkout').value;
+  if(!fname||!lname||!email||!phone||!ci||!co){alert('Please fill in all fields.');return;}
+  const btn=document.getElementById('m-save-btn');
+  btn.textContent='Saving…';btn.disabled=true;
+  try{
+    await api('/admin/bookings/manual',{method:'POST',body:JSON.stringify({
+      firstName:fname,lastName:lname,email,phone,roomType:unit,
+      checkIn:ci,checkOut:co,guests:document.getElementById('m-guests').value||1,status:'approved'
+    })});
+    closeModal();
+    ['m-fname','m-lname','m-email','m-phone','m-guests','m-checkin','m-checkout'].forEach(id=>document.getElementById(id).value='');
+    await refreshAll();
+  }catch(e){alert(e.message);}
+  finally{btn.textContent='Save Booking';btn.disabled=false;}
 }
 
 init();
