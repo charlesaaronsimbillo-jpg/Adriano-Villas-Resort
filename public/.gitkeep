@@ -1,0 +1,24 @@
+# MongoDB — reuse your Atlas cluster, just change the DB name at the end
+MONGO_URI=mongodb+srv://YOUR_USER:YOUR_PASS@YOUR_CLUSTER.mongodb.net/adriano_villas
+
+# Admin login credentials
+ADMIN_USER=admin
+ADMIN_PASS=adriano2026
+
+# Session secret — change to something random in production
+SESSION_SECRET=adriano-secret-2026
+
+# Brevo (Sendinblue) API key — reuse the same key from D3S
+BREVO_API_KEY=your_brevo_api_key_here
+
+# Sender email address (must be verified in Brevo)
+SENDER_EMAIL=reservations@adrianovillas.com
+SENDER_NAME=Adriano Villas & Resort
+
+# Firebase push notifications (optional — same project or new one)
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_CLIENT_EMAIL=your_firebase_client_email
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_KEY_HERE\n-----END PRIVATE KEY-----\n"
+
+# Admin device token for push notifications (set via app)
+ADMIN_DEVICE_TOKEN=

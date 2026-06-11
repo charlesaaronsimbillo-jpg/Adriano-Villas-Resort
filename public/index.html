@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Adriano Villas &amp; Resort</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d1b2a;--navy-mid:#1a2e45;--navy-light:#243b55;
+  --gold:#c9a96e;--gold-light:#e8d5b0;
+  --white:#ffffff;--cream:#f8f5ef;--cream-mid:#f0ebe0;
+  --dark-text:#1a1a1a;--mid-text:#555550;--light-text:#8a8a80;
+  --border-light:rgba(0,0,0,0.1);--border-gold:rgba(201,169,110,0.3);
+  --border-dark:rgba(201,169,110,0.25);
+  --radius:2px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--dark-text);font-family:'Jost',sans-serif;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s;}
+nav.scrolled{background:rgba(255,255,255,0.97);padding:1rem 4rem;border-bottom:1px solid var(--border-light);backdrop-filter:blur(8px);box-shadow:0 2px 20px rgba(0,0,0,0.06);}
+nav.scrolled .nav-logo-main{color:var(--dark-text);}
+nav.scrolled .nav-links a{color:var(--dark-text);}
+nav.scrolled .nav-links a:not(.nav-book):hover{color:var(--gold);}
+.nav-logo{display:flex;flex-direction:column;line-height:1;}
+.nav-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:0.08em;color:var(--white);transition:color 0.4s;}
+.nav-logo-sub{font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);}
+.nav-links{display:flex;gap:2.5rem;align-items:center;}
+.nav-links a{text-decoration:none;color:var(--white);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.85;transition:all 0.2s;position:relative;}
+.nav-links a:not(.nav-book)::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
+.nav-links a:not(.nav-book):hover::after{width:100%;}
+.nav-links a:hover{opacity:1;color:var(--gold);}
+.nav-book{background:var(--gold);color:var(--navy)!important;padding:0.65rem 1.5rem;opacity:1!important;font-weight:600;border-radius:var(--radius);}
+.nav-book:hover{background:var(--gold-light)!important;}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.hero-photo-placeholder{position:absolute;inset:0;background:linear-gradient(160deg,#0f3460 0%,#1a2e45 40%,#0d2010 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
+.hero-photo-placeholder-icon{font-size:4rem;opacity:0.12;}
+.hero-photo-placeholder-label{font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:rgba(201,169,110,0.45);border:1px dashed rgba(201,169,110,0.25);padding:0.6rem 1.4rem;}
+
+/* ── NOTIFICATION ── */
+.notif{position:fixed;bottom:2rem;right:2rem;background:var(--navy);border:1px solid var(--gold);color:var(--white);padding:1rem 1.5rem;font-size:0.8rem;z-index:999;transform:translateX(150%);transition:transform 0.4s;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.notif.show{transform:translateX(0);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,27,42,0.95) 0%,rgba(13,27,42,0.4) 55%,rgba(13,27,42,0.25) 100%);}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:880px;padding:2rem;}
+.hero-eyebrow{font-size:0.7rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.2s forwards;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1.04;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.4s forwards;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-subtitle{font-size:1rem;font-weight:300;color:rgba(248,246,241,0.72);letter-spacing:0.05em;margin-bottom:3rem;opacity:0;animation:fadeUp 0.8s 0.6s forwards;}
+.hero-actions{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.8s forwards;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:1rem 2.5rem;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all 0.3s;border:none;cursor:pointer;font-family:'Jost',sans-serif;}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);}
+.btn-outline{border:1px solid rgba(248,246,241,0.45);color:var(--white);padding:1rem 2.5rem;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:400;text-decoration:none;transition:all 0.3s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;z-index:2;opacity:0;animation:fadeIn 1s 1.2s forwards;}
+.hero-scroll span{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(248,246,241,0.45);}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite;}
+
+/* ── STATS STRIP ── */
+.about-strip{background:var(--cream);padding:2.75rem 4rem;display:flex;align-items:center;justify-content:center;gap:5rem;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);}
+.about-stat{text-align:center;cursor:default;transition:transform 0.3s;}
+.about-stat:hover{transform:translateY(-4px);}
+.about-stat-num{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:var(--gold);line-height:1;}
+.about-stat-label{font-size:0.62rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--light-text);margin-top:0.4rem;}
+.about-divider{width:1px;height:45px;background:var(--border-light);}
+
+/* ── SECTION COMMON ── */
+section{padding:7rem 4rem;}
+.section-tag{font-size:0.62rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4vw,3.4rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem;}
+.section-title em{font-style:italic;}
+.section-divider{width:55px;height:1px;background:var(--gold);margin:0 auto 2rem;transition:width 0.5s;}
+
+/* ── SLIDER ── */
+.slider-wrap{position:relative;overflow:hidden;}
+.slider-track{display:flex;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);}
+.slide{min-width:100%;position:relative;}
+.photo-placeholder{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;background:var(--cream-mid);border:1px dashed rgba(201,169,110,0.3);}
+.photo-placeholder-icon{font-size:2rem;opacity:0.25;}
+.photo-placeholder-label{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(100,90,70,0.5);}
+.photo-placeholder-hint{font-size:0.52rem;color:rgba(100,90,70,0.35);letter-spacing:0.1em;}
+.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.1);color:var(--dark-text);width:38px;height:38px;cursor:pointer;font-size:1.1rem;z-index:5;transition:all 0.2s;backdrop-filter:blur(4px);}
+.slider-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--white);}
+.slider-btn.prev{left:1rem;}
+.slider-btn.next{right:1rem;}
+.slider-dots{position:absolute;bottom:0.9rem;left:50%;transform:translateX(-50%);display:flex;gap:0.4rem;z-index:5;}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);border:none;cursor:pointer;transition:all 0.2s;padding:0;}
+.dot.active{background:var(--gold);transform:scale(1.3);}
+.slide-counter{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.08);color:var(--dark-text);font-size:0.62rem;letter-spacing:0.15em;padding:0.3rem 0.7rem;z-index:5;backdrop-filter:blur(4px);}
+
+/* ── ACCOMMODATIONS ── */
+#accommodations{background:var(--white);}
+.acc-header{text-align:center;margin-bottom:5rem;}
+.acc-header .section-title{color:var(--dark-text);}
+.acc-header:hover .section-divider{width:110px;}
+
+/* Villa blocks */
+.villa-block{display:grid;grid-template-columns:1.15fr 0.85fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto 3rem;box-shadow:0 4px 30px rgba(0,0,0,0.07);}
+.villa-block.reverse{grid-template-columns:0.85fr 1.15fr;}
+.villa-slider-wrap .slider-wrap{height:440px;}
+.villa-slider-wrap .photo-placeholder{height:440px;}
+.villa-info-panel{background:var(--cream);padding:3.5rem;display:flex;flex-direction:column;justify-content:center;}
+.villa-tag{font-size:0.58rem;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;}
+.villa-name{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;margin-bottom:0.9rem;line-height:1.08;color:var(--dark-text);}
+.villa-desc{font-size:0.84rem;color:var(--mid-text);line-height:1.8;margin-bottom:1.75rem;}
+.villa-details-list{display:flex;flex-direction:column;gap:0.55rem;margin-bottom:2rem;}
+.villa-detail-row{display:flex;gap:0.75rem;font-size:0.8rem;color:var(--mid-text);}
+.villa-detail-row span:first-child{color:var(--gold);min-width:16px;text-align:center;}
+.villa-rate-tag{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--gold);margin-bottom:0.2rem;}
+.villa-rate-label{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--light-text);margin-bottom:2rem;}
+
+/* Cabanas & cabin */
+.small-units-header{text-align:center;margin-bottom:3rem;margin-top:1rem;}
+.small-units-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;margin-bottom:0.5rem;color:var(--dark-text);}
+.small-units-sub{font-size:0.75rem;color:var(--light-text);letter-spacing:0.1em;}
+.units-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1200px;margin:0 auto 3rem;}
+.unit-card{background:var(--white);border:1px solid var(--border-light);overflow:hidden;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;}
+.unit-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);}
+.unit-card-slider .slider-wrap{height:240px;}
+.unit-card-slider .photo-placeholder{height:240px;}
+.unit-card-body{padding:1.75rem;background:var(--cream);}
+.unit-name{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;margin-bottom:0.35rem;color:var(--dark-text);}
+.unit-cap{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--light-text);margin-bottom:1.25rem;}
+.unit-price{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);font-weight:300;}
+.unit-price-label{font-size:0.58rem;color:var(--light-text);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.2rem;}
+.unit-book-btn{margin-top:1.5rem;width:100%;background:transparent;border:1px solid rgba(0,0,0,0.2);color:var(--dark-text);padding:0.8rem;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+.unit-book-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--white);}
+
+/* Cabin full row */
+.cabin-block{display:grid;grid-template-columns:1.25fr 0.75fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto;box-shadow:0 4px 30px rgba(0,0,0,0.07);}
+.cabin-block .slider-wrap{height:360px;}
+.cabin-block .photo-placeholder{height:360px;}
+
+/* ── BOOKING ── */
+#booking{background:var(--navy);border-top:none;}
+.booking-header{text-align:center;margin-bottom:4rem;}
+.booking-header .section-title{color:var(--white);}
+.booking-header .section-tag{color:var(--gold);}
+.booking-header:hover .section-divider{width:110px;}
+.booking-container{max-width:1040px;margin:0 auto;}
+.steps{display:flex;align-items:center;justify-content:center;margin-bottom:3.5rem;}
+.step{display:flex;align-items:center;gap:0.75rem;}
+.step-num{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:rgba(255,255,255,0.4);transition:all 0.3s;}
+.step-num.active{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:600;}
+.step-num.done{background:rgba(201,169,110,0.15);border-color:var(--gold);color:var(--gold);}
+.step-label{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.step-label.active{color:var(--white);}
+.step-connector{width:55px;height:1px;background:rgba(255,255,255,0.12);margin:0 0.5rem;}
+.step-panel{display:none;}
+.step-panel.active{display:block;}
+
+/* Unit selector */
+.unit-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;}
+.unit-option{border:1px solid rgba(255,255,255,0.12);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:rgba(255,255,255,0.03);}
+.unit-option.selected{border-color:var(--gold);background:rgba(201,169,110,0.08);}
+.unit-option:hover{border-color:rgba(201,169,110,0.5);background:rgba(201,169,110,0.05);}
+.unit-option-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:0.3rem;color:var(--white);}
+.unit-option-detail{font-size:0.68rem;color:rgba(255,255,255,0.45);}
+.unit-option-price{font-size:0.85rem;color:var(--gold);margin-top:0.75rem;}
+.unit-check{position:absolute;top:1rem;right:1rem;width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:0.6rem;transition:all 0.3s;}
+.unit-option.selected .unit-check{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+
+/* Calendar */
+.calendar-wrap{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;}
+.calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.cal-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--white);}
+.cal-nav{background:none;border:1px solid rgba(255,255,255,0.15);color:var(--white);width:32px;height:32px;cursor:pointer;font-size:1rem;transition:all 0.2s;}
+.cal-nav:hover{border-color:var(--gold);color:var(--gold);}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;}
+.cal-day-label{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0.5rem 0;}
+.cal-day{padding:0.6rem;font-size:0.8rem;cursor:pointer;transition:all 0.2s;border:1px solid transparent;color:var(--white);}
+.cal-day:hover:not(.booked):not(.past){background:rgba(201,169,110,0.12);border-color:rgba(201,169,110,0.3);}
+.cal-day.selected{background:var(--gold);color:var(--navy);font-weight:600;}
+.cal-day.in-range{background:rgba(201,169,110,0.15);}
+.cal-day.booked{color:rgba(255,255,255,0.2);text-decoration:line-through;cursor:not-allowed;}
+.cal-day.past{color:rgba(255,255,255,0.15);cursor:not-allowed;}
+.cal-day.empty{cursor:default;}
+.cal-legend{display:flex;gap:2rem;margin-top:1rem;font-size:0.62rem;color:rgba(255,255,255,0.4);}
+.legend-dot{width:10px;height:10px;display:inline-block;margin-right:0.4rem;}
+.legend-dot.available{background:rgba(201,169,110,0.3);}
+.legend-dot.booked-dot{background:rgba(255,255,255,0.15);}
+.legend-dot.selected-dot{background:var(--gold);}
+.date-display{text-align:center;font-size:0.85rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;min-height:24px;}
+
+/* Guest form */
+.guest-form{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;}
+.form-group{display:flex;flex-direction:column;gap:0.5rem;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.45);}
+.form-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:var(--white);padding:0.85rem 1rem;font-family:'Jost',sans-serif;font-size:0.9rem;transition:border-color 0.2s;outline:none;}
+.form-input:focus{border-color:var(--gold);}
+.form-input::placeholder{color:rgba(255,255,255,0.25);}
+select.form-input option{background:var(--navy);}
+
+/* Summary */
+.booking-summary{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;}
+.summary-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:1.5rem;color:var(--white);}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+.summary-row:last-child{border-bottom:none;}
+.summary-label{font-size:0.8rem;color:rgba(255,255,255,0.45);}
+.summary-value{font-size:0.9rem;color:var(--white);}
+.summary-total{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);}
+.booking-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;}
+.btn-next{background:var(--gold);color:var(--navy);border:none;padding:1rem 2.5rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;}
+.btn-next:hover{background:var(--gold-light);}
+.btn-back{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+.btn-back:hover{border-color:var(--gold);color:var(--white);}
+
+/* Confirm */
+.confirm-box{text-align:center;padding:4rem 2rem;}
+.confirm-icon{font-size:4rem;margin-bottom:1.5rem;}
+.confirm-title{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;margin-bottom:1rem;color:var(--white);}
+.confirm-sub{color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:2rem;}
+.confirm-ref{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);letter-spacing:0.1em;}
+
+/* ── INQUIRE ── */
+#inquire{background:var(--cream);border-top:1px solid var(--border-light);padding:7rem 4rem;}
+.inquire-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;max-width:1200px;margin:0 auto;align-items:start;}
+.inquire-form-wrap{background:var(--white);border:1px solid var(--border-light);padding:2.5rem;box-shadow:0 4px 30px rgba(0,0,0,0.06);}
+.inquire-form-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:0.5rem;color:var(--dark-text);}
+.inquire-form-sub{font-size:0.82rem;color:var(--mid-text);line-height:1.65;margin-bottom:2rem;}
+.inq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.inq-full{grid-column:1/-1;}
+.inq-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--light-text);display:block;margin-bottom:0.45rem;}
+.inq-input{width:100%;background:var(--cream);border:1px solid var(--border-light);color:var(--dark-text);padding:0.8rem 1rem;font-family:'Jost',sans-serif;font-size:0.88rem;transition:border-color 0.2s;outline:none;}
+.inq-input:focus{border-color:var(--gold);}
+.inq-input::placeholder{color:var(--light-text);}
+textarea.inq-input{resize:vertical;min-height:100px;}
+select.inq-input option{background:var(--white);}
+.inq-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;}
+.inq-btn:hover{background:var(--gold);color:var(--navy);}
+.inq-success{display:none;text-align:center;padding:2rem;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.5rem;}
+
+/* map side */
+.inquire-map-side{}
+.map-eyebrow{font-size:0.62rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;}
+.map-eyebrow::before{content:'';display:inline-block;width:35px;height:1px;background:var(--gold);}
+.map-title{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;line-height:1.1;margin-bottom:1rem;color:var(--dark-text);}
+.map-title em{font-style:italic;}
+.map-desc{font-size:0.85rem;color:var(--mid-text);line-height:1.75;margin-bottom:2rem;}
+.map-embed{width:100%;height:360px;border:1px solid var(--border-light);overflow:hidden;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+.map-embed iframe{width:100%;height:100%;border:none;display:block;}
+.map-details{margin-top:1.5rem;display:flex;flex-direction:column;gap:0.85rem;}
+.map-detail-row{display:flex;gap:0.9rem;align-items:flex-start;font-size:0.83rem;}
+.map-detail-icon{color:var(--gold);font-size:0.95rem;margin-top:0.05rem;flex-shrink:0;}
+.map-detail-text{color:var(--mid-text);line-height:1.55;}
+.map-detail-text strong{color:var(--dark-text);font-weight:500;}
+
+/* ── CONTACT ── */
+#contact{padding:5rem 4rem;text-align:center;background:var(--navy);border-top:none;}
+.contact-grid{display:flex;gap:4rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;}
+.contact-item .label{font-size:0.58rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;}
+.contact-item .value{font-size:0.95rem;color:var(--white);}
+#contact .section-title{color:var(--white);}
+#contact .section-tag{color:var(--gold);}
+
+/* ── FOOTER ── */
+footer{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.06);padding:4rem;display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;margin-bottom:0.4rem;color:var(--white);}
+.footer-tagline{font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.footer-desc{margin-top:1.5rem;font-size:0.83rem;color:rgba(255,255,255,0.4);line-height:1.75;}
+.footer-heading{font-size:0.62rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:0.75rem;}
+.footer-links a{text-decoration:none;color:rgba(255,255,255,0.4);font-size:0.84rem;transition:all 0.25s;position:relative;}
+.footer-links a:hover{color:var(--white);padding-left:6px;}
+.footer-bottom{grid-column:1/-1;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:0.72rem;color:rgba(255,255,255,0.25);}
+.footer-admin-link{font-size:0.68rem;color:rgba(255,255,255,0.25);text-decoration:none;letter-spacing:0.15em;text-transform:uppercase;transition:color 0.2s;}
+.footer-admin-link:hover{color:var(--gold);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes scrollPulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 0.75s cubic-bezier(0.4,0,0.2,1),transform 0.75s cubic-bezier(0.4,0,0.2,1);}
+.reveal.revealed{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.75s cubic-bezier(0.4,0,0.2,1),transform 0.75s cubic-bezier(0.4,0,0.2,1);}
+.reveal-left.revealed{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.75s cubic-bezier(0.4,0,0.2,1),transform 0.75s cubic-bezier(0.4,0,0.2,1);}
+.reveal-right.revealed{opacity:1;transform:translateX(0);}
+.reveal-d1{transition-delay:0.1s;}.reveal-d2{transition-delay:0.2s;}.reveal-d3{transition-delay:0.3s;}.reveal-d4{transition-delay:0.4s;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <span class="nav-logo-main">ADRIANO</span>
+    <span class="nav-logo-sub">Villas &amp; Resort</span>
+  </div>
+  <div class="nav-links">
+    <a href="#accommodations">Stay</a>
+    <a href="#booking">Book</a>
+    <a href="#inquire">Inquire</a>
+    <a href="#contact">Contact</a>
+    <a href="#booking" class="nav-book">Book Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-photo-placeholder">
+    <div class="hero-photo-placeholder-icon">🏝️</div>
+    <div class="hero-photo-placeholder-label">Resort Overview Photo</div>
+    <div style="font-size:0.52rem;color:rgba(201,169,110,0.3);letter-spacing:0.15em;margin-top:0.25rem;">Replace with: photos/resort-hero.jpg</div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Welcome to Adriano Villas &amp; Resort</p>
+    <h1 class="hero-title">Where <em>Luxury</em><br>Meets Nature</h1>
+    <p class="hero-subtitle">Private villas, breathtaking views, and moments that last a lifetime.</p>
+    <div class="hero-actions">
+      <a href="#booking" class="btn-primary">Reserve Your Stay</a>
+      <a href="#accommodations" class="btn-outline">Explore Villas</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="about-strip">
+  <div class="about-stat reveal reveal-d1"><div class="about-stat-num">2</div><div class="about-stat-label">Private Villas</div></div>
+  <div class="about-divider"></div>
+  <div class="about-stat reveal reveal-d2"><div class="about-stat-num">25</div><div class="about-stat-label">Guests Per Villa</div></div>
+  <div class="about-divider"></div>
+  <div class="about-stat reveal reveal-d3"><div class="about-stat-num">3</div><div class="about-stat-label">Cabanas</div></div>
+  <div class="about-divider"></div>
+  <div class="about-stat reveal reveal-d4"><div class="about-stat-num">6</div><div class="about-stat-label">Cabin Capacity</div></div>
+</div>
+
+<!-- ACCOMMODATIONS -->
+<section id="accommodations">
+  <div class="acc-header">
+    <p class="section-tag reveal">Our Accommodations</p>
+    <h2 class="section-title reveal reveal-d1">Choose Your <em>Sanctuary</em></h2>
+    <div class="section-divider reveal reveal-d2"></div>
+  </div>
+
+  <!-- OCEAN VIEW VILLA -->
+  <div class="villa-block reveal">
+    <div class="villa-slider-wrap">
+      <div class="slider-wrap" id="slider-ocean">
+        <div class="slider-track" id="track-ocean">
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 1</div><div class="photo-placeholder-hint">photos/ocean-1.jpg</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 2</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 3</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 4</div></div></div>
+        </div>
+        <button class="slider-btn prev" onclick="slide('ocean',-1)">‹</button>
+        <button class="slider-btn next" onclick="slide('ocean',1)">›</button>
+        <div class="slider-dots" id="dots-ocean"></div>
+        <div class="slide-counter" id="counter-ocean">1 / 4</div>
+      </div>
+    </div>
+    <div class="villa-info-panel">
+      <p class="villa-tag">Private Villa · Up to 25 Guests</p>
+      <h3 class="villa-name">Ocean View<br>Villa</h3>
+      <p class="villa-desc">Perched with sweeping panoramic sea views, this exclusive villa offers total privacy and full luxury amenities for up to 25 guests.</p>
+      <div class="villa-details-list">
+        <div class="villa-detail-row"><span>👥</span><span>Up to 25 guests</span></div>
+        <div class="villa-detail-row"><span>🌊</span><span>Panoramic ocean view</span></div>
+        <div class="villa-detail-row"><span>🏡</span><span>Full villa — entire space</span></div>
+        <div class="villa-detail-row"><span>🌙</span><span>Minimum 1 night stay</span></div>
+      </div>
+      <div class="villa-rate-tag">₱28,200</div>
+      <div class="villa-rate-label">per night · entire villa</div>
+      <a href="#booking" class="btn-primary" onclick="selectUnit('ocean')">Book This Villa →</a>
+    </div>
+  </div>
+
+  <!-- MOUNTAIN VIEW VILLA -->
+  <div class="villa-block reverse reveal">
+    <div class="villa-info-panel" style="order:-1;">
+      <p class="villa-tag">Private Villa · Up to 25 Guests</p>
+      <h3 class="villa-name">Mountain View<br>Villa</h3>
+      <p class="villa-desc">Nestled in lush highland serenity, this villa wraps your stay in nature's quiet grandeur — perfect for large groups seeking a peaceful escape.</p>
+      <div class="villa-details-list">
+        <div class="villa-detail-row"><span>👥</span><span>Up to 25 guests</span></div>
+        <div class="villa-detail-row"><span>⛰️</span><span>Highland mountain vistas</span></div>
+        <div class="villa-detail-row"><span>🏡</span><span>Full villa — entire space</span></div>
+        <div class="villa-detail-row"><span>🌙</span><span>Minimum 1 night stay</span></div>
+      </div>
+      <div class="villa-rate-tag">₱28,200</div>
+      <div class="villa-rate-label">per night · entire villa</div>
+      <a href="#booking" class="btn-primary" onclick="selectUnit('mountain')">Book This Villa →</a>
+    </div>
+    <div class="villa-slider-wrap">
+      <div class="slider-wrap" id="slider-mountain">
+        <div class="slider-track" id="track-mountain">
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 1</div><div class="photo-placeholder-hint">photos/mountain-1.jpg</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 2</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 3</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 4</div></div></div>
+        </div>
+        <button class="slider-btn prev" onclick="slide('mountain',-1)">‹</button>
+        <button class="slider-btn next" onclick="slide('mountain',1)">›</button>
+        <div class="slider-dots" id="dots-mountain"></div>
+        <div class="slide-counter" id="counter-mountain">1 / 4</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CABANAS -->
+  <div class="small-units-header reveal">
+    <p class="section-tag">Intimate Stays</p>
+    <h3 class="small-units-title">Cabanas &amp; Cabin</h3>
+    <div class="small-units-sub">Cozy retreats for smaller groups</div>
+  </div>
+
+  <div class="units-grid">
+    <!-- CABANA 1 -->
+    <div class="unit-card reveal reveal-d1">
+      <div class="unit-card-slider">
+        <div class="slider-wrap" id="slider-cabana1">
+          <div class="slider-track" id="track-cabana1">
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 1</div><div class="photo-placeholder-hint">photos/cabana-1-a.jpg</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 2</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 3</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 4</div></div></div>
+          </div>
+          <button class="slider-btn prev" onclick="slide('cabana1',-1)" style="width:30px;height:30px;font-size:0.9rem;">‹</button>
+          <button class="slider-btn next" onclick="slide('cabana1',1)" style="width:30px;height:30px;font-size:0.9rem;">›</button>
+          <div class="slider-dots" id="dots-cabana1"></div>
+          <div class="slide-counter" id="counter-cabana1">1 / 4</div>
+        </div>
+      </div>
+      <div class="unit-card-body">
+        <h3 class="unit-name">Cabana 1</h3>
+        <p class="unit-cap">Up to 4 Guests</p>
+        <div class="unit-price">₱6,500</div>
+        <div class="unit-price-label">Per Night</div>
+        <button class="unit-book-btn" onclick="scrollToBook('cabana1')">Book Cabana 1</button>
+      </div>
+    </div>
+
+    <!-- CABANA 2 -->
+    <div class="unit-card reveal reveal-d2">
+      <div class="unit-card-slider">
+        <div class="slider-wrap" id="slider-cabana2">
+          <div class="slider-track" id="track-cabana2">
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 1</div><div class="photo-placeholder-hint">photos/cabana-2-a.jpg</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 2</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 3</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 4</div></div></div>
+          </div>
+          <button class="slider-btn prev" onclick="slide('cabana2',-1)" style="width:30px;height:30px;font-size:0.9rem;">‹</button>
+          <button class="slider-btn next" onclick="slide('cabana2',1)" style="width:30px;height:30px;font-size:0.9rem;">›</button>
+          <div class="slider-dots" id="dots-cabana2"></div>
+          <div class="slide-counter" id="counter-cabana2">1 / 4</div>
+        </div>
+      </div>
+      <div class="unit-card-body">
+        <h3 class="unit-name">Cabana 2</h3>
+        <p class="unit-cap">Up to 4 Guests</p>
+        <div class="unit-price">₱6,500</div>
+        <div class="unit-price-label">Per Night</div>
+        <button class="unit-book-btn" onclick="scrollToBook('cabana2')">Book Cabana 2</button>
+      </div>
+    </div>
+
+    <!-- CABANA 3 -->
+    <div class="unit-card reveal reveal-d3">
+      <div class="unit-card-slider">
+        <div class="slider-wrap" id="slider-cabana3">
+          <div class="slider-track" id="track-cabana3">
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 1</div><div class="photo-placeholder-hint">photos/cabana-3-a.jpg</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 2</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 3</div></div></div>
+            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 4</div></div></div>
+          </div>
+          <button class="slider-btn prev" onclick="slide('cabana3',-1)" style="width:30px;height:30px;font-size:0.9rem;">‹</button>
+          <button class="slider-btn next" onclick="slide('cabana3',1)" style="width:30px;height:30px;font-size:0.9rem;">›</button>
+          <div class="slider-dots" id="dots-cabana3"></div>
+          <div class="slide-counter" id="counter-cabana3">1 / 4</div>
+        </div>
+      </div>
+      <div class="unit-card-body">
+        <h3 class="unit-name">Cabana 3</h3>
+        <p class="unit-cap">Up to 4 Guests</p>
+        <div class="unit-price">₱6,500</div>
+        <div class="unit-price-label">Per Night</div>
+        <button class="unit-book-btn" onclick="scrollToBook('cabana3')">Book Cabana 3</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CABIN -->
+  <div class="cabin-block reveal">
+    <div class="villa-slider-wrap">
+      <div class="slider-wrap" id="slider-cabin">
+        <div class="slider-track" id="track-cabin">
+          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 1</div><div class="photo-placeholder-hint">photos/cabin-a.jpg</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 2</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 3</div></div></div>
+          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 4</div></div></div>
+        </div>
+        <button class="slider-btn prev" onclick="slide('cabin',-1)">‹</button>
+        <button class="slider-btn next" onclick="slide('cabin',1)">›</button>
+        <div class="slider-dots" id="dots-cabin"></div>
+        <div class="slide-counter" id="counter-cabin">1 / 4</div>
+      </div>
+    </div>
+    <div class="villa-info-panel">
+      <p class="villa-tag">Cozy Cabin · Up to 6 Guests</p>
+      <h3 class="villa-name">The Cabin</h3>
+      <p class="villa-desc">A warm, intimate escape for smaller groups. Surrounded by nature with all the comforts of a private retreat.</p>
+      <div class="villa-details-list">
+        <div class="villa-detail-row"><span>👥</span><span>Up to 6 guests</span></div>
+        <div class="villa-detail-row"><span>🌿</span><span>Nature-immersive setting</span></div>
+        <div class="villa-detail-row"><span>🌙</span><span>Minimum 1 night stay</span></div>
+      </div>
+      <div class="villa-rate-tag">₱10,600</div>
+      <div class="villa-rate-label">per night</div>
+      <a href="#booking" class="btn-primary" onclick="selectUnit('cabin')">Book The Cabin →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="booking-header">
+    <p class="section-tag reveal">Reservations</p>
+    <h2 class="section-title reveal reveal-d1">Reserve Your <em>Stay</em></h2>
+    <div class="section-divider reveal reveal-d2"></div>
+  </div>
+  <div class="booking-container">
+    <div class="steps">
+      <div class="step"><div class="step-num active" id="step-num-1">1</div><div class="step-label active" id="step-lbl-1">Select Unit</div></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-num" id="step-num-2">2</div><div class="step-label" id="step-lbl-2">Choose Dates</div></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-num" id="step-num-3">3</div><div class="step-label" id="step-lbl-3">Guest Details</div></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-num" id="step-num-4">4</div><div class="step-label" id="step-lbl-4">Confirm</div></div>
+    </div>
+
+    <!-- STEP 1: Select Unit -->
+    <div class="step-panel active" id="panel-1">
+      <div class="unit-selector">
+        <div class="unit-option" data-unit="ocean" data-rate="28200" data-cap="25" onclick="pickUnit(this)"><div class="unit-check">✓</div><div class="unit-option-name">Ocean View Villa</div><div class="unit-option-detail">Up to 25 guests</div><div class="unit-option-price">₱28,200 / night</div></div>
+        <div class="unit-option" data-unit="mountain" data-rate="28200" data-cap="25" onclick="pickUnit(this)"><div class="unit-check">✓</div><div class="unit-option-name">Mountain View Villa</div><div class="unit-option-detail">Up to 25 guests</div><div class="unit-option-price">₱28,200 / night</div></div>
+        <div class="unit-option" data-unit="cabana1" data-rate="6500" data-cap="4" onclick="pickUnit(this)"><div class="unit-check">✓</div><div class="unit-option-name">Cabana 1</div><div class="unit-option-detail">Up to 4 guests</div><div class="unit-option-price">₱6,500 / night</div></div>
+        <div class="unit-option" data-unit="cabana2" data-rate="6500" data-cap="4" onclick="pickUnit(this)"><div class="unit-check">✓</div><div class="unit-option-name">Cabana 2</div><div class="unit-option-detail">Up to 4 guests</div><div class="unit-option-price">₱6,500 / night</div></div>
+        <div class="unit-option" data-unit="cabana3" data-rate="6500" data-cap="4" onclick="pickUnit(this)"><div class="unit-check">✓</div><div class="unit-option-name">Cabana 3</div><div class="unit-option-detail">Up to 4 guests</div><div class="unit-option-price">₱6,500 / night</div></div>
+        <div class="unit-option" data-unit="cabin" data-rate="10600" data-cap="6" onclick="pickUnit(this)"><div class="unit-check">✓</div><div class="unit-option-name">The Cabin</div><div class="unit-option-detail">Up to 6 guests</div><div class="unit-option-price">₱10,600 / night</div></div>
+      </div>
+      <div class="booking-nav"><span></span><button class="btn-next" onclick="goStep(2)">Select Dates →</button></div>
+    </div>
+
+    <!-- STEP 2: Calendar — one per unit, shown dynamically -->
+    <div class="step-panel" id="panel-2">
+      <div class="calendar-wrap">
+        <div class="calendar-header">
+          <button class="cal-nav" onclick="prevMonth()">‹</button>
+          <div class="cal-title" id="cal-title"></div>
+          <button class="cal-nav" onclick="nextMonth()">›</button>
+        </div>
+        <!-- unit availability note -->
+        <div id="cal-unit-label" style="font-size:0.62rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;text-align:center;"></div>
+        <div class="cal-days" id="cal-days"></div>
+        <div class="cal-legend">
+          <span><span class="legend-dot selected-dot"></span>Selected</span>
+          <span><span class="legend-dot booked-dot"></span>Booked</span>
+          <span><span class="legend-dot available"></span>Available</span>
+        </div>
+      </div>
+      <div class="date-display" id="date-display"></div>
+      <div class="booking-nav"><button class="btn-back" onclick="goStep(1)">← Back</button><button class="btn-next" onclick="goStep(3)">Guest Details →</button></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-panel" id="panel-3">
+      <div class="guest-form">
+        <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="f-fname" type="text" placeholder="Juan"/></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="f-lname" type="text" placeholder="dela Cruz"/></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="f-email" type="email" placeholder="juan@email.com"/></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" id="f-phone" type="tel" placeholder="+63 9XX XXX XXXX"/></div>
+        <div class="form-group"><label class="form-label">Number of Guests</label><input class="form-input" id="f-guests" type="number" min="1" placeholder="e.g. 3"/></div>
+        <div class="form-group"><label class="form-label">Special Requests</label><input class="form-input" id="f-notes" type="text" placeholder="Any requests or notes…"/></div>
+      </div>
+      <div class="booking-nav"><button class="btn-back" onclick="goStep(2)">← Back</button><button class="btn-next" onclick="goStep(4)">Review Booking →</button></div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-panel" id="panel-4">
+      <div class="booking-summary">
+        <h3 class="summary-title">Booking Summary</h3>
+        <div class="summary-row"><span class="summary-label">Unit</span><span class="summary-value" id="s-unit">—</span></div>
+        <div class="summary-row"><span class="summary-label">Check-in</span><span class="summary-value" id="s-checkin">—</span></div>
+        <div class="summary-row"><span class="summary-label">Check-out</span><span class="summary-value" id="s-checkout">—</span></div>
+        <div class="summary-row"><span class="summary-label">Nights</span><span class="summary-value" id="s-nights">—</span></div>
+        <div class="summary-row"><span class="summary-label">Guests</span><span class="summary-value" id="s-guests">—</span></div>
+        <div class="summary-row"><span class="summary-label">Guest Name</span><span class="summary-value" id="s-name">—</span></div>
+        <div class="summary-row" style="margin-top:0.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <span class="summary-label" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">Total</span>
+          <span class="summary-total" id="s-total">₱0</span>
+        </div>
+      </div>
+      <div style="font-size:0.75rem;color:var(--text-muted);text-align:center;margin-bottom:1.5rem;">Our team will contact you to confirm your reservation and payment details.</div>
+      <div class="booking-nav"><button class="btn-back" onclick="goStep(3)">← Back</button><button class="btn-next" onclick="submitBooking()">Confirm Booking ✓</button></div>
+    </div>
+
+    <!-- STEP 5 Confirmation -->
+    <div class="step-panel" id="panel-5">
+      <div class="confirm-box">
+        <div class="confirm-icon">🌿</div>
+        <h2 class="confirm-title">Booking Received!</h2>
+        <p class="confirm-sub">We'll be in touch within 24 hours to confirm your stay.</p>
+        <p class="confirm-ref" id="confirm-ref">REF# —</p>
+        <br><br>
+        <a href="#" class="btn-primary" onclick="resetBooking();return false;">Make Another Booking</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INQUIRE -->
+<section id="inquire">
+  <div class="inquire-layout">
+
+    <!-- LEFT: Map + Getting Here -->
+    <div class="inquire-map-side reveal-left">
+      <div class="map-eyebrow">Find Us</div>
+      <h2 class="map-title">Getting <em>Here</em></h2>
+      <p class="map-desc">Tucked in Morong, Bataan — easy to reach via the Strand Subdivision. Look for Turtle Crossing on the left.</p>
+      <div class="map-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.166465532102!2d120.29795617611103!3d14.646490185845344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33960d582d755119%3A0x52391b5c1ea11339!2sAdriano%20Villas%20and%20Resort!5e0!3m2!1sen!2sph!4v1781055615867!5m2!1sen!2sph"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Adrianos Villas & Resort — J8W2+H6 Morong, Bataan">
+        </iframe>
+      </div>
+      <div class="map-details">
+        <div class="map-detail-row"><span class="map-detail-icon">📍</span><div class="map-detail-text"><strong>Adrianos Villas &amp; Resort</strong><br>Turtle Crossing, The Strand Subdivision<br>Morong, Bataan, Philippines</div></div>
+        <div class="map-detail-row"><span class="map-detail-icon">🗺️</span><div class="map-detail-text">Plus Code: <strong>J8W2+H6</strong> Morong, Bataan — <a href="https://maps.google.com/?q=J8W2+H6+Morong,Bataan" target="_blank" style="color:var(--gold);text-decoration:none;">Open in Google Maps ↗</a></div></div>
+        <div class="map-detail-row"><span class="map-detail-icon">🚗</span><div class="map-detail-text">Accessible via SCTEX / Olongapo–Gapan Road. Enter The Strand Subdivision and follow to Turtle Crossing.</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Inquiry Form -->
+    <div class="reveal-right">
+      <div class="inquire-form-wrap">
+        <h3 class="inquire-form-title">Send an Inquiry</h3>
+        <p class="inquire-form-sub">Fill out the form and we'll get back to you fast. Viewing first — see the place before committing.</p>
+        <div id="inq-form">
+          <div class="inq-grid">
+            <div><label class="inq-label">First Name</label><input class="inq-input" id="inq-fname" type="text" placeholder="Juan"/></div>
+            <div><label class="inq-label">Last Name</label><input class="inq-input" id="inq-lname" type="text" placeholder="Dela Cruz"/></div>
+            <div><label class="inq-label">Email</label><input class="inq-input" id="inq-email" type="email" placeholder="juan@email.com"/></div>
+            <div><label class="inq-label">Phone</label><input class="inq-input" id="inq-phone" type="tel" placeholder="+63 9XX XXX XXXX"/></div>
+            <div><label class="inq-label">Check-in Date</label><input class="inq-input" id="inq-checkin" type="date"/></div>
+            <div><label class="inq-label">Check-out Date</label><input class="inq-input" id="inq-checkout" type="date"/></div>
+            <div>
+              <label class="inq-label">Package / Unit</label>
+              <select class="inq-input" id="inq-package">
+                <option value="">Select a package…</option>
+                <option>Ocean View Villa (₱28,200/night)</option>
+                <option>Mountain View Villa (₱28,200/night)</option>
+                <option>Cabana 1 (₱6,500/night)</option>
+                <option>Cabana 2 (₱6,500/night)</option>
+                <option>Cabana 3 (₱6,500/night)</option>
+                <option>The Cabin (₱10,600/night)</option>
+                <option>Day Tour</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div><label class="inq-label">No. of Guests</label><input class="inq-input" id="inq-guests" type="number" min="1" placeholder="e.g. 10"/></div>
+            <div class="inq-full"><label class="inq-label">Message / Special Requests</label><textarea class="inq-input" id="inq-message" placeholder="Occasion, requests, or questions?"></textarea></div>
+          </div>
+          <button class="inq-btn" onclick="submitInquiry()">Send Inquiry →</button>
+        </div>
+        <div class="inq-success" id="inq-success">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">🌿</div>
+          <div>Inquiry sent!</div>
+          <div style="font-size:0.85rem;color:var(--text-muted);font-family:'Jost',sans-serif;margin-top:0.75rem;">We'll reach out within 24 hours.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-tag reveal">Get In Touch</p>
+  <h2 class="section-title reveal reveal-d1">We'd Love to <em>Host You</em></h2>
+  <div class="section-divider reveal reveal-d2"></div>
+  <p style="color:var(--text-muted);font-size:0.9rem;max-width:500px;margin:0 auto 2rem;">For group bookings, special events, or inquiries, reach out to our reservations team.</p>
+  <div class="contact-grid">
+    <div class="contact-item"><div class="label">Phone</div><div class="value">+63 XXX XXX XXXX</div></div>
+    <div class="contact-item"><div class="label">Email</div><div class="value">reservations@adrianovillas.com</div></div>
+    <div class="contact-item"><div class="label">Location</div><div class="value">Morong, Bataan, Philippines</div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Adriano Villas</div>
+    <div class="footer-tagline">&amp; Resort</div>
+    <p class="footer-desc">A private retreat where luxury meets the natural beauty of the Philippines. Two exclusive villas, three intimate cabanas, and a cozy cabin await your arrival.</p>
+  </div>
+  <div>
+    <div class="footer-heading">Quick Links</div>
+    <ul class="footer-links">
+      <li><a href="#accommodations">Accommodations</a></li>
+      <li><a href="#booking">Book a Stay</a></li>
+      <li><a href="#inquire">Send an Inquiry</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-heading">Accommodations</div>
+    <ul class="footer-links">
+      <li><a href="#booking">Ocean View Villa</a></li>
+      <li><a href="#booking">Mountain View Villa</a></li>
+      <li><a href="#booking">Cabana 1</a></li>
+      <li><a href="#booking">Cabana 2</a></li>
+      <li><a href="#booking">Cabana 3</a></li>
+      <li><a href="#booking">The Cabin</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Adriano Villas &amp; Resort. All rights reserved.</span>
+    <a href="admin.html" class="footer-admin-link">Staff Login →</a>
+  </div>
+</footer>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ── SLIDER ──────────────────────────────────────────
+const sliderState={};
+const SLIDERS=['ocean','mountain','cabana1','cabana2','cabana3','cabin'];
+const SLIDE_COUNT=4;
+function initSliders(){
+  SLIDERS.forEach(id=>{
+    sliderState[id]=0;
+    const dots=document.getElementById('dots-'+id);
+    if(!dots)return;
+    dots.innerHTML='';
+    for(let i=0;i<SLIDE_COUNT;i++){
+      const d=document.createElement('button');
+      d.className='dot'+(i===0?' active':'');
+      d.onclick=(e=>{e.stopPropagation();goSlide(id,i);});
+      dots.appendChild(d);
+    }
+  });
+}
+function slide(id,dir){goSlide(id,(sliderState[id]+dir+SLIDE_COUNT)%SLIDE_COUNT);}
+function goSlide(id,n){
+  sliderState[id]=n;
+  const track=document.getElementById('track-'+id);
+  if(track)track.style.transform=`translateX(-${n*100}%)`;
+  const counter=document.getElementById('counter-'+id);
+  if(counter)counter.textContent=`${n+1} / ${SLIDE_COUNT}`;
+  const dots=document.getElementById('dots-'+id);
+  if(dots)dots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+initSliders();
+
+// ── BOOKING ──────────────────────────────────────────
+const UNIT_LABELS={ocean:'Ocean View Villa',mountain:'Mountain View Villa',cabana1:'Cabana 1',cabana2:'Cabana 2',cabana3:'Cabana 3',cabin:'The Cabin'};
+const booking={unit:null,rate:0,cap:0,checkin:null,checkout:null};
+let calYear=new Date().getFullYear();
+let calMonth=new Date().getMonth();
+let pickStage=0;
+function getBookings(){try{return JSON.parse(localStorage.getItem('av_bookings')||'[]');}catch{return[];}}
+function saveBookings(b){localStorage.setItem('av_bookings',JSON.stringify(b));}
+
+function scrollToBook(unit){
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>selectUnit(unit),400);
+}
+function pickUnit(el){
+  document.querySelectorAll('.unit-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.unit=el.dataset.unit;
+  booking.rate=parseInt(el.dataset.rate);
+  booking.cap=parseInt(el.dataset.cap);
+}
+function selectUnit(type){
+  document.querySelectorAll('.unit-option').forEach(o=>{if(o.dataset.unit===type)pickUnit(o);});
+}
+
+function goStep(n){
+  if(n===2&&!booking.unit){showNotif('Please select a unit first.');return;}
+  if(n===3&&(!booking.checkin||!booking.checkout)){showNotif('Please select check-in and check-out dates.');return;}
+  if(n===4)buildSummary();
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+n).classList.add('active');
+  for(let i=1;i<=4;i++){
+    const num=document.getElementById('step-num-'+i);
+    const lbl=document.getElementById('step-lbl-'+i);
+    if(!num)continue;
+    num.classList.remove('active','done');lbl.classList.remove('active');
+    if(i<n){num.classList.add('done');num.textContent='✓';}
+    else if(i===n){num.classList.add('active');num.textContent=i;lbl.classList.add('active');}
+    else{num.textContent=i;}
+  }
+  if(n===2){
+    // Show which unit's calendar
+    document.getElementById('cal-unit-label').textContent=UNIT_LABELS[booking.unit]||'';
+    renderCalendar();
+  }
+}
+
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function getBookedDates(){
+  const booked=new Set();
+  getBookings().filter(b=>b.unit===booking.unit).forEach(b=>{
+    let d=new Date(b.checkin);const end=new Date(b.checkout);
+    while(d<end){booked.add(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}
+  });
+  return booked;
+}
+function renderCalendar(){
+  document.getElementById('cal-title').textContent=MONTHS[calMonth]+' '+calYear;
+  const grid=document.getElementById('cal-days');grid.innerHTML='';
+  ['SUN','MON','TUE','WED','THU','FRI','SAT'].forEach(d=>{const el=document.createElement('div');el.className='cal-day-label';el.textContent=d;grid.appendChild(el);});
+  const booked=getBookedDates();
+  const first=new Date(calYear,calMonth,1).getDay();
+  const days=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();today.setHours(0,0,0,0);
+  for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
+  for(let d=1;d<=days;d++){
+    const el=document.createElement('div');
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const thisDate=new Date(calYear,calMonth,d);
+    el.className='cal-day';el.textContent=d;
+    if(thisDate<today){el.classList.add('past');}
+    else if(booked.has(dateStr)){el.classList.add('booked');}
+    else{
+      if(booking.checkin&&booking.checkout){
+        const ci=new Date(booking.checkin),co=new Date(booking.checkout);
+        if(dateStr===booking.checkin||dateStr===booking.checkout)el.classList.add('selected');
+        else if(thisDate>ci&&thisDate<co)el.classList.add('in-range');
+      }else if(booking.checkin&&dateStr===booking.checkin){el.classList.add('selected');}
+      el.addEventListener('click',()=>clickDay(dateStr,thisDate));
+    }
+    grid.appendChild(el);
+  }
+}
+function clickDay(dateStr){
+  if(pickStage===0){booking.checkin=dateStr;booking.checkout=null;pickStage=1;updateDateDisplay();}
+  else{if(dateStr<=booking.checkin){booking.checkin=dateStr;booking.checkout=null;updateDateDisplay();return;}booking.checkout=dateStr;pickStage=0;updateDateDisplay();}
+  renderCalendar();
+}
+function updateDateDisplay(){
+  const el=document.getElementById('date-display');
+  if(booking.checkin&&booking.checkout){const n=Math.round((new Date(booking.checkout)-new Date(booking.checkin))/(864e5));el.textContent=`${fmtDate(booking.checkin)}  →  ${fmtDate(booking.checkout)}  ·  ${n} night${n!==1?'s':''}`;}
+  else if(booking.checkin){el.textContent=`Check-in: ${fmtDate(booking.checkin)}  —  now select check-out`;}
+  else{el.textContent='';}
+}
+function fmtDate(s){if(!s)return'—';const[y,m,d]=s.split('-');return`${MONTHS[parseInt(m)-1]} ${parseInt(d)}, ${y}`;}
+function prevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
+function nextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
+
+function buildSummary(){
+  const nights=booking.checkin&&booking.checkout?Math.round((new Date(booking.checkout)-new Date(booking.checkin))/(864e5)):0;
+  document.getElementById('s-unit').textContent=UNIT_LABELS[booking.unit]||'—';
+  document.getElementById('s-checkin').textContent=fmtDate(booking.checkin);
+  document.getElementById('s-checkout').textContent=fmtDate(booking.checkout);
+  document.getElementById('s-nights').textContent=nights+' night'+(nights!==1?'s':'');
+  document.getElementById('s-guests').textContent=document.getElementById('f-guests').value||'—';
+  document.getElementById('s-name').textContent=(document.getElementById('f-fname').value+' '+document.getElementById('f-lname').value).trim()||'—';
+  document.getElementById('s-total').textContent='₱'+(nights*booking.rate).toLocaleString();
+}
+function submitBooking(){
+  const fname=document.getElementById('f-fname').value.trim();
+  const lname=document.getElementById('f-lname').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  if(!fname||!lname||!email){showNotif('Please fill in required guest details.');goStep(3);return;}
+  const nights=Math.round((new Date(booking.checkout)-new Date(booking.checkin))/(864e5));
+  const ref='AV'+Date.now().toString().slice(-6);
+  const record={ref,unit:booking.unit,unitLabel:UNIT_LABELS[booking.unit],checkin:booking.checkin,checkout:booking.checkout,nights,guests:document.getElementById('f-guests').value,name:fname+' '+lname,email,phone:document.getElementById('f-phone').value,notes:document.getElementById('f-notes').value,total:nights*booking.rate,rate:booking.rate,created:new Date().toISOString()};
+  const all=getBookings();all.push(record);saveBookings(all);
+  document.getElementById('confirm-ref').textContent='REF# '+ref;
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-5').classList.add('active');
+}
+function resetBooking(){
+  booking.unit=null;booking.rate=0;booking.cap=0;booking.checkin=null;booking.checkout=null;pickStage=0;
+  document.querySelectorAll('.unit-option').forEach(e=>e.classList.remove('selected'));
+  ['f-fname','f-lname','f-email','f-phone','f-guests','f-notes'].forEach(id=>document.getElementById(id).value='');
+  goStep(1);
+}
+function showNotif(msg){const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),3200);}
+
+// ── INQUIRY FORM ─────────────────────────────────────
+function submitInquiry(){
+  const fname=document.getElementById('inq-fname').value.trim();
+  const email=document.getElementById('inq-email').value.trim();
+  if(!fname||!email){showNotif('Please fill in your name and email.');return;}
+  // Store inquiry locally
+  const inqs=JSON.parse(localStorage.getItem('av_inquiries')||'[]');
+  inqs.push({
+    id:'INQ'+Date.now(),
+    name:fname+' '+(document.getElementById('inq-lname').value.trim()),
+    email,
+    phone:document.getElementById('inq-phone').value,
+    checkin:document.getElementById('inq-checkin').value,
+    checkout:document.getElementById('inq-checkout').value,
+    package:document.getElementById('inq-package').value,
+    guests:document.getElementById('inq-guests').value,
+    message:document.getElementById('inq-message').value,
+    created:new Date().toISOString()
+  });
+  localStorage.setItem('av_inquiries',JSON.stringify(inqs));
+  document.getElementById('inq-form').style.display='none';
+  document.getElementById('inq-success').style.display='block';
+}
+
+// ── EFFECTS ENGINE ────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>60);
+},{passive:true});
+
+const heroBg=document.querySelector('.hero-photo-placeholder')||document.querySelector('.hero-photo');
+window.addEventListener('scroll',()=>{
+  if(heroBg)heroBg.style.transform=`translateY(${window.scrollY*0.38}px)`;
+},{passive:true});
+
+const revealEls=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');obs.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -48px 0px'});
+revealEls.forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

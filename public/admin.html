@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Adriano Villas — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d1b2a;--navy-mid:#1a2e45;--navy-light:#243b55;
+  --gold:#c9a96e;--gold-light:#e8d5b0;--white:#f8f6f1;
+  --text-muted:#8a9bb0;--border:rgba(201,169,110,0.2);
+  --danger:#e05c5c;--success:#5cb88a;--sidebar:190px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--navy);color:var(--white);font-family:'Jost',sans-serif;display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--navy-mid);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:2rem 0;position:fixed;top:0;left:0;bottom:0;z-index:10;}
+.sidebar-logo{padding:0 1.5rem 2rem;border-bottom:1px solid var(--border);}
+.sidebar-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;letter-spacing:0.05em;}
+.sidebar-logo-sub{font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-top:0.2rem;}
+.sidebar-badge{font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);padding:0 1.5rem;margin:1.5rem 0 0.75rem;}
+.sidebar-nav{list-style:none;flex:1;}
+.sidebar-nav a{display:flex;align-items:center;gap:0.75rem;padding:0.8rem 1.5rem;text-decoration:none;color:var(--text-muted);font-size:0.72rem;letter-spacing:0.1em;transition:all 0.2s;border-left:2px solid transparent;}
+.sidebar-nav a:hover{color:var(--white);background:rgba(201,169,110,0.05);}
+.sidebar-nav a.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,169,110,0.07);}
+.sidebar-icon{font-size:1rem;}
+.sidebar-bottom{padding:1.5rem;border-top:1px solid var(--border);}
+.sidebar-bottom a{font-size:0.68rem;color:var(--text-muted);text-decoration:none;display:block;margin-bottom:0.5rem;transition:color 0.2s;}
+.sidebar-bottom a:hover{color:var(--white);}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;padding:2.5rem;min-height:100vh;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;}
+.topbar-title em{font-style:italic;color:var(--gold);}
+.topbar-right{display:flex;align-items:center;gap:1rem;}
+.month-select{background:var(--navy-mid);border:1px solid var(--border);color:var(--white);padding:0.5rem 1rem;font-family:'Jost',sans-serif;font-size:0.72rem;outline:none;cursor:pointer;}
+.month-select option{background:var(--navy);}
+.topbar-date{font-size:0.72rem;color:var(--text-muted);letter-spacing:0.1em;}
+
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:2rem;}
+.stat-card{background:var(--navy-mid);border:1px solid var(--border);padding:1.75rem;position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.stat-label{font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem;}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;line-height:1;}
+.stat-value.gold{color:var(--gold);}
+.stat-sub{font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem;}
+.stat-icon{position:absolute;top:1.5rem;right:1.5rem;font-size:1.5rem;opacity:0.18;}
+
+/* CARDS */
+.card{background:var(--navy-mid);border:1px solid var(--border);margin-bottom:1.5rem;}
+.card-header{padding:1.25rem 1.75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;}
+.card-body{padding:1.75rem;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;}
+th{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);padding:0 0.75rem 0.75rem;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:1rem 0.75rem;font-size:0.83rem;border-bottom:1px solid rgba(201,169,110,0.07);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(201,169,110,0.03);}
+.badge{display:inline-block;padding:0.25rem 0.6rem;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;border-radius:2px;}
+.badge-confirmed{background:rgba(92,184,138,0.15);color:var(--success);border:1px solid rgba(92,184,138,0.3);}
+.badge-pending{background:rgba(201,169,110,0.15);color:var(--gold);border:1px solid rgba(201,169,110,0.3);}
+.unit-tag{display:inline-block;padding:0.2rem 0.5rem;font-size:0.62rem;border:1px solid var(--border);color:var(--text-muted);}
+
+/* BUTTONS */
+.btn-sm{padding:0.35rem 0.85rem;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-danger{background:rgba(224,92,92,0.15);color:var(--danger);border:1px solid rgba(224,92,92,0.3);}
+.btn-danger:hover{background:var(--danger);color:white;}
+.btn-gold{background:var(--gold);color:var(--navy);font-weight:600;}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-muted);}
+.btn-outline:hover{border-color:var(--gold);color:var(--white);}
+
+/* FORMS */
+.form-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:1rem;}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;}
+.form-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);}
+.form-input{background:var(--navy);border:1px solid var(--border);color:var(--white);padding:0.65rem 0.9rem;font-family:'Jost',sans-serif;font-size:0.83rem;outline:none;min-width:180px;}
+.form-input:focus{border-color:var(--gold);}
+.form-input::placeholder{color:var(--text-muted);}
+select.form-input option{background:var(--navy);}
+
+/* CALENDAR PAGE — 3 cols for cabanas */
+.cal-grid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
+.cal-grid-wrap-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
+.cal-section-label{font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.mini-cal-nav{background:none;border:1px solid var(--border);color:var(--white);width:26px;height:26px;cursor:pointer;font-size:0.9rem;transition:all 0.2s;}
+.mini-cal-nav:hover{border-color:var(--gold);color:var(--gold);}
+.mini-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.mcd-label{font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);text-align:center;padding:0.4rem 0;}
+.mcd{padding:0.45rem;text-align:center;font-size:0.72rem;cursor:default;border:1px solid transparent;}
+.mcd.booked-ocean{background:rgba(15,52,96,0.85);color:var(--gold-light);border-color:rgba(201,169,110,0.2);}
+.mcd.booked-mountain{background:rgba(26,58,42,0.85);color:#a8d5b5;border-color:rgba(168,213,181,0.2);}
+.mcd.booked-cabana1{background:rgba(90,45,5,0.75);color:#f0c080;border-color:rgba(240,192,128,0.25);}
+.mcd.booked-cabana2{background:rgba(60,25,80,0.75);color:#d4a8f0;border-color:rgba(212,168,240,0.25);}
+.mcd.booked-cabana3{background:rgba(8,65,55,0.75);color:#88e0cc;border-color:rgba(136,224,204,0.25);}
+.mcd.booked-cabin{background:rgba(50,20,80,0.6);color:#c8a0f0;border-color:rgba(200,160,240,0.2);}
+.mcd.today{outline:1px solid var(--gold);}
+.mcd.past{opacity:0.32;}
+.cal-legend{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:1rem;}
+.cleg{display:flex;align-items:center;gap:0.4rem;font-size:0.62rem;color:var(--text-muted);}
+.cleg-dot{width:10px;height:10px;border-radius:1px;}
+
+/* EXPENSES */
+.expense-list{display:flex;flex-direction:column;gap:0.75rem;}
+.expense-item{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1rem;background:var(--navy);border:1px solid var(--border);}
+.expense-name{font-size:0.83rem;}
+.expense-meta{font-size:0.68rem;color:var(--text-muted);}
+.expense-amount{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);}
+.expense-delete{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:0.2rem 0.5rem;transition:color 0.2s;}
+.expense-delete:hover{color:var(--danger);}
+
+/* SUMMARY BOXES */
+.summary-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;}
+.sbox{background:var(--navy-mid);border:1px solid var(--border);padding:1.5rem;text-align:center;}
+.sbox-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;}
+.sbox-value{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;}
+.sbox-value.income{color:var(--success);}
+.sbox-value.expense{color:var(--danger);}
+.sbox-value.net{color:var(--gold);}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--navy-mid);border:1px solid var(--border);padding:2rem;min-width:420px;max-width:90vw;position:relative;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:1.5rem;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;transition:color 0.2s;}
+.modal-close:hover{color:var(--white);}
+
+/* MISC */
+.empty-state{text-align:center;padding:3rem;color:var(--text-muted);font-size:0.83rem;}
+.divider{height:1px;background:var(--border);margin:1.5rem 0;}
+.text-muted{color:var(--text-muted);}
+.text-gold{color:var(--gold);}
+.flex-end{display:flex;justify-content:flex-end;gap:0.75rem;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-main">ADRIANO</div>
+    <div class="sidebar-logo-sub">Admin Panel</div>
+  </div>
+  <div class="sidebar-badge">Menu</div>
+  <ul class="sidebar-nav">
+    <li><a href="#" class="active" onclick="return showPage('dashboard',this)"><span class="sidebar-icon">◈</span> Dashboard</a></li>
+    <li><a href="#" onclick="return showPage('bookings',this)"><span class="sidebar-icon">📋</span> Bookings</a></li>
+    <li><a href="#" onclick="return showPage('calendar',this)"><span class="sidebar-icon">📅</span> Calendar</a></li>
+    <li><a href="#" onclick="return showPage('expenses',this)"><span class="sidebar-icon">₱</span> Expenses</a></li>
+    <li><a href="#" onclick="return showPage('reports',this)"><span class="sidebar-icon">📊</span> Reports</a></li>
+  </ul>
+  <div class="sidebar-bottom">
+    <a href="index.html">← Back to Site</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="page-title">Good day, <em>Admin</em></div>
+    </div>
+    <div class="topbar-right">
+      <select class="month-select" id="month-select" onchange="onMonthChange()"></select>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">🏡</div><div class="stat-label">Total Bookings (Month)</div><div class="stat-value" id="stat-bookings-month">0</div><div class="stat-sub">Selected month</div></div>
+      <div class="stat-card"><div class="stat-icon">₱</div><div class="stat-label">Monthly Revenue</div><div class="stat-value gold" id="stat-revenue-month">₱0</div><div class="stat-sub">From confirmed bookings</div></div>
+      <div class="stat-card"><div class="stat-icon">📉</div><div class="stat-label">Monthly Expenses</div><div class="stat-value" id="stat-expenses-month">₱0</div><div class="stat-sub">Logged expenses</div></div>
+      <div class="stat-card"><div class="stat-icon">✨</div><div class="stat-label">Net Income</div><div class="stat-value gold" id="stat-net-month">₱0</div><div class="stat-sub">Revenue − Expenses</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Recent Bookings</span><button class="btn-sm btn-outline" onclick="showPage('bookings',null)">View All</button></div>
+        <div class="card-body" style="padding:0;"><table><thead><tr><th>Guest</th><th>Unit</th><th>Check-in</th><th>Total</th></tr></thead><tbody id="dash-recent"></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Bookings by Unit</span></div>
+        <div class="card-body"><div id="unit-breakdown"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKINGS -->
+  <div class="page" id="page-bookings">
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-header"><span class="card-title">Filter Bookings</span></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Unit</label>
+            <select class="form-input" id="filter-unit" onchange="renderBookingsTable()">
+              <option value="">All Units</option>
+              <option value="ocean">Ocean View Villa</option>
+              <option value="mountain">Mountain View Villa</option>
+              <option value="cabana1">Cabana 1</option>
+              <option value="cabana2">Cabana 2</option>
+              <option value="cabana3">Cabana 3</option>
+              <option value="cabin">The Cabin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Search</label>
+            <input class="form-input" id="filter-search" placeholder="Name, email, ref…" oninput="renderBookingsTable()"/>
+          </div>
+          <button class="btn-sm btn-gold" style="height:36px;align-self:flex-end;" onclick="openAddBookingModal()">+ Add Booking</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">All Bookings</span><span style="font-size:0.72rem;color:var(--text-muted);" id="bookings-count"></span></div>
+      <div class="card-body" style="padding:0;overflow-x:auto;">
+        <table>
+          <thead><tr><th>Ref</th><th>Guest</th><th>Unit</th><th>Check-in</th><th>Check-out</th><th>Nights</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr></thead>
+          <tbody id="bookings-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="page" id="page-calendar">
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-header">
+        <span class="card-title">Availability Calendar</span>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <button class="mini-cal-nav" onclick="calPrev()">‹</button>
+          <span id="cal-page-title" style="font-size:0.85rem;min-width:130px;text-align:center;"></span>
+          <button class="mini-cal-nav" onclick="calNext()">›</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <!-- Villas row -->
+        <div class="cal-grid-wrap">
+          <div>
+            <div class="cal-section-label">🌊 Ocean View Villa</div>
+            <div class="mini-cal-days" id="cal-ocean"></div>
+          </div>
+          <div>
+            <div class="cal-section-label">⛰️ Mountain View Villa</div>
+            <div class="mini-cal-days" id="cal-mountain"></div>
+          </div>
+        </div>
+        <!-- Cabanas row -->
+        <div class="cal-grid-wrap-3">
+          <div>
+            <div class="cal-section-label">🏖️ Cabana 1</div>
+            <div class="mini-cal-days" id="cal-cabana1"></div>
+          </div>
+          <div>
+            <div class="cal-section-label">🏖️ Cabana 2</div>
+            <div class="mini-cal-days" id="cal-cabana2"></div>
+          </div>
+          <div>
+            <div class="cal-section-label">🏖️ Cabana 3</div>
+            <div class="mini-cal-days" id="cal-cabana3"></div>
+          </div>
+        </div>
+        <!-- Cabin row -->
+        <div style="max-width:340px;">
+          <div class="cal-section-label">🌿 The Cabin</div>
+          <div class="mini-cal-days" id="cal-cabin"></div>
+        </div>
+        <!-- Legend -->
+        <div class="cal-legend" style="margin-top:1.5rem;">
+          <div class="cleg"><div class="cleg-dot" style="background:rgba(15,52,96,0.85);"></div>Ocean View</div>
+          <div class="cleg"><div class="cleg-dot" style="background:rgba(26,58,42,0.85);"></div>Mountain View</div>
+          <div class="cleg"><div class="cleg-dot" style="background:rgba(90,45,5,0.75);"></div>Cabana 1</div>
+          <div class="cleg"><div class="cleg-dot" style="background:rgba(60,25,80,0.75);"></div>Cabana 2</div>
+          <div class="cleg"><div class="cleg-dot" style="background:rgba(8,65,55,0.75);"></div>Cabana 3</div>
+          <div class="cleg"><div class="cleg-dot" style="background:rgba(50,20,80,0.6);"></div>Cabin</div>
+        </div>
+      </div>
+    </div>
+    <!-- Upcoming -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Upcoming Check-ins</span></div>
+      <div class="card-body" style="padding:0;overflow-x:auto;">
+        <table>
+          <thead><tr><th>Guest</th><th>Unit</th><th>Check-in</th><th>Check-out</th><th>Guests</th><th>Total</th></tr></thead>
+          <tbody id="upcoming-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="page" id="page-expenses">
+    <div class="summary-boxes">
+      <div class="sbox"><div class="sbox-label">Monthly Revenue</div><div class="sbox-value income" id="exp-revenue">₱0</div></div>
+      <div class="sbox"><div class="sbox-label">Monthly Expenses</div><div class="sbox-value expense" id="exp-total">₱0</div></div>
+      <div class="sbox"><div class="sbox-label">Net Income</div><div class="sbox-value net" id="exp-net">₱0</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Add Expense</span></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="exp-name" placeholder="e.g. Electricity bill"/></div>
+          <div class="form-group"><label class="form-label">Amount (₱)</label><input class="form-input" id="exp-amount" type="number" placeholder="0.00" style="min-width:130px;"/></div>
+          <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="exp-date" type="date" style="min-width:150px;"/></div>
+          <button class="btn-sm btn-gold" style="height:36px;align-self:flex-end;" onclick="addExpense()">Add Expense</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Expense Log</span><span style="font-size:0.72rem;color:var(--text-muted);" id="exp-month-label"></span></div>
+      <div class="card-body"><div class="expense-list" id="expense-list"><div class="empty-state">No expenses logged for this month.</div></div></div>
+    </div>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="page" id="page-reports">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stat-card"><div class="stat-label">All-time Bookings</div><div class="stat-value" id="rep-total-bookings">0</div></div>
+      <div class="stat-card"><div class="stat-label">All-time Revenue</div><div class="stat-value gold" id="rep-total-revenue">₱0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Nights Booked</div><div class="stat-value" id="rep-total-nights">0</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Monthly Summary</span></div>
+      <div class="card-body" style="padding:0;overflow-x:auto;">
+        <table>
+          <thead><tr><th>Month</th><th>Bookings</th><th>Nights</th><th>Revenue</th><th>Expenses</th><th>Net</th></tr></thead>
+          <tbody id="reports-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ADD BOOKING MODAL -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Add Booking</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="m-fname" placeholder="Juan"/></div>
+      <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="m-lname" placeholder="dela Cruz"/></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="m-email" type="email" placeholder="email@example.com"/></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="m-phone" type="tel" placeholder="+63 9XX XXX XXXX"/></div>
+      <div class="form-group"><label class="form-label">Unit</label>
+        <select class="form-input" id="m-unit" onchange="updateModalRate()">
+          <option value="ocean" data-rate="28200">Ocean View Villa</option>
+          <option value="mountain" data-rate="28200">Mountain View Villa</option>
+          <option value="cabana1" data-rate="6500">Cabana 1</option>
+          <option value="cabana2" data-rate="6500">Cabana 2</option>
+          <option value="cabana3" data-rate="6500">Cabana 3</option>
+          <option value="cabin" data-rate="10600">The Cabin</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Guests</label><input class="form-input" id="m-guests" type="number" min="1" placeholder="1"/></div>
+      <div class="form-group"><label class="form-label">Check-in</label><input class="form-input" id="m-checkin" type="date"/></div>
+      <div class="form-group"><label class="form-label">Check-out</label><input class="form-input" id="m-checkout" type="date"/></div>
+    </div>
+    <div style="background:var(--navy);padding:1rem;border:1px solid var(--border);margin-bottom:1.25rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:0.4rem;"><span class="text-muted">Rate per night</span><span id="m-rate-display">₱28,200</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:0.83rem;"><span class="text-muted">Estimated Total</span><span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);" id="m-total-display">₱0</span></div>
+    </div>
+    <div class="flex-end">
+      <button class="btn-sm btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn-sm btn-gold" onclick="saveModalBooking()">Save Booking</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const UNIT_LABELS={ocean:'Ocean View Villa',mountain:'Mountain View Villa',cabana1:'Cabana 1',cabana2:'Cabana 2',cabana3:'Cabana 3',cabin:'The Cabin'};
+const UNIT_RATES={ocean:28200,mountain:28200,cabana1:6500,cabana2:6500,cabana3:6500,cabin:10600};
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let selYear=new Date().getFullYear(),selMonth=new Date().getMonth();
+let adminCalYear=new Date().getFullYear(),adminCalMonth=new Date().getMonth();
+
+function getBookings(){try{return JSON.parse(localStorage.getItem('av_bookings')||'[]');}catch{return[];}}
+function saveBookings(b){localStorage.setItem('av_bookings',JSON.stringify(b));}
+function getExpenses(){try{return JSON.parse(localStorage.getItem('av_expenses')||'[]');}catch{return[];}}
+function saveExpenses(e){localStorage.setItem('av_expenses',JSON.stringify(e));}
+
+function init(){
+  const now=new Date();
+  document.getElementById('topbar-date').textContent=now.toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const sel=document.getElementById('month-select');
+  for(let y=now.getFullYear();y>=now.getFullYear()-2;y--){
+    for(let m=11;m>=0;m--){
+      if(y===now.getFullYear()&&m>now.getMonth())continue;
+      const opt=document.createElement('option');
+      opt.value=`${y}-${m}`;opt.textContent=`${MONTHS[m]} ${y}`;
+      if(y===selYear&&m===selMonth)opt.selected=true;
+      sel.appendChild(opt);
+    }
+  }
+  document.getElementById('exp-date').value=now.toISOString().split('T')[0];
+  document.getElementById('m-checkin').addEventListener('change',updateModalTotal);
+  document.getElementById('m-checkout').addEventListener('change',updateModalTotal);
+  document.getElementById('m-unit').addEventListener('change',updateModalTotal);
+  refreshAll();
+}
+
+function onMonthChange(){
+  const[y,m]=document.getElementById('month-select').value.split('-').map(Number);
+  selYear=y;selMonth=m;refreshAll();
+}
+function refreshAll(){updateDashboard();renderBookingsTable();renderCalendarPage();renderExpenses();renderReports();}
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const titles={dashboard:'Good day, <em>Admin</em>',bookings:'Manage <em>Bookings</em>',calendar:'Availability <em>Calendar</em>',expenses:'Expenses &amp; <em>Finances</em>',reports:'Monthly <em>Reports</em>'};
+  document.getElementById('page-title').innerHTML=titles[id]||id;
+  if(id==='calendar')renderCalendarPage();
+  return false;
+}
+
+function fmt(n){return'₱'+(n||0).toLocaleString();}
+function fmtDate(s){if(!s)return'—';const[y,m,d]=s.split('-');return`${MONTHS[parseInt(m)-1]} ${parseInt(d)}, ${y}`;}
+function monthKey(y,m){return`${y}-${String(m+1).padStart(2,'0')}`;}
+function bookingInMonth(b,y,m){const mk=monthKey(y,m);return(b.checkin&&b.checkin.startsWith(mk))||(b.checkout&&b.checkout.startsWith(mk));}
+
+// Dashboard
+function updateDashboard(){
+  const all=getBookings();
+  const monthly=all.filter(b=>bookingInMonth(b,selYear,selMonth));
+  const revenue=monthly.reduce((s,b)=>s+(b.total||0),0);
+  const expTotal=getExpenses().filter(e=>e.date&&e.date.startsWith(monthKey(selYear,selMonth))).reduce((s,e)=>s+(e.amount||0),0);
+  document.getElementById('stat-bookings-month').textContent=monthly.length;
+  document.getElementById('stat-revenue-month').textContent=fmt(revenue);
+  document.getElementById('stat-expenses-month').textContent=fmt(expTotal);
+  document.getElementById('stat-net-month').textContent=fmt(revenue-expTotal);
+  const recent=[...all].sort((a,b)=>new Date(b.created)-new Date(a.created)).slice(0,6);
+  document.getElementById('dash-recent').innerHTML=recent.length?recent.map(b=>`<tr><td>${b.name||'—'}</td><td><span class="unit-tag">${UNIT_LABELS[b.unit]||b.unit}</span></td><td>${fmtDate(b.checkin)}</td><td style="color:var(--gold);font-family:'Cormorant Garamond',serif;">${fmt(b.total)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty-state">No bookings yet.</td></tr>';
+  const breakdown={};all.forEach(b=>{breakdown[b.unit]=(breakdown[b.unit]||0)+1;});
+  document.getElementById('unit-breakdown').innerHTML=Object.entries(breakdown).length?Object.entries(breakdown).map(([u,c])=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.85rem 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:0.83rem;">${UNIT_LABELS[u]||u}</span>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <div style="width:80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:${Math.min(100,c*20)}%;height:100%;background:var(--gold);"></div></div>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);min-width:24px;text-align:right;">${c}</span>
+      </div>
+    </div>`).join(''):'<div class="empty-state">No bookings yet.</div>';
+}
+
+// Bookings table
+function renderBookingsTable(){
+  const all=getBookings();
+  const unit=document.getElementById('filter-unit').value;
+  const q=(document.getElementById('filter-search').value||'').toLowerCase();
+  let filtered=all;
+  if(unit)filtered=filtered.filter(b=>b.unit===unit);
+  if(q)filtered=filtered.filter(b=>((b.name||'')+(b.email||'')+(b.ref||'')).toLowerCase().includes(q));
+  filtered=[...filtered].sort((a,b)=>new Date(b.created)-new Date(a.created));
+  document.getElementById('bookings-count').textContent=`${filtered.length} result${filtered.length!==1?'s':''}`;
+  document.getElementById('bookings-tbody').innerHTML=filtered.length?filtered.map(b=>`
+    <tr>
+      <td style="font-size:0.68rem;color:var(--text-muted);">${b.ref||'—'}</td>
+      <td>${b.name||'—'}<div style="font-size:0.68rem;color:var(--text-muted);">${b.email||''}</div></td>
+      <td><span class="unit-tag">${UNIT_LABELS[b.unit]||b.unit}</span></td>
+      <td>${fmtDate(b.checkin)}</td><td>${fmtDate(b.checkout)}</td>
+      <td>${b.nights||'—'}</td><td>${b.guests||'—'}</td>
+      <td style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;">${fmt(b.total)}</td>
+      <td><span class="badge badge-confirmed">Confirmed</span></td>
+      <td><button class="btn-sm btn-danger" onclick="deleteBooking('${b.ref}')">Delete</button></td>
+    </tr>`).join(''):'<tr><td colspan="10" class="empty-state">No bookings found.</td></tr>';
+}
+function deleteBooking(ref){if(!confirm('Delete this booking?'))return;saveBookings(getBookings().filter(b=>b.ref!==ref));refreshAll();}
+
+// Calendar — separate mini-cal per unit
+function renderCalendarPage(){
+  document.getElementById('cal-page-title').textContent=`${MONTHS[adminCalMonth]} ${adminCalYear}`;
+  ['ocean','mountain','cabana1','cabana2','cabana3','cabin'].forEach(u=>renderMiniCal(u));
+  renderUpcoming();
+}
+function getBookedDatesForUnit(unit){
+  const booked=new Set();
+  getBookings().filter(b=>b.unit===unit).forEach(b=>{
+    let d=new Date(b.checkin);const end=new Date(b.checkout);
+    while(d<end){booked.add(d.toISOString().split('T')[0]);d.setDate(d.getDate()+1);}
+  });
+  return booked;
+}
+function renderMiniCal(unit){
+  const container=document.getElementById('cal-'+unit);
+  if(!container)return;
+  container.innerHTML='';
+  const today=new Date();today.setHours(0,0,0,0);
+  ['S','M','T','W','T','F','S'].forEach(d=>{const e=document.createElement('div');e.className='mcd-label';e.textContent=d;container.appendChild(e);});
+  const booked=getBookedDatesForUnit(unit);
+  const first=new Date(adminCalYear,adminCalMonth,1).getDay();
+  const days=new Date(adminCalYear,adminCalMonth+1,0).getDate();
+  for(let i=0;i<first;i++){const e=document.createElement('div');container.appendChild(e);}
+  for(let d=1;d<=days;d++){
+    const el=document.createElement('div');el.className='mcd';
+    const dateStr=`${adminCalYear}-${String(adminCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const thisDate=new Date(adminCalYear,adminCalMonth,d);
+    el.textContent=d;
+    if(booked.has(dateStr))el.classList.add('booked-'+unit);
+    if(thisDate.toDateString()===today.toDateString())el.classList.add('today');
+    if(thisDate<today)el.classList.add('past');
+    container.appendChild(el);
+  }
+}
+function calPrev(){adminCalMonth--;if(adminCalMonth<0){adminCalMonth=11;adminCalYear--;}renderCalendarPage();}
+function calNext(){adminCalMonth++;if(adminCalMonth>11){adminCalMonth=0;adminCalYear++;}renderCalendarPage();}
+
+function renderUpcoming(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const upcoming=getBookings().filter(b=>new Date(b.checkin)>=today).sort((a,b)=>new Date(a.checkin)-new Date(b.checkin)).slice(0,10);
+  document.getElementById('upcoming-tbody').innerHTML=upcoming.length?upcoming.map(b=>`<tr><td>${b.name||'—'}</td><td><span class="unit-tag">${UNIT_LABELS[b.unit]||b.unit}</span></td><td>${fmtDate(b.checkin)}</td><td>${fmtDate(b.checkout)}</td><td>${b.guests||'—'}</td><td style="color:var(--gold);font-family:'Cormorant Garamond',serif;">${fmt(b.total)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty-state">No upcoming bookings.</td></tr>';
+}
+
+// Expenses
+function renderExpenses(){
+  const mk=monthKey(selYear,selMonth);
+  document.getElementById('exp-month-label').textContent=`${MONTHS[selMonth]} ${selYear}`;
+  const exps=getExpenses().filter(e=>e.date&&e.date.startsWith(mk));
+  const total=exps.reduce((s,e)=>s+(e.amount||0),0);
+  const revenue=getBookings().filter(b=>bookingInMonth(b,selYear,selMonth)).reduce((s,b)=>s+(b.total||0),0);
+  document.getElementById('exp-revenue').textContent=fmt(revenue);
+  document.getElementById('exp-total').textContent=fmt(total);
+  document.getElementById('exp-net').textContent=fmt(revenue-total);
+  document.getElementById('expense-list').innerHTML=exps.length?exps.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(e=>`
+    <div class="expense-item">
+      <div><div class="expense-name">${e.name}</div><div class="expense-meta">${fmtDate(e.date)}</div></div>
+      <div style="display:flex;align-items:center;gap:1rem;"><div class="expense-amount">${fmt(e.amount)}</div><button class="expense-delete" onclick="deleteExpense('${e.id}')">✕</button></div>
+    </div>`).join(''):'<div class="empty-state">No expenses logged for this month.</div>';
+}
+function addExpense(){
+  const name=document.getElementById('exp-name').value.trim();
+  const amount=parseFloat(document.getElementById('exp-amount').value);
+  const date=document.getElementById('exp-date').value;
+  if(!name||!amount||!date){alert('Please fill in all fields.');return;}
+  const exps=getExpenses();exps.push({id:'E'+Date.now(),name,amount,date,created:new Date().toISOString()});
+  saveExpenses(exps);document.getElementById('exp-name').value='';document.getElementById('exp-amount').value='';
+  renderExpenses();updateDashboard();renderReports();
+}
+function deleteExpense(id){if(!confirm('Remove this expense?'))return;saveExpenses(getExpenses().filter(e=>e.id!==id));renderExpenses();updateDashboard();renderReports();}
+
+// Reports
+function renderReports(){
+  const all=getBookings();
+  document.getElementById('rep-total-bookings').textContent=all.length;
+  document.getElementById('rep-total-revenue').textContent=fmt(all.reduce((s,b)=>s+(b.total||0),0));
+  document.getElementById('rep-total-nights').textContent=all.reduce((s,b)=>s+(b.nights||0),0);
+  const now=new Date();const rows=[];
+  for(let i=0;i<12;i++){
+    let m=now.getMonth()-i;let y=now.getFullYear();
+    while(m<0){m+=12;y--;}
+    const mk=monthKey(y,m);
+    const mBookings=all.filter(b=>bookingInMonth(b,y,m));
+    const revenue=mBookings.reduce((s,b)=>s+(b.total||0),0);
+    const exps=getExpenses().filter(e=>e.date&&e.date.startsWith(mk)).reduce((s,e)=>s+(e.amount||0),0);
+    rows.push({label:`${MONTHS[m]} ${y}`,count:mBookings.length,nights:mBookings.reduce((s,b)=>s+(b.nights||0),0),revenue,exps,net:revenue-exps});
+  }
+  document.getElementById('reports-tbody').innerHTML=rows.map(r=>`
+    <tr><td>${r.label}</td><td>${r.count}</td><td>${r.nights}</td>
+    <td style="color:var(--success);">${fmt(r.revenue)}</td>
+    <td style="color:var(--danger);">${fmt(r.exps)}</td>
+    <td style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.1rem;">${fmt(r.net)}</td></tr>`).join('');
+}
+
+// Modal
+function openAddBookingModal(){document.getElementById('add-modal').classList.add('open');updateModalRate();}
+function closeModal(){document.getElementById('add-modal').classList.remove('open');}
+function updateModalRate(){
+  const sel=document.getElementById('m-unit');
+  document.getElementById('m-rate-display').textContent=fmt(parseInt(sel.selectedOptions[0].dataset.rate||0));
+  updateModalTotal();
+}
+function updateModalTotal(){
+  const rate=parseInt(document.getElementById('m-unit').selectedOptions[0]?.dataset.rate||0);
+  const ci=document.getElementById('m-checkin').value;
+  const co=document.getElementById('m-checkout').value;
+  if(ci&&co&&ci<co){const nights=Math.round((new Date(co)-new Date(ci))/(86400000));document.getElementById('m-total-display').textContent=fmt(nights*rate);}
+  else{document.getElementById('m-total-display').textContent='₱0';}
+}
+function saveModalBooking(){
+  const fname=document.getElementById('m-fname').value.trim();
+  const lname=document.getElementById('m-lname').value.trim();
+  const email=document.getElementById('m-email').value.trim();
+  const unit=document.getElementById('m-unit').value;
+  const checkin=document.getElementById('m-checkin').value;
+  const checkout=document.getElementById('m-checkout').value;
+  if(!fname||!checkin||!checkout){alert('Please fill in required fields.');return;}
+  const rate=UNIT_RATES[unit];
+  const nights=Math.round((new Date(checkout)-new Date(checkin))/(86400000));
+  const ref='AV'+Date.now().toString().slice(-6);
+  const record={ref,unit,unitLabel:UNIT_LABELS[unit],checkin,checkout,nights,guests:document.getElementById('m-guests').value,name:(fname+' '+lname).trim(),email,phone:document.getElementById('m-phone').value,total:nights*rate,rate,created:new Date().toISOString()};
+  const all=getBookings();all.push(record);saveBookings(all);
+  closeModal();refreshAll();
+  ['m-fname','m-lname','m-email','m-phone','m-guests','m-checkin','m-checkout'].forEach(id=>document.getElementById(id).value='');
+}
+
+init();
+</script>
+</body>
+</html>
