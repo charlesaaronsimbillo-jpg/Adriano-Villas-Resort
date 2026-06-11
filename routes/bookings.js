@@ -87,7 +87,10 @@ router.post('/', async (req, res) => {
     });
     await booking.save();
 
-    // 🔔 Push notification to admin
+    // ✅ Respond immediately — don't make the guest wait for emails
+    res.status(201).json({ success: true, message: 'Booking inquiry received!', booking });
+
+    // 🔔 Push notification (background)
     try {
       const adminToken = process.env.ADMIN_DEVICE_TOKEN;
       if (adminToken && global.firebaseAdmin) {
@@ -104,7 +107,7 @@ router.post('/', async (req, res) => {
       console.error('⚠️ Push notification failed:', notifErr.message);
     }
 
-    // ✉️ Confirmation email to guest
+    // ✉️ Confirmation email to guest (background)
     try {
       const checkInFmt  = start ? start.toDateString() : 'Not specified';
       const checkOutFmt = end   ? end.toDateString()   : 'Not specified';
@@ -211,8 +214,6 @@ router.post('/', async (req, res) => {
     } catch (adminEmailErr) {
       console.error('⚠️ Admin notification email failed:', adminEmailErr?.response?.data || adminEmailErr.message);
     }
-
-    res.status(201).json({ success: true, message: 'Booking inquiry received!', booking });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
