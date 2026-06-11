@@ -211,6 +211,9 @@ router.post('/', async (req, res) => {
     } catch (adminEmailErr) {
       console.error('⚠️ Admin notification email failed:', adminEmailErr?.response?.data || adminEmailErr.message);
     }
+
+    res.status(201).json({ success: true, message: 'Booking inquiry received!', booking });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
