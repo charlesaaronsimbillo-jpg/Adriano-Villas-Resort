@@ -1011,29 +1011,7 @@ function resetBooking(){
 }
 function showNotif(msg){const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),3200);}
 
-// ── INQUIRY FORM ─────────────────────────────────────
-function submitInquiry(){
-  const fname=document.getElementById('inq-fname').value.trim();
-  const email=document.getElementById('inq-email').value.trim();
-  if(!fname||!email){showNotif('Please fill in your name and email.');return;}
-  // Store inquiry locally
-  const inqs=JSON.parse(localStorage.getItem('av_inquiries')||'[]');
-  inqs.push({
-    id:'INQ'+Date.now(),
-    name:fname+' '+(document.getElementById('inq-lname').value.trim()),
-    email,
-    phone:document.getElementById('inq-phone').value,
-    checkin:document.getElementById('inq-checkin').value,
-    checkout:document.getElementById('inq-checkout').value,
-    package:document.getElementById('inq-package').value,
-    guests:document.getElementById('inq-guests').value,
-    message:document.getElementById('inq-message').value,
-    created:new Date().toISOString()
-  });
-  localStorage.setItem('av_inquiries',JSON.stringify(inqs));
-  document.getElementById('inq-form').style.display='none';
-  document.getElementById('inq-success').style.display='block';
-}
+
 
 // ── EFFECTS ENGINE ────────────────────────────────
 window.addEventListener('scroll',()=>{
