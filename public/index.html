@@ -1082,6 +1082,9 @@ function buildSummary(){
 }
 
 async function submitBooking(){
+  const fname=document.getElementById('f-fname').value.trim();
+  const lname=document.getElementById('f-lname').value.trim();
+  const email=document.getElementById('f-email').value.trim();
   const phone=document.getElementById('f-phone').value.trim();
   if(!email.includes('@')||!email.includes('.')){showNotif('Please enter a valid email address.');return;}
   if(phone&&!/^\d{11}$/.test(phone)){showNotif('Phone number must be exactly 11 digits.');return;}
@@ -1135,6 +1138,9 @@ async function submitBooking(){
 }
 
 async function submitInquiry(){
+  const fname=document.getElementById('inq-fname').value.trim();
+  const lname=document.getElementById('inq-lname').value.trim();
+  const email=document.getElementById('inq-email').value.trim();
   const phone=document.getElementById('inq-phone').value.trim();
   if(!email.includes('@')||!email.includes('.')){showNotif('Please enter a valid email address.');return;}
   if(phone&&!/^\d{11}$/.test(phone)){showNotif('Phone number must be exactly 11 digits.');return;}
