@@ -73,6 +73,7 @@ nav.scrolled .nav-links a:not(.nav-book):hover{color:var(--gold);}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,27,42,0.92) 0%,rgba(13,27,42,0.75) 35%,rgba(13,27,42,0.2) 65%,rgba(13,27,42,0) 100%);}
 .hero-content{position:relative;z-index:2;text-align:left;max-width:580px;padding:2rem;margin-left:clamp(1.25rem,6vw,6rem);}
 .hero-eyebrow{font-size:0.7rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+.eyebrow-short{display:none;}
 .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1.04;margin-bottom:1.5rem;color:var(--white);opacity:0;animation:fadeUp 0.8s 0.4s forwards;}
 .hero-title em{font-style:italic;color:var(--gold);}
 .hero-subtitle{font-size:1rem;font-weight:300;color:rgba(248,246,241,0.72);letter-spacing:0.05em;margin-bottom:3rem;opacity:0;animation:fadeUp 0.8s 0.6s forwards;}
@@ -440,6 +441,8 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
 /* ── SMALL PHONES ── */
 @media(max-width:400px){
   .hero-title{font-size:2.5rem;}
+  .eyebrow-full{display:none;}
+  .eyebrow-short{display:inline;}
   .about-stat{flex:1 1 100%;}
   nav{padding:0.9rem 1rem;}
 }
@@ -470,7 +473,7 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
 <img src="photos/Hero/villa_front.JPG" class="hero-photo" alt="Adriano Villas & Resort" style="object-position: center 60%;">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Welcome to Adriano Villas &amp; Resort</p>
+    <p class="hero-eyebrow"><span class="eyebrow-full">Welcome to Adriano Villas &amp; Resort</span><span class="eyebrow-short">Adriano Villas &amp; Resort</span></p>
     <h1 class="hero-title">Where <em>Luxury</em><br>Meets Nature</h1>
     <p class="hero-subtitle">Private villas, breathtaking views, and moments that last a lifetime.</p>
     <div class="hero-actions">
