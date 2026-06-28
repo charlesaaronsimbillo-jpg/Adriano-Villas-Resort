@@ -102,9 +102,9 @@ section{padding:7rem 4rem;}
 
 /* ── SLIDER ── */
 .slider-wrap{position:relative;overflow:hidden;}
+.slider-track{display:flex;height:100%;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);}
+.slide{min-width:100%;height:100%;position:relative;flex-shrink:0;}
 .slide-img{width:100%;height:100%;object-fit:cover;display:block;}
-.slider-track{display:flex;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);}
-.slide{min-width:100%;position:relative;}
 .photo-placeholder{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;background:var(--cream-mid);border:1px dashed rgba(201,169,110,0.3);}
 .photo-placeholder-icon{font-size:2rem;opacity:0.25;}
 .photo-placeholder-label{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(100,90,70,0.5);}
@@ -129,6 +129,7 @@ section{padding:7rem 4rem;}
 .villa-block.reverse{grid-template-columns:0.85fr 1.15fr;}
 .villa-slider-wrap .slider-wrap{height:440px;}
 .villa-slider-wrap .photo-placeholder{height:440px;}
+.villa-slider-wrap .slider-wrap,.villa-slider-wrap .slider-track,.villa-slider-wrap .slide{height:inherit;}
 .villa-slider-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
 .villa-info-panel{background:var(--cream);padding:3.5rem;display:flex;flex-direction:column;justify-content:center;}
 .villa-tag{font-size:0.58rem;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;}
@@ -149,6 +150,7 @@ section{padding:7rem 4rem;}
 .unit-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);}
 .unit-card-slider .slider-wrap{height:240px;}
 .unit-card-slider .photo-placeholder{height:240px;}
+.unit-card-slider .slider-track,.unit-card-slider .slide{height:inherit;}
 .unit-card-slider img{width:100%;height:100%;object-fit:cover;display:block;}
 .unit-card-body{padding:1.75rem;background:var(--cream);}
 .unit-name{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;margin-bottom:0.35rem;color:var(--dark-text);}
@@ -162,6 +164,7 @@ section{padding:7rem 4rem;}
 .cabin-block{display:grid;grid-template-columns:1.25fr 0.75fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto;box-shadow:0 4px 30px rgba(0,0,0,0.07);border-radius:24px;}
 .cabin-block .slider-wrap{height:360px;}
 .cabin-block .photo-placeholder{height:360px;}
+.cabin-block .slider-track,.cabin-block .slide{height:inherit;}
 .cabin-block img{width:100%;height:100%;object-fit:cover;display:block;}
 
 /* ── BOOKING ── */
