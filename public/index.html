@@ -102,7 +102,7 @@ section{padding:7rem 4rem;}
 
 /* ── SLIDER ── */
 .slider-wrap{position:relative;overflow:hidden;}
-.slide-img{width:100%;height:100%;object-fit:cover;display:block;}
+.slide-img{width:100%;object-fit:cover;display:block;}
 .slider-track{display:flex;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);}
 .slide{min-width:100%;position:relative;}
 .photo-placeholder{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;background:var(--cream-mid);border:1px dashed rgba(201,169,110,0.3);}
@@ -129,7 +129,7 @@ section{padding:7rem 4rem;}
 .villa-block.reverse{grid-template-columns:0.85fr 1.15fr;}
 .villa-slider-wrap .slider-wrap{height:440px;}
 .villa-slider-wrap .photo-placeholder{height:440px;}
-.villa-slider-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.villa-slider-wrap img{width:100%;height:440px;object-fit:cover;display:block;}
 .villa-info-panel{background:var(--cream);padding:3.5rem;display:flex;flex-direction:column;justify-content:center;}
 .villa-tag{font-size:0.58rem;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;}
 .villa-name{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;margin-bottom:0.9rem;line-height:1.08;color:var(--dark-text);}
@@ -149,7 +149,7 @@ section{padding:7rem 4rem;}
 .unit-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);}
 .unit-card-slider .slider-wrap{height:240px;}
 .unit-card-slider .photo-placeholder{height:240px;}
-.unit-card-slider img{width:100%;height:100%;object-fit:cover;display:block;}
+.unit-card-slider img{width:100%;height:240px;object-fit:cover;display:block;}
 .unit-card-body{padding:1.75rem;background:var(--cream);}
 .unit-name{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:300;margin-bottom:0.35rem;color:var(--dark-text);}
 .unit-cap{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--light-text);margin-bottom:1.25rem;}
@@ -162,7 +162,7 @@ section{padding:7rem 4rem;}
 .cabin-block{display:grid;grid-template-columns:1.25fr 0.75fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto;box-shadow:0 4px 30px rgba(0,0,0,0.07);border-radius:24px;}
 .cabin-block .slider-wrap{height:360px;}
 .cabin-block .photo-placeholder{height:360px;}
-.cabin-block img{width:100%;height:100%;object-fit:cover;display:block;}
+.cabin-block img{width:100%;height:360px;object-fit:cover;display:block;}
 
 /* ── BOOKING ── */
 #booking{background:var(--navy);border-top:none;}
@@ -334,11 +334,14 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
   .villa-block{grid-template-columns:1fr 1fr;}
   .villa-block.reverse{grid-template-columns:1fr 1fr;}
   .villa-slider-wrap .slider-wrap{height:360px;}
+  .villa-slider-wrap img{height:360px;}
   .villa-info-panel{padding:2.5rem 2rem;}
   .units-grid{grid-template-columns:repeat(2,1fr);}
   .unit-card-slider .slider-wrap{height:210px;}
+  .unit-card-slider img{height:210px;}
   .cabin-block{grid-template-columns:1fr 1fr;}
   .cabin-block .slider-wrap{height:300px;}
+  .cabin-block img{height:300px;}
   .inquire-layout{gap:3rem;}
   .booking-container{padding:0 1rem;}
   .unit-selector{grid-template-columns:repeat(2,1fr);}
