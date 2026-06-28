@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
 /* ── FLATPICKR CUSTOM THEME ── */
-.flatpickr-calendar{background:#1a2e45;border:1px solid rgba(201,169,110,0.25);border-radius:4px;box-shadow:0 12px 40px rgba(0,0,0,0.35);font-family:'Jost',sans-serif;}
+.flatpickr-calendar{background:#1a2e45;border:1px solid rgba(201,169,110,0.25);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.35);font-family:'Jost',sans-serif;}
 .flatpickr-months{background:#0d1b2a;border-radius:4px 4px 0 0;padding:0.25rem 0;}
 .flatpickr-month{color:#f8f6f1;}
 .flatpickr-current-month{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:#f8f6f1;}
@@ -39,12 +39,10 @@ span.flatpickr-weekday{color:#8a9bb0;font-size:0.6rem;letter-spacing:0.1em;font-
   --dark-text:#1a1a1a;--mid-text:#555550;--light-text:#8a8a80;
   --border-light:rgba(0,0,0,0.1);--border-gold:rgba(201,169,110,0.3);
   --border-dark:rgba(201,169,110,0.25);
-  --radius:2px;
+  --radius:16px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--white);color:var(--dark-text);font-family:'Jost',sans-serif;overflow-x:hidden;}
-
+body{background-color:#f0ebe0;color:var(--dark-text);font-family:'Jost',sans-serif;overflow-x:hidden;}
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s;}
 nav.scrolled{background:rgba(255,255,255,0.97);padding:1rem 4rem;border-bottom:1px solid var(--border-light);backdrop-filter:blur(8px);box-shadow:0 2px 20px rgba(0,0,0,0.06);}
@@ -59,29 +57,29 @@ nav.scrolled .nav-links a:not(.nav-book):hover{color:var(--gold);}
 .nav-links a:not(.nav-book)::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
 .nav-links a:not(.nav-book):hover::after{width:100%;}
 .nav-links a:hover{opacity:1;color:var(--gold);}
-.nav-book{background:var(--gold);color:var(--navy)!important;padding:0.65rem 1.5rem;opacity:1!important;font-weight:600;border-radius:var(--radius);}
+.nav-book{background:var(--gold);color:var(--navy)!important;padding:0.65rem 1.5rem;opacity:1!important;font-weight:600;border-radius:50px;}
 .nav-book:hover{background:var(--gold-light)!important;}
 
 /* ── HERO ── */
-.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;}
 .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .hero-photo-placeholder{position:absolute;inset:0;background:linear-gradient(160deg,#0f3460 0%,#1a2e45 40%,#0d2010 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
 .hero-photo-placeholder-icon{font-size:4rem;opacity:0.12;}
 .hero-photo-placeholder-label{font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:rgba(201,169,110,0.45);border:1px dashed rgba(201,169,110,0.25);padding:0.6rem 1.4rem;}
 
 /* ── NOTIFICATION ── */
-.notif{position:fixed;bottom:2rem;right:2rem;background:var(--navy);border:1px solid var(--gold);color:var(--white);padding:1rem 1.5rem;font-size:0.8rem;z-index:999;transform:translateX(150%);transition:transform 0.4s;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.notif{position:fixed;bottom:2rem;right:2rem;background:var(--navy);border:1px solid var(--gold);color:var(--white);padding:1rem 1.5rem;font-size:0.8rem;z-index:999;transform:translateX(150%);transition:transform 0.4s;box-shadow:0 4px 20px rgba(0,0,0,0.2);border-radius:16px;}
 .notif.show{transform:translateX(0);}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,27,42,0.95) 0%,rgba(13,27,42,0.4) 55%,rgba(13,27,42,0.25) 100%);}
-.hero-content{position:relative;z-index:2;text-align:center;max-width:880px;padding:2rem;}
-.hero-eyebrow{font-size:0.7rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.2s forwards;}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1.04;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.4s forwards;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(13,27,42,0.92) 0%,rgba(13,27,42,0.75) 35%,rgba(13,27,42,0.2) 65%,rgba(13,27,42,0) 100%);}
+.hero-content{position:relative;z-index:2;text-align:left;max-width:580px;padding:2rem;margin-left:6rem;}
+.hero-eyebrow{font-size:0.7rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1.04;margin-bottom:1.5rem;color:var(--white);opacity:0;animation:fadeUp 0.8s 0.4s forwards;}
 .hero-title em{font-style:italic;color:var(--gold);}
 .hero-subtitle{font-size:1rem;font-weight:300;color:rgba(248,246,241,0.72);letter-spacing:0.05em;margin-bottom:3rem;opacity:0;animation:fadeUp 0.8s 0.6s forwards;}
-.hero-actions{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.8s forwards;}
-.btn-primary{background:var(--gold);color:var(--navy);padding:1rem 2.5rem;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all 0.3s;border:none;cursor:pointer;font-family:'Jost',sans-serif;}
+.hero-actions{display:flex;gap:1.5rem;justify-content:flex-start;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.8s forwards;}
+.btn-primary{background:var(--gold);color:var(--navy);padding:1rem 2.5rem;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;text-decoration:none;transition:all 0.3s;border:none;cursor:pointer;font-family:'Jost',sans-serif;border-radius:50px;}
 .btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);}
-.btn-outline{border:1px solid rgba(248,246,241,0.45);color:var(--white);padding:1rem 2.5rem;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:400;text-decoration:none;transition:all 0.3s;}
+.btn-outline{border:1px solid rgba(248,246,241,0.45);color:var(--white);padding:1rem 2.5rem;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:400;text-decoration:none;transition:all 0.3s;border-radius:50px;}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
 .hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;z-index:2;opacity:0;animation:fadeIn 1s 1.2s forwards;}
 .hero-scroll span{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(248,246,241,0.45);}
@@ -110,23 +108,23 @@ section{padding:7rem 4rem;}
 .photo-placeholder-icon{font-size:2rem;opacity:0.25;}
 .photo-placeholder-label{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(100,90,70,0.5);}
 .photo-placeholder-hint{font-size:0.52rem;color:rgba(100,90,70,0.35);letter-spacing:0.1em;}
-.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.1);color:var(--dark-text);width:38px;height:38px;cursor:pointer;font-size:1.1rem;z-index:5;transition:all 0.2s;backdrop-filter:blur(4px);}
+.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.1);color:var(--dark-text);width:38px;height:38px;cursor:pointer;font-size:1.1rem;z-index:5;transition:all 0.2s;backdrop-filter:blur(4px);border-radius:50%;}
 .slider-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--white);}
 .slider-btn.prev{left:1rem;}
 .slider-btn.next{right:1rem;}
 .slider-dots{position:absolute;bottom:0.9rem;left:50%;transform:translateX(-50%);display:flex;gap:0.4rem;z-index:5;}
 .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);border:none;cursor:pointer;transition:all 0.2s;padding:0;}
 .dot.active{background:var(--gold);transform:scale(1.3);}
-.slide-counter{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.08);color:var(--dark-text);font-size:0.62rem;letter-spacing:0.15em;padding:0.3rem 0.7rem;z-index:5;backdrop-filter:blur(4px);}
+.slide-counter{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.85);border:1px solid rgba(0,0,0,0.08);color:var(--dark-text);font-size:0.62rem;letter-spacing:0.15em;padding:0.3rem 0.7rem;z-index:5;backdrop-filter:blur(4px);border-radius:50px;}
 
 /* ── ACCOMMODATIONS ── */
-#accommodations{background:var(--white);}
+#accommodations{background-color:#faf7f2;background-image:radial-gradient(circle,rgba(201,169,110,0.15) 1px,transparent 1px);background-size:24px 24px;}
 .acc-header{text-align:center;margin-bottom:5rem;}
 .acc-header .section-title{color:var(--dark-text);}
 .acc-header:hover .section-divider{width:110px;}
 
 /* Villa blocks */
-.villa-block{display:grid;grid-template-columns:1.15fr 0.85fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto 3rem;box-shadow:0 4px 30px rgba(0,0,0,0.07);}
+.villa-block{display:grid;grid-template-columns:1.15fr 0.85fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto 3rem;box-shadow:0 4px 30px rgba(0,0,0,0.07);border-radius:24px;}
 .villa-block.reverse{grid-template-columns:0.85fr 1.15fr;}
 .villa-slider-wrap .slider-wrap{height:440px;}
 .villa-slider-wrap .photo-placeholder{height:440px;}
@@ -145,7 +143,7 @@ section{padding:7rem 4rem;}
 .small-units-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;margin-bottom:0.5rem;color:var(--dark-text);}
 .small-units-sub{font-size:0.75rem;color:var(--light-text);letter-spacing:0.1em;}
 .units-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1200px;margin:0 auto 3rem;}
-.unit-card{background:var(--white);border:1px solid var(--border-light);overflow:hidden;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;}
+.unit-card{background:var(--white);border:1px solid var(--border-light);overflow:hidden;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;border-radius:20px;}
 .unit-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);}
 .unit-card-slider .slider-wrap{height:240px;}
 .unit-card-slider .photo-placeholder{height:240px;}
@@ -154,11 +152,11 @@ section{padding:7rem 4rem;}
 .unit-cap{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--light-text);margin-bottom:1.25rem;}
 .unit-price{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);font-weight:300;}
 .unit-price-label{font-size:0.58rem;color:var(--light-text);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.2rem;}
-.unit-book-btn{margin-top:1.5rem;width:100%;background:transparent;border:1px solid rgba(0,0,0,0.2);color:var(--dark-text);padding:0.8rem;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+.unit-book-btn{margin-top:1.5rem;width:100%;background:transparent;border:1px solid rgba(0,0,0,0.2);color:var(--dark-text);padding:0.8rem;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;border-radius:50px;}
 .unit-book-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--white);}
 
 /* Cabin full row */
-.cabin-block{display:grid;grid-template-columns:1.25fr 0.75fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto;box-shadow:0 4px 30px rgba(0,0,0,0.07);}
+.cabin-block{display:grid;grid-template-columns:1.25fr 0.75fr;overflow:hidden;border:1px solid var(--border-light);max-width:1200px;margin:0 auto;box-shadow:0 4px 30px rgba(0,0,0,0.07);border-radius:24px;}
 .cabin-block .slider-wrap{height:360px;}
 .cabin-block .photo-placeholder{height:360px;}
 
@@ -182,7 +180,7 @@ section{padding:7rem 4rem;}
 
 /* Unit selector */
 .unit-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;}
-.unit-option{border:1px solid rgba(255,255,255,0.12);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:rgba(255,255,255,0.03);}
+.unit-option{border:1px solid rgba(255,255,255,0.12);padding:1.5rem;cursor:pointer;transition:all 0.3s;position:relative;background:rgba(255,255,255,0.03);border-radius:16px;}
 .unit-option.selected{border-color:var(--gold);background:rgba(201,169,110,0.08);}
 .unit-option:hover{border-color:rgba(201,169,110,0.5);background:rgba(201,169,110,0.05);}
 .unit-option-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:0.3rem;color:var(--white);}
@@ -192,10 +190,10 @@ section{padding:7rem 4rem;}
 .unit-option.selected .unit-check{background:var(--gold);border-color:var(--gold);color:var(--navy);}
 
 /* Calendar */
-.calendar-wrap{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;}
+.calendar-wrap{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;border-radius:20px;}
 .calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
 .cal-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--white);}
-.cal-nav{background:none;border:1px solid rgba(255,255,255,0.15);color:var(--white);width:32px;height:32px;cursor:pointer;font-size:1rem;transition:all 0.2s;}
+.cal-nav{background:none;border:1px solid rgba(255,255,255,0.15);color:var(--white);width:32px;height:32px;cursor:pointer;font-size:1rem;transition:all 0.2s;border-radius:50%;}
 .cal-nav:hover{border-color:var(--gold);color:var(--gold);}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;}
 .cal-day-label{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0.5rem 0;}
@@ -218,13 +216,13 @@ section{padding:7rem 4rem;}
 .form-group{display:flex;flex-direction:column;gap:0.5rem;}
 .form-group.full{grid-column:1/-1;}
 .form-label{font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.45);}
-.form-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:var(--white);padding:0.85rem 1rem;font-family:'Jost',sans-serif;font-size:0.9rem;transition:border-color 0.2s;outline:none;}
+.form-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:var(--white);padding:0.85rem 1rem;font-family:'Jost',sans-serif;font-size:0.9rem;transition:border-color 0.2s;outline:none;border-radius:12px;}
 .form-input:focus{border-color:var(--gold);}
 .form-input::placeholder{color:rgba(255,255,255,0.25);}
 select.form-input option{background:var(--navy);}
 
 /* Summary */
-.booking-summary{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;}
+.booking-summary{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;border-radius:20px;}
 .summary-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:1.5rem;color:var(--white);}
 .summary-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.08);}
 .summary-row:last-child{border-bottom:none;}
@@ -232,9 +230,9 @@ select.form-input option{background:var(--navy);}
 .summary-value{font-size:0.9rem;color:var(--white);}
 .summary-total{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);}
 .booking-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;}
-.btn-next{background:var(--gold);color:var(--navy);border:none;padding:1rem 2.5rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;}
+.btn-next{background:var(--gold);color:var(--navy);border:none;padding:1rem 2.5rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;border-radius:50px;}
 .btn-next:hover{background:var(--gold-light);}
-.btn-back{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+.btn-back{background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;border-radius:50px;}
 .btn-back:hover{border-color:var(--gold);color:var(--white);}
 
 /* Confirm */
@@ -253,12 +251,12 @@ select.form-input option{background:var(--navy);}
 .inq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
 .inq-full{grid-column:1/-1;}
 .inq-label{font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--light-text);display:block;margin-bottom:0.45rem;}
-.inq-input{width:100%;background:var(--cream);border:1px solid var(--border-light);color:var(--dark-text);padding:0.8rem 1rem;font-family:'Jost',sans-serif;font-size:0.88rem;transition:border-color 0.2s;outline:none;}
+.inq-input{width:100%;background:var(--cream);border:1px solid var(--border-light);color:var(--dark-text);padding:0.8rem 1rem;font-family:'Jost',sans-serif;font-size:0.88rem;transition:border-color 0.2s;outline:none;border-radius:12px;}
 .inq-input:focus{border-color:var(--gold);}
 .inq-input::placeholder{color:var(--light-text);}
 textarea.inq-input{resize:vertical;min-height:100px;}
 select.inq-input option{background:var(--white);}
-.inq-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;}
+.inq-btn{width:100%;background:var(--navy);color:var(--white);border:none;padding:1rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all 0.3s;margin-top:0.5rem;border-radius:50px;}
 .inq-btn:hover{background:var(--gold);color:var(--navy);}
 .inq-success{display:none;text-align:center;padding:2rem;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:1.5rem;}
 
@@ -455,11 +453,7 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-photo-placeholder">
-    <div class="hero-photo-placeholder-icon">🏝️</div>
-    <div class="hero-photo-placeholder-label">Resort Overview Photo</div>
-    <div style="font-size:0.52rem;color:rgba(201,169,110,0.3);letter-spacing:0.15em;margin-top:0.25rem;">Replace with: photos/resort-hero.jpg</div>
-  </div>
+<img src="photos/Hero/villa_front.JPG" class="hero-photo" alt="Adriano Villas & Resort" style="object-position: center 60%;">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Welcome to Adriano Villas &amp; Resort</p>
@@ -495,37 +489,39 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
     <div class="section-divider reveal reveal-d2"></div>
   </div>
 
-  <!-- OCEAN VIEW VILLA -->
-  <div class="villa-block reveal">
-    <div class="villa-slider-wrap">
-      <div class="slider-wrap" id="slider-ocean">
-        <div class="slider-track" id="track-ocean">
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 1</div><div class="photo-placeholder-hint">photos/ocean-1.jpg</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 2</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 3</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">🌊</div><div class="photo-placeholder-label">Ocean View Villa — Photo 4</div></div></div>
-        </div>
-        <button class="slider-btn prev" onclick="slide('ocean',-1)">‹</button>
-        <button class="slider-btn next" onclick="slide('ocean',1)">›</button>
-        <div class="slider-dots" id="dots-ocean"></div>
-        <div class="slide-counter" id="counter-ocean">1 / 4</div>
+ <!-- OCEAN VIEW VILLA -->
+<div class="villa-block reveal">
+  <div class="villa-slider-wrap">
+    <div class="slider-wrap" id="slider-ocean">
+      <div class="slider-track" id="track-ocean">
+        <div class="slide"><img src="photos/Ocean/Ocean-1.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+        <div class="slide"><img src="photos/Ocean/Ocean-2.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+        <div class="slide"><img src="photos/Ocean/Ocean-3.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+        <div class="slide"><img src="photos/Ocean/Ocean-4.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+        <div class="slide"><img src="photos/Ocean/Ocean-5.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+        <div class="slide"><img src="photos/Ocean/Ocean-6.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
       </div>
-    </div>
-    <div class="villa-info-panel">
-      <p class="villa-tag">Private Villa · Up to 25 Guests</p>
-      <h3 class="villa-name">Ocean View<br>Villa</h3>
-      <p class="villa-desc">Perched with sweeping panoramic sea views, this exclusive villa offers total privacy and full luxury amenities for up to 25 guests.</p>
-      <div class="villa-details-list">
-        <div class="villa-detail-row"><span>👥</span><span>Up to 25 guests</span></div>
-        <div class="villa-detail-row"><span>🌊</span><span>Panoramic ocean view</span></div>
-        <div class="villa-detail-row"><span>🏡</span><span>Full villa — entire space</span></div>
-        <div class="villa-detail-row"><span>🌙</span><span>Minimum 1 night stay</span></div>
-      </div>
-      <div class="villa-rate-tag">₱28,200</div>
-      <div class="villa-rate-label">per night · entire villa</div>
-      <a href="#booking" class="btn-primary" onclick="selectUnit('ocean')">Book This Villa →</a>
+      <button class="slider-btn prev" onclick="slide('ocean',-1)">‹</button>
+      <button class="slider-btn next" onclick="slide('ocean',1)">›</button>
+      <div class="slider-dots" id="dots-ocean"></div>
+      <div class="slide-counter" id="counter-ocean">1 / 6</div>
     </div>
   </div>
+  <div class="villa-info-panel">
+    <p class="villa-tag">Private Villa · Up to 25 Guests</p>
+    <h3 class="villa-name">Ocean View<br>Villa</h3>
+    <p class="villa-desc">Perched with sweeping panoramic sea views, this exclusive villa offers total privacy and full luxury amenities for up to 25 guests.</p>
+    <div class="villa-details-list">
+      <div class="villa-detail-row"><span>👥</span><span>Up to 25 guests</span></div>
+      <div class="villa-detail-row"><span>🌊</span><span>Panoramic ocean view</span></div>
+      <div class="villa-detail-row"><span>🏡</span><span>Full villa — entire space</span></div>
+      <div class="villa-detail-row"><span>🌙</span><span>Minimum 1 night stay</span></div>
+    </div>
+    <div class="villa-rate-tag">₱28,200</div>
+    <div class="villa-rate-label">per night · entire villa</div>
+    <a href="#booking" class="btn-primary" onclick="selectUnit('ocean')">Book This Villa →</a>
+  </div>
+</div>
 
   <!-- MOUNTAIN VIEW VILLA -->
   <div class="villa-block reverse reveal">
@@ -546,15 +542,17 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
     <div class="villa-slider-wrap">
       <div class="slider-wrap" id="slider-mountain">
         <div class="slider-track" id="track-mountain">
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 1</div><div class="photo-placeholder-hint">photos/mountain-1.jpg</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 2</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 3</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:440px;"><div class="photo-placeholder-icon">⛰️</div><div class="photo-placeholder-label">Mountain View Villa — Photo 4</div></div></div>
+<div class="slide"><img src="photos/Mountain/Mountain-1.jpg" style="width:100%;height:440px;object-fit:cover;display:block;object-position:center 30%;"></div>
+<div class="slide"><img src="photos/Mountain/Mountain-2.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Mountain/Mountain-3.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Mountain/Mountain-4.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Mountain/Mountain-5.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Mountain/Mountain-6.jpg" style="width:100%;height:440px;object-fit:cover;display:block;"></div>
         </div>
         <button class="slider-btn prev" onclick="slide('mountain',-1)">‹</button>
         <button class="slider-btn next" onclick="slide('mountain',1)">›</button>
         <div class="slider-dots" id="dots-mountain"></div>
-        <div class="slide-counter" id="counter-mountain">1 / 4</div>
+        <div class="slide-counter" id="counter-mountain">1 / 6</div>
       </div>
     </div>
   </div>
@@ -572,10 +570,10 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
       <div class="unit-card-slider">
         <div class="slider-wrap" id="slider-cabana1">
           <div class="slider-track" id="track-cabana1">
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 1</div><div class="photo-placeholder-hint">photos/cabana-1-a.jpg</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 2</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 3</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 1 — Photo 4</div></div></div>
+<div class="slide"><img src="photos/Cabana/Cabana-1.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-2.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-3.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-4.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
           </div>
           <button class="slider-btn prev" onclick="slide('cabana1',-1)" style="width:30px;height:30px;font-size:0.9rem;">‹</button>
           <button class="slider-btn next" onclick="slide('cabana1',1)" style="width:30px;height:30px;font-size:0.9rem;">›</button>
@@ -597,10 +595,10 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
       <div class="unit-card-slider">
         <div class="slider-wrap" id="slider-cabana2">
           <div class="slider-track" id="track-cabana2">
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 1</div><div class="photo-placeholder-hint">photos/cabana-2-a.jpg</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 2</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 3</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 2 — Photo 4</div></div></div>
+            <div class="slide"><img src="photos/Cabana/Cabana-4.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-3.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-2.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-1.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
           </div>
           <button class="slider-btn prev" onclick="slide('cabana2',-1)" style="width:30px;height:30px;font-size:0.9rem;">‹</button>
           <button class="slider-btn next" onclick="slide('cabana2',1)" style="width:30px;height:30px;font-size:0.9rem;">›</button>
@@ -622,10 +620,10 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
       <div class="unit-card-slider">
         <div class="slider-wrap" id="slider-cabana3">
           <div class="slider-track" id="track-cabana3">
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 1</div><div class="photo-placeholder-hint">photos/cabana-3-a.jpg</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 2</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 3</div></div></div>
-            <div class="slide"><div class="photo-placeholder" style="height:240px;"><div class="photo-placeholder-icon">🏖️</div><div class="photo-placeholder-label">Cabana 3 — Photo 4</div></div></div>
+           <div class="slide"><img src="photos/Cabana/Cabana-3.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-1.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-4.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
+<div class="slide"><img src="photos/Cabana/Cabana-2.jpg" style="width:100%;height:240px;object-fit:cover;display:block;"></div>
           </div>
           <button class="slider-btn prev" onclick="slide('cabana3',-1)" style="width:30px;height:30px;font-size:0.9rem;">‹</button>
           <button class="slider-btn next" onclick="slide('cabana3',1)" style="width:30px;height:30px;font-size:0.9rem;">›</button>
@@ -648,10 +646,10 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
     <div class="villa-slider-wrap">
       <div class="slider-wrap" id="slider-cabin">
         <div class="slider-track" id="track-cabin">
-          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 1</div><div class="photo-placeholder-hint">photos/cabin-a.jpg</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 2</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 3</div></div></div>
-          <div class="slide"><div class="photo-placeholder" style="height:360px;"><div class="photo-placeholder-icon">🌿</div><div class="photo-placeholder-label">Cabin — Photo 4</div></div></div>
+          <div class="slide"><img src="photos/cabin/cabin-4.jpg" style="width:100%;height:360px;object-fit:cover;display:block;"></div>
+          <div class="slide"><img src="photos/cabin/cabin-3.jpg" style="width:100%;height:360px;object-fit:cover;display:block;"></div>
+          <div class="slide"><img src="photos/cabin/cabin-2.jpg" style="width:100%;height:360px;object-fit:cover;display:block;"></div>
+          <div class="slide"><img src="photos/cabin/cabin-1.jpg" style="width:100%;height:360px;object-fit:cover;display:block;"></div>
         </div>
         <button class="slider-btn prev" onclick="slide('cabin',-1)">‹</button>
         <button class="slider-btn next" onclick="slide('cabin',1)">›</button>
@@ -821,7 +819,7 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
       </div>
       <div class="map-details">
         <div class="map-detail-row"><span class="map-detail-icon">📍</span><div class="map-detail-text"><strong>Adrianos Villas &amp; Resort</strong><br>Turtle Crossing, The Strand Subdivision<br>Morong, Bataan, Philippines</div></div>
-        <div class="map-detail-row"><span class="map-detail-icon">🗺️</span><div class="map-detail-text">Plus Code: <strong>J8W2+H6</strong> Morong, Bataan — <a href="https://maps.google.com/?q=J8W2+H6+Morong,Bataan" target="_blank" style="color:var(--gold);text-decoration:none;">Open in Google Maps ↗</a></div></div>
+        <div class="map-detail-row"><span class="map-detail-icon">🗺️</span><div class="map-detail-text">Plus Code: <strong>J8W2+H6</strong> Morong, Bataan — <a href="https://www.google.com/maps/place/Adriano+Villas+and+Resort/@14.6464901,120.2956602,17z/data=!3m1!4b1!4m9!3m8!1s0x33960d582d755119:0x52391b5c1ea11339!5m2!4m1!1i2!8m2!3d14.6464902!4d120.3005311!16s%2Fg%2F11srylvn_3?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" style="color:var(--gold);text-decoration:none;">Open in Google Maps ↗</a></div></div>
         <div class="map-detail-row"><span class="map-detail-icon">🚗</span><div class="map-detail-text">Accessible via SCTEX / Olongapo–Gapan Road. Enter The Strand Subdivision and follow to Turtle Crossing.</div></div>
       </div>
     </div>
@@ -921,14 +919,15 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
 // ── SLIDER ──────────────────────────────────────────
 const sliderState={};
 const SLIDERS=['ocean','mountain','cabana1','cabana2','cabana3','cabin'];
-const SLIDE_COUNT=4;
+const SLIDE_COUNTS={ocean:6,mountain:6,cabana1:4,cabana2:4,cabana3:4,cabin:4};
 function initSliders(){
   SLIDERS.forEach(id=>{
     sliderState[id]=0;
+    const count=SLIDE_COUNTS[id];
     const dots=document.getElementById('dots-'+id);
     if(!dots)return;
     dots.innerHTML='';
-    for(let i=0;i<SLIDE_COUNT;i++){
+    for(let i=0;i<count;i++){
       const d=document.createElement('button');
       d.className='dot'+(i===0?' active':'');
       d.onclick=(e=>{e.stopPropagation();goSlide(id,i);});
@@ -936,13 +935,14 @@ function initSliders(){
     }
   });
 }
-function slide(id,dir){goSlide(id,(sliderState[id]+dir+SLIDE_COUNT)%SLIDE_COUNT);}
+function slide(id,dir){const count=SLIDE_COUNTS[id];goSlide(id,(sliderState[id]+dir+count)%count);}
 function goSlide(id,n){
+  const count=SLIDE_COUNTS[id];
   sliderState[id]=n;
   const track=document.getElementById('track-'+id);
   if(track)track.style.transform=`translateX(-${n*100}%)`;
   const counter=document.getElementById('counter-'+id);
-  if(counter)counter.textContent=`${n+1} / ${SLIDE_COUNT}`;
+  if(counter)counter.textContent=`${n+1} / ${count}`;
   const dots=document.getElementById('dots-'+id);
   if(dots)dots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===n));
 }
@@ -1068,9 +1068,9 @@ function buildSummary(){
 }
 
 async function submitBooking(){
-  const fname=document.getElementById('f-fname').value.trim();
-  const lname=document.getElementById('f-lname').value.trim();
-  const email=document.getElementById('f-email').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  if(!email.includes('@')||!email.includes('.')){showNotif('Please enter a valid email address.');return;}
+  if(phone&&!/^\d{11}$/.test(phone)){showNotif('Phone number must be exactly 11 digits.');return;}
   if(!fname||!lname||!email){showNotif('Please fill in required guest details.');goStep(3);return;}
   const btn=document.querySelector('#panel-4 .btn-next');
   btn.textContent='Sending…';btn.disabled=true;
@@ -1121,9 +1121,9 @@ async function submitBooking(){
 }
 
 async function submitInquiry(){
-  const fname=document.getElementById('inq-fname').value.trim();
-  const lname=document.getElementById('inq-lname').value.trim();
-  const email=document.getElementById('inq-email').value.trim();
+  const phone=document.getElementById('inq-phone').value.trim();
+  if(!email.includes('@')||!email.includes('.')){showNotif('Please enter a valid email address.');return;}
+  if(phone&&!/^\d{11}$/.test(phone)){showNotif('Phone number must be exactly 11 digits.');return;}
   if(!fname||!email){showNotif('Please fill in your name and email.');return;}
   const btn=document.querySelector('.inq-btn');
   btn.textContent='Sending…';btn.disabled=true;
