@@ -612,7 +612,7 @@ function renderInquiries(){
       </div>`
       :`<div style="margin:0 1.25rem 0.85rem;font-size:0.78rem;color:var(--muted);font-style:italic;">No message provided.</div>`}
       <div style="display:flex;align-items:center;gap:0.6rem;padding:0.65rem 1.25rem;border-top:1px solid rgba(255,255,255,0.05);background:rgba(0,0,0,0.12);flex-wrap:wrap;">
-        <a href="mailto:${i.email}" style="font-size:0.68rem;color:var(--gold);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(201,169,110,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,169,110,0.1)'" onmouseout="this.style.background='transparent'">Reply via Email</a>
+        <a href="https://mail.google.com/mail/?view=cm&to=${i.email}&su=Re: Your Inquiry – Adriano Villas & Resort" target="_blank" style="font-size:0.68rem;color:var(--gold);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(201,169,110,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,169,110,0.1)'" onmouseout="this.style.background='transparent'">Reply via Email</a>
         <a href="https://www.facebook.com/adrianovillasandresort" target="_blank" style="font-size:0.68rem;color:#1877f2;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(24,119,242,0.3);padding:0.3rem 0.7rem;border-radius:2px;transition:all 0.2s;" onmouseover="this.style.background='rgba(24,119,242,0.08)'" onmouseout="this.style.background='transparent'">Facebook Page</a>
         <div style="flex:1;"></div>
         ${i.status==='new'?`<button class="btn-cancel" onclick="closeInquiry('${i._id}')">Mark Closed</button>`:''}
