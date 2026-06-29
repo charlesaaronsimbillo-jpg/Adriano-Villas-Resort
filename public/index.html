@@ -319,6 +319,15 @@ footer{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.06);pa
   .hero-eyebrow{display:none;}
 }
 
+/* ── TABLET PORTRAIT HERO ALIGNMENT ── */
+@media(min-width:600px) and (max-width:768px){
+  .hero{justify-content:flex-start;}
+  .hero-content{text-align:left;margin-left:2.5rem;max-width:75%;}
+  .hero-title{text-align:left;}
+  .hero-subtitle{text-align:left;}
+  .hero-actions{align-items:flex-start;}
+}
+
 /* ── MOBILE HAMBURGER ── */
 .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:10000;}
 .nav-toggle span{display:block;width:24px;height:2px;background:var(--white);transition:all 0.3s;}
