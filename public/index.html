@@ -41,7 +41,7 @@ span.flatpickr-weekday{color:#8a9bb0;font-size:0.6rem;letter-spacing:0.1em;font-
   --border-dark:rgba(201,169,110,0.25);
   --radius:16px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}*{margin:0;padding:0;box-sizing:border-box;}
 body{background-color:#f0ebe0;color:var(--dark-text);font-family:'Jost',sans-serif;overflow-x:hidden;}
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all 0.4s;}
@@ -53,7 +53,7 @@ nav.scrolled .nav-links a:not(.nav-book):hover{color:var(--gold);}
 .nav-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:0.08em;color:var(--white);transition:color 0.4s;}
 .nav-logo-sub{font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);}
 .nav-links{display:flex;gap:2.5rem;align-items:center;}
-.nav-links a{text-decoration:none;color:var(--white);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.85;transition:all 0.2s;position:relative;}
+.nav-links a{text-decoration:none;color:var(--white);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;opacity:0.85;transition:all 0.2s;position:relative;text-shadow:0 1px 6px rgba(0,0,0,0.8);}
 .nav-links a:not(.nav-book)::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
 .nav-links a:not(.nav-book):hover::after{width:100%;}
 .nav-links a:hover{opacity:1;color:var(--gold);}
