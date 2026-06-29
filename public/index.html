@@ -314,6 +314,11 @@ footer{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.06);pa
 .reveal-right.revealed{opacity:1;transform:translateX(0);}
 .reveal-d1{transition-delay:0.1s;}.reveal-d2{transition-delay:0.2s;}.reveal-d3{transition-delay:0.3s;}.reveal-d4{transition-delay:0.4s;}
 
+/* ── EYEBROW OVERLAP FIX (tablet landscape) ── */
+@media(min-width:769px) and (max-width:1024px){
+  .hero-eyebrow{display:none;}
+}
+
 /* ── MOBILE HAMBURGER ── */
 .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:10000;}
 .nav-toggle span{display:block;width:24px;height:2px;background:var(--white);transition:all 0.3s;}
@@ -324,7 +329,6 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
 
 /* ── TABLET ── */
 @media(max-width:1024px){
-  .hero-eyebrow{display:none;}
   nav{padding:1.2rem 2rem;}
   nav.scrolled{padding:0.9rem 2rem;}
   section{padding:5rem 2rem;}
