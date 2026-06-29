@@ -315,7 +315,7 @@ footer{background:var(--navy-mid);border-top:1px solid rgba(255,255,255,0.06);pa
 .reveal-d1{transition-delay:0.1s;}.reveal-d2{transition-delay:0.2s;}.reveal-d3{transition-delay:0.3s;}.reveal-d4{transition-delay:0.4s;}
 
 /* ── MOBILE HAMBURGER ── */
-.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:200;}
+.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;z-index:1000;}
 .nav-toggle span{display:block;width:24px;height:2px;background:var(--white);transition:all 0.3s;}
 nav.scrolled .nav-toggle span{background:var(--dark-text);}
 .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
@@ -464,6 +464,7 @@ nav.scrolled .nav-toggle span{background:var(--dark-text);}
     <span></span><span></span><span></span>
   </button>
   <div class="nav-links" id="nav-links">
+    <button onclick="closeNav()" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:1.8rem;cursor:pointer;line-height:1;">✕</button>
     <a href="#accommodations" onclick="closeNav()">Stay</a>
     <a href="#booking" onclick="closeNav()">Book</a>
     <a href="#inquire" onclick="closeNav()">Inquire</a>
