@@ -890,6 +890,7 @@ init();
     altFormat: 'M j, Y',
     minDate: 'today',
     disableMobile: true,
+    monthSelectorType: 'static',
     onChange: function(dates) {
       if (dates[0]) {
         const next = new Date(dates[0]);
@@ -905,6 +906,7 @@ init();
     altFormat: 'M j, Y',
     minDate: 'today',
     disableMobile: true,
+    monthSelectorType: 'static',
     onChange: function() { updateModalTotal(); }
   });
 
@@ -915,6 +917,7 @@ init();
     altFormat: 'M j, Y',
     maxDate: 'today',
     disableMobile: true,
+    monthSelectorType: 'static',
   });
 })();
 </script>
