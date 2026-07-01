@@ -7,7 +7,6 @@ const axios = require('axios');
 
 // ── EMAIL HELPER (Brevo) ───────────────────────────────────────────────────────
 async function sendEmail({ toEmail, toName, subject, htmlContent }) {
-  console.log('KEY:', process.env.BREVO_API_KEY?.substring(0, 10), '| LENGTH:', process.env.BREVO_API_KEY?.length);
   await axios.post(
     'https://api.brevo.com/v3/smtp/email',
     {
