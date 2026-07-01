@@ -5,19 +5,23 @@ const BlockedDate = require('../models/BlockedDate');
 const Message = require('../models/Message');
 const axios = require('axios');
 
-// ── EMAIL HELPER ──────────────────────────────────────────────────────────────
+// ── EMAIL HELPER (Brevo) ───────────────────────────────────────────────────────
 async function sendEmail({ toEmail, toName, subject, htmlContent }) {
+  console.log('KEY:', process.env.BREVO_API_KEY?.substring(0, 10), '| LENGTH:', process.env.BREVO_API_KEY?.length);
   await axios.post(
-    'https://api.resend.com/emails',
+    'https://api.brevo.com/v3/smtp/email',
     {
-      from: `${process.env.SENDER_NAME || 'Adriano Villas & Resort'} <${process.env.SENDER_EMAIL || 'onboarding@resend.dev'}>`,
-      to: [`${toName} <${toEmail}>`],
+      sender: {
+        name: process.env.SENDER_NAME || 'Adriano Villas & Resort',
+        email: process.env.SENDER_EMAIL,
+      },
+      to: [{ email: toEmail, name: toName }],
       subject,
-      html: htmlContent,
+      htmlContent,
     },
     {
       headers: {
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'api-key': process.env.BREVO_API_KEY,
         'Content-Type': 'application/json',
       },
     }
