@@ -145,7 +145,8 @@ router.post('/', async (req, res) => {
                   <tr><td style="padding:5px 0;font-weight:bold;">Unit</td><td>${roomType || 'Not selected'}</td></tr>
                   <tr><td style="padding:5px 0;font-weight:bold;">Check-in</td><td>${checkInFmt}</td></tr>
                   <tr><td style="padding:5px 0;font-weight:bold;">Check-out</td><td>${checkOutFmt}</td></tr>
-                  <tr><td style="padding:5px 0;font-weight:bold;">Guests</td><td>${guests || 1}</td></tr>
+                 <tr><td style="padding:5px 0;font-weight:bold;">Guests</td><td>${guests || 1}</td></tr>
+                  <tr><td style="padding:5px 0;font-weight:bold;">Reference No.</td><td><strong style="color:#c9a96e;">${booking.refNumber}</strong></td></tr>
                   ${message ? `<tr><td style="padding:5px 0;font-weight:bold;vertical-align:top;">Message</td><td>${message}</td></tr>` : ''}
                 </table>
               </div>
